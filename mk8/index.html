@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../src/css/styles.css">
     <link rel="stylesheet" href="../src/css/input.css">
     <link rel="stylesheet" href="../src/css/mk8.css">
+    <script src="../src/js/mk8.js"></script>
 </head>
 <body>
 <div class="background"></div>
@@ -28,11 +29,13 @@
         </div>
         <div class="tip">
             <img src="../src/media/mk8/rbutton.png" alt="Drift">
-            <p>To drift, hold down the R button while turning. Drifting helps you take sharp turns without losing speed.</p>
+            <p>To drift, hold down the R button while turning. Drifting helps you take sharp turns without losing
+                speed.</p>
         </div>
         <div class="tip">
             <img src="../src/media/mk8/miniturbo.png" alt="Mini Turbo">
-            <p>Timing is key! Release the R button at the right moment to perform a speed boost while drifting. This is called a Mini Turbo.</p>
+            <p>Timing is key! Release the R button at the right moment to perform a speed boost while drifting. This is
+                called a Mini Turbo.</p>
         </div>
         <div class="tip">
             <img src="../src/media/mk8/powerup.png" alt="Power-ups">
@@ -43,7 +46,7 @@
             <p>Watch out for obstacles and other racers. Use your items strategically to maintain your lead.</p>
         </div>
         <div class="tip">
-            <img src="../src/media/mk8/track.png"  alt="Track Layout">
+            <img src="../src/media/mk8/track.png" alt="Track Layout">
             <p>Learn the layout of each track to anticipate upcoming turns and obstacles.</p>
         </div>
         <div class="tip">
@@ -72,35 +75,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    const tips = document.querySelectorAll('.tip');
-    let currentTipIndex = 0;
-
-    function showNextTip() {
-        tips[currentTipIndex].classList.remove('active');
-        currentTipIndex = (currentTipIndex + 1) % tips.length;
-        tips[currentTipIndex].classList.add('active');
-    }
-
-    function handleScroll() {
-        const tipRect = tips[currentTipIndex].getBoundingClientRect();
-        if (tipRect.top >= 0 && tipRect.bottom <= window.innerHeight) {
-            showNextTip();
-        }
-    }
-
-    function debounce(func, delay) {
-        let timeout;
-        return function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(func, delay);
-        }
-    }
-
-    window.addEventListener('touchmove', debounce(handleScroll, 100));
-    window.addEventListener('wheel', debounce(handleScroll, 100));
-
-</script>
 </body>
 </html>
