@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beginner's Guide to Mario Kart</title>
+
+    <link rel="stylesheet" href="../src/css/other.css">
+    <link rel="stylesheet" href="../src/css/styles.css">
+    <link rel="stylesheet" href="../src/css/input.css">
+    <link rel="stylesheet" href="../src/css/mk8.css">
+</head>
+<body>
+<div class="background"></div>
+<div class="container">
+    <div class="tips">
+        <div class="tip active">
+            <h2>Welcome to Mario Kart! ↕</h2>
+            <p>Scroll to start with the basics.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/joystick.png" alt="Joystick">
+            <p>Use the joystick to control your kart's movement.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/buttons.png" alt="Buttons">
+            <p>Press the A button to accelerate and the B button to brake or reverse.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/rbutton.png" alt="Drift">
+            <p>To drift, hold down the R button while turning. Drifting helps you take sharp turns without losing speed.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/miniturbo.png" alt="Mini Turbo">
+            <p>Timing is key! Release the R button at the right moment to perform a speed boost while drifting. This is called a Mini Turbo.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/powerup.png" alt="Power-ups">
+            <p>Collect power-ups scattered throughout the track to gain advantages over your opponents.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/obstacles.png" alt="Obstacles">
+            <p>Watch out for obstacles and other racers. Use your items strategically to maintain your lead.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/track.png"  alt="Track Layout">
+            <p>Learn the layout of each track to anticipate upcoming turns and obstacles.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/characters.png" alt="Characters">
+            <p>Experiment with different characters and kart combinations to find the one that suits your playstyle.</p>
+        </div>
+        <div class="tip">
+            <img src="../src/media/mk8/blueshell.png" alt="Power-up Strategy">
+            <p>Master the art of using power-ups strategically to gain an edge over your opponents.</p>
+        </div>
+        <div class="tip">
+            <p>Practice makes perfect! Spend time in Time Trial mode to refine your racing skills.</p>
+        </div>
+        <div class="tip">
+            <img class="no-outline" src="../src/media/mk8/babypark.png" alt="Mini-map">
+            <p>Pay attention to the mini-map to track your opponents and plan your moves accordingly.</p>
+        </div>
+        <div class="tip">
+            <p>Don't get discouraged by losses. Learn from your mistakes and keep improving!</p>
+        </div>
+        <div class="tip">
+            <p>Have fun! Mario Kart is as much about enjoying the experience as it is about winning.</p>
+        </div>
+        <div class="tip">
+            <p>Roman was first the whole time.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tips = document.querySelectorAll('.tip');
+    let currentTipIndex = 0;
+
+    function showNextTip() {
+        tips[currentTipIndex].classList.remove('active');
+        currentTipIndex = (currentTipIndex + 1) % tips.length;
+        tips[currentTipIndex].classList.add('active');
+    }
+
+    function handleScroll() {
+        const tipRect = tips[currentTipIndex].getBoundingClientRect();
+        if (tipRect.top >= 0 && tipRect.bottom <= window.innerHeight) {
+            showNextTip();
+        }
+    }
+
+    function debounce(func, delay) {
+        let timeout;
+        return function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(func, delay);
+        }
+    }
+
+    window.addEventListener('wheel', debounce(handleScroll, 100));
+</script>
+</body>
+</html>
