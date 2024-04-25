@@ -1,4 +1,5 @@
 let tips;
+let lastYPosition;
 let currentTipIndex = 0;
 
 function showNextTip() {
@@ -18,19 +19,16 @@ function handleScroll(event) {
     if (event.type === 'wheel') {
         deltaY = event.deltaY;
     } else if (event.type === 'touchmove') {
-        deltaY = event.touches[0].clientY - lastYPosition;
-        lastYPosition = event.touches[0].clientY;
+        const touchY = event.touches[0].clientY;
+        deltaY = touchY - lastYPosition;
+        lastYPosition = touchY;
+        console.log(deltaY)
     }
 
-    let scrollDirection;
     if (deltaY > 0) {
-        scrollDirection = 'down';
         showNextTip();
     } else if (deltaY < 0) {
-        scrollDirection = 'up';
         showPrevTip();
-    } else {
-        scrollDirection = 'none'; // No scroll
     }
 }
 
@@ -63,6 +61,9 @@ function handleKeyDown(event) {
 
 window.addEventListener('load', async (event) => {
     tips = document.querySelectorAll('.tip');
+    window.addEventListener('touchstart', function(event) {
+        lastYPosition = event.touches[0].clientY;
+    });
     window.addEventListener('touchmove', debounce(handleScroll, 250));
     window.addEventListener('wheel', debounce(handleScroll, 250));
     window.addEventListener('keydown', handleKeyDown);
