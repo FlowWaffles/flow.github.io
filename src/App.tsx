@@ -4,7 +4,7 @@ import Test from './pages/test/Test';
 
 function App() {
   return (
-    <BrowserRouter basename="/flow.github.io">
+    <BrowserRouter basename={import.meta.env.DEV ? '/' : '/flow.github.io/'}>
       <Routes>
         <Route path="/" element={<Fail />} />
         <Route path="/test" element={<Test />} />
