@@ -14,7 +14,7 @@ function App() {
     <>
       <img
         id="obiWan"
-        src="/assets/obiwan.jpg"
+        src="/assets/obiWan.png"
         alt="Obi-Wan"
         style={{ display: 'none' }}
       />
