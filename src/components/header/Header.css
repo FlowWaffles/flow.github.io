@@ -1,0 +1,54 @@
+.header {
+    padding: 1rem;
+}
+
+h1 {
+    font-size: 14vw;
+    font-family: 'Monoton-Regular', monospace;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+    margin: 0;
+    animation: neonGlow 2s infinite alternate cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    will-change: text-shadow;
+}
+
+p {
+    font-size: 1rem;
+    font-family: 'Orbitron-Regular', monospace;
+    color: white;
+    margin: 0;
+}
+
+a {
+    color: white;
+    text-decoration: underline
+}
+
+a:hover {
+    color: white;
+}
+
+@media (min-width: 666px) {
+    h1 {
+        font-size: 80px;
+    }
+
+    p {
+        font-size: 20px;
+    }
+}
+
+@keyframes neonGlow {
+    0% {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 22px #fff,
+            0 0 40px #42dcdb, 0 0 60px #42dcdb, 0 0 80px #42dcdb,
+            0 0 100px #42dcdb, 0 0 140px #42dcdb, 0 0 200px #42dcdb;
+    }
+
+    100% {
+        text-shadow: 0 0 2px #fff, 0 0 8px #fff, 0 0 10px #fff,
+            0 0 20px #42dcdb, 0 0 30px #42dcdb, 0 0 40px #42dcdb,
+            0 0 50px #42dcdb, 0 0 80px #42dcdb, 0 0 100px #42dcdb;
+    }
+}

@@ -1,5 +1,11 @@
+import Header from "../components/header/Header";
+
 const Fail = () => {
-  return <div>Fail</div>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 };
 
 export default Fail;
