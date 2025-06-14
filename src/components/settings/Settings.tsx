@@ -30,14 +30,15 @@ const Settings: FC<SettingsProps> = ({ isDark, onThemeChange }) => {
 
     return (
         <div className="settings-container">
-            <button
-                className="settings-toggle"
-                aria-label="Toggle settings"
-                onClick={() => setOpen((prev) => !prev)}
-            >
-                <SettingsIcon />
-            </button>
-
+            {!open && (
+                <button
+                    className="settings-toggle"
+                    aria-label="Toggle settings"
+                    onClick={() => setOpen((prev) => !prev)}
+                >
+                    <SettingsIcon />
+                </button>
+            )}
             {open && (
                 <div className="settings-panel" ref={panelRef}>
                     <Lights checked={isDark} onChange={onThemeChange} />

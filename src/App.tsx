@@ -2,18 +2,16 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Fail from './pages/Fail';
 import Test from './pages/test/Test';
 import { obiWaniFy } from './utils/obi';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Settings from './components/settings/Settings';
+import { useThemeCookie } from './utils/ThemeCookie';
 
 function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>(
-    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  );
+  const prefersDark = typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia('(prefers-color-scheme: dark)').matches
+    : false;
 
-  useEffect(() => {
-    document.body.classList.remove('light-theme', 'dark-theme');
-    document.body.classList.add(`${theme}-theme`);
-  }, [theme]);
+  const [isDark, setIsDark] = useThemeCookie(prefersDark);
 
 useEffect(() => {
   const img = document.getElementById('obiWan') as HTMLImageElement | null;
@@ -27,10 +25,6 @@ useEffect(() => {
   }
 }, []);
 
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
-  };
-
   return (
     <>
       <img
@@ -40,7 +34,7 @@ useEffect(() => {
         style={{ display: 'none' }}
       />
 
-      <Settings isDark={theme === 'dark'} onThemeChange={toggleTheme} />
+       <Settings isDark={isDark} onThemeChange={setIsDark} />
 
       <BrowserRouter>
         <Routes>
