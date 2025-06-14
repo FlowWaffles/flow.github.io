@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Fail from './pages/Fail';
 import Test from './pages/test/Test';
-import Lights from './components/settings/lights/Lights';
 import { obiWaniFy } from './utils/obi';
 import { useEffect, useState } from 'react';
 import Settings from './components/settings/Settings';
@@ -16,9 +15,17 @@ function App() {
     document.body.classList.add(`${theme}-theme`);
   }, [theme]);
 
-  useEffect(() => {
+useEffect(() => {
+  const img = document.getElementById('obiWan') as HTMLImageElement | null;
+  if (!img) return;
+
+  if (img.complete && img.naturalWidth !== 0) {
     obiWaniFy();
-  }, []);
+  } else {
+    img.addEventListener('load', obiWaniFy);
+    return () => img.removeEventListener('load', obiWaniFy);
+  }
+}, []);
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
