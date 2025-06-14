@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 const COOKIE_NAME = 'theme';
 
 function setCookie(name: string, value: string, days = 365) {
-    console.log(`Setting cookie: ${name}=${value}, expires in ${days} days`);
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
   document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
 }
@@ -15,9 +14,7 @@ function getCookie(name: string): string | null {
 
 export function useThemeCookie(defaultDark: boolean) {
   const [isDark, setIsDark] = useState<boolean>(() => {
-    console.log('Initializing theme from cookie');
     const cookie = getCookie(COOKIE_NAME);
-    console.log(`Cookie value: ${cookie}`);
     if (cookie === 'dark') return true;
     if (cookie === 'light') return false;
     return defaultDark;
