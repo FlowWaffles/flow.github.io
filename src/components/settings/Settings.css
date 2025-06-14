@@ -1,8 +1,27 @@
+.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.3s ease;
+}
+
+.hidden {
+    height: 0;
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
 .settings-container {
     position: fixed;
     right: 0.5rem;
     bottom: 0.5rem;
     z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
 }
 
 @media (min-width: 769px) {
@@ -26,17 +45,6 @@
     transition: color 0.3s;
 }
 
-.settings-toggle .theme-button {
-    width: 50%;
-}
-
-
-.settings-toggle:hover,
-.settings-toggle:focus-visible {
-    color: white;
-    outline: none;
-}
-
 .settings-panel {
     margin-top: 0.5rem;
     background-color: rgba(0, 0, 0, 0.6);
@@ -46,6 +54,16 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
+
+.settings-toggle .theme-button {
+    width: 50%;
+}
+
+.settings-toggle:hover,
+.settings-toggle:focus-visible {
+    color: white;
+    outline: none;
 }
 
 .setting-group {

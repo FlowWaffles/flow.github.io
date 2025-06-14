@@ -4,6 +4,11 @@
     transition: opacity 0.5s ease-in;
 }
 
+.music-player__label {
+    font-size: 0.66rem;
+    color: #ffffff99;
+}
+
 .fade-in-05 {
     opacity: 1;
 }

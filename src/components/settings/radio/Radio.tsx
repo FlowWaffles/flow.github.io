@@ -30,7 +30,21 @@ const Radio = () => {
     }, [isMuted]);
 
     const toggleMute = () => {
-        setIsMuted(prev => !prev);
+        setIsMuted(prev => {
+            const newMuted = !prev;
+            const audio = audioRef.current;
+            if (audio) {
+                audio.muted = newMuted;
+                if (!newMuted) {
+                    audio.play().catch((err) => {
+                        console.warn('Playback failed:', err);
+                    });
+                } else {
+                    audio.pause();
+                }
+            }
+            return newMuted;
+        });
     };
 
     return (
@@ -51,6 +65,7 @@ const Radio = () => {
                     icon={isMuted ? <VolumeOffIcon fontSize="small" /> : <VolumeUpIcon fontSize="small" />}
                     ariaLabel={isMuted ? 'Turn sound on' : 'Turn sound off'}
                 />
+                <span className="music-player__label">audio by <a href="https://www.instagram.com/res.output/" target="_blank">res-o</a></span>
             </div>
         </div>
     );

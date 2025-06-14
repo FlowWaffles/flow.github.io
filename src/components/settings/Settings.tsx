@@ -31,21 +31,20 @@ const Settings: FC<SettingsProps> = ({ isDark, onThemeChange }) => {
 
     return (
         <div className="settings-container">
-            {!open && (
-                <button
-                    className="settings-toggle"
-                    aria-label="Toggle settings"
-                    onClick={() => setOpen((prev) => !prev)}
-                >
-                    <SettingsIcon />
-                </button>
-            )}
-            {open && (
-                <div className="settings-panel" ref={panelRef}>
-                    <Lights checked={isDark} onChange={onThemeChange} />
-                    <Radio />
-                </div>
-            )}
+            <button
+                className={`settings-toggle ${open ? 'hidden' : 'visible'}`}
+                aria-label="Toggle settings"
+                onClick={() => setOpen(true)}
+            >
+                <SettingsIcon />
+            </button>
+            <div
+                className={`settings-panel ${open ? 'visible' : 'hidden'}`}
+                ref={panelRef}
+            >
+                <Lights checked={isDark} onChange={onThemeChange} />
+                <Radio />
+            </div>
         </div>
     );
 };
