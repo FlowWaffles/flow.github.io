@@ -32,10 +32,10 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
-
 
 body {
   display: flex;
@@ -44,49 +44,39 @@ body {
   padding: 0;
   width: 100dvw;
   height: 100dvh;
+  overflow: hidden;
+}
+
+
+.light-theme {
   background: linear-gradient(-45deg, #ff69b4, #dd27b6, #85dcf0, #2193b0);
   background-size: 400% 400%;
   animation: gradientMove 40s ease-in-out infinite;
-  will-change: background-position;
-  overflow: hidden;
+}
+
+.dark-theme {
+  background: linear-gradient(-45deg, #000000, #1b3742, #8705b1, #0b2834);
+  background-size: 400% 400%;
+  animation: gradientMove 40s ease-in-out infinite;
 }
 
 @keyframes gradientMove {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
-    background-position: 80% 10%;
+    background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
 }
 
-
-
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
@@ -94,9 +84,11 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
