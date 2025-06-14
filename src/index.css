@@ -49,7 +49,7 @@ body {
 
 
 .light-theme {
-  background: linear-gradient(-45deg, #ff69b4, #dd27b6, #85dcf0, #2193b0);
+  background: linear-gradient(-45deg, #f3aed1, #e266c7, #85dcf0, #2193b0);
   background-size: 400% 400%;
   animation: gradientMove 40s ease-in-out infinite;
 }
@@ -62,21 +62,27 @@ body {
 
 @keyframes gradientMove {
   0% {
-    background-position: 0% 50%;
+    background-position: 0% 30%;
   }
 
   50% {
-    background-position: 100% 50%;
+    background-position: 90% 40%;
   }
 
   100% {
-    background-position: 0% 50%;
+    background-position: 0% 30%;
   }
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+:focus-visible {
+  outline: 3px solid #646cff;
+  outline-offset: 3px;
+  border-radius: 5px;
 }
 
 @media (prefers-color-scheme: light) {

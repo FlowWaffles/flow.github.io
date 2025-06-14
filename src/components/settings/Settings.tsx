@@ -33,7 +33,7 @@ const Settings: FC<SettingsProps> = ({ isDark, onThemeChange }) => {
         <div className="settings-container">
             <button
                 className={`settings-toggle ${open ? 'hidden' : 'visible'}`}
-                aria-label="Toggle settings"
+                aria-label="Toggle settings menu"
                 onClick={() => setOpen(true)}
             >
                 <SettingsIcon />

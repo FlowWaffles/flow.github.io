@@ -1,0 +1,82 @@
+.uni-box {
+    position: relative;
+    padding-top: 2rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uni {
+    font-size: 69px;
+    height: 13rem;
+    width: 13rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uni:after {
+    z-index: 69;
+    content: "";
+    background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(14, 66, 119, 1) 41%, rgba(204, 82, 255, 1) 87%);
+    mask-image: url(../assets/unicorn.svg);
+    width: 100%;
+    height: 100%;
+    mask-repeat: round;
+    margin-left: -60px;
+    background-size: 800% 200%;
+    animation: gradient2 50s linear infinite;
+}
+
+.uni:before {
+    content: "";
+    height: 15rem;
+    width: 15rem;
+    border-radius: 50%;
+    position: absolute;
+    filter: none !important;
+    z-index: 0;
+    animation: glow 10s linear infinite;
+    box-shadow: inset 0 0 60px whitesmoke,
+        inset 20px 0 80px #f0f,
+        inset -20px 0 80px #0ff,
+        inset 20px 0 300px #f0f,
+        inset -20px 0 300px #0ff,
+        0 0 50px #fff,
+        -10px 0 80px #f0f,
+        10px 0 80px #0ff;
+}
+
+@keyframes gradient2 {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+
+@keyframes glow {
+    0% {
+        opacity: 0.5;
+        transform: scale(0.7) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1) rotate(180deg);
+
+    }
+
+    100% {
+        opacity: 0.5;
+        transform: scale(0.7) rotate(360deg);
+    }
+}
