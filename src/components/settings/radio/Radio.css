@@ -1,0 +1,9 @@
+.music-player__container {
+    position: relative;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.fade-in-05 {
+    opacity: 1;
+}

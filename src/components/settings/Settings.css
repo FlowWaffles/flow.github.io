@@ -26,6 +26,11 @@
     transition: color 0.3s;
 }
 
+.settings-toggle .theme-button {
+    width: 50%;
+}
+
+
 .settings-toggle:hover,
 .settings-toggle:focus-visible {
     color: white;

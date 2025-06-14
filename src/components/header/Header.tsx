@@ -1,6 +1,7 @@
 import './Header.css';
+import React from 'react';
 
-const Header = () => {
+const Header = React.memo(() => {
     return (
         <header className="bg-gray-800 text-white p-4">
             <div className="header">
@@ -9,5 +10,5 @@ const Header = () => {
             </div>
         </header>
     );
-}
+})
 export default Header;

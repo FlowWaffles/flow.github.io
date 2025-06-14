@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Lights from './lights/Lights';
+import Radio from './radio/Radio';
 import './Settings.css';
 
 type SettingsProps = {
@@ -42,6 +43,7 @@ const Settings: FC<SettingsProps> = ({ isDark, onThemeChange }) => {
             {open && (
                 <div className="settings-panel" ref={panelRef}>
                     <Lights checked={isDark} onChange={onThemeChange} />
+                    <Radio />
                 </div>
             )}
         </div>

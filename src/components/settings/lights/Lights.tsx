@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import UniButton from '../../button/UniButton';
 import './Lights.css';
 
 type LightsProps = {
@@ -11,26 +12,20 @@ type LightsProps = {
 const Lights: FC<LightsProps> = ({ checked, onChange }) => {
   return (
     <div className="lights-group">
-      <button
-        type="button"
-        aria-pressed={!checked}
-        aria-label="Switch to light mode"
-        className={`theme-button ${!checked ? 'selected' : ''}`}
+      <UniButton
         onClick={() => onChange(false)}
-      >
-        <LightModeIcon />
-        <span>Light</span>
-      </button>
-      <button
-        type="button"
-        aria-pressed={checked}
-        aria-label="Switch to dark mode"
-        className={`theme-button ${checked ? 'selected' : ''}`}
+        selected={!checked}
+        icon={<LightModeIcon />}
+        label="Lights"
+        ariaLabel="Switch to light mode"
+      />
+      <UniButton
         onClick={() => onChange(true)}
-      >
-        <DarkModeOutlinedIcon />
-        <span>Dark</span>
-      </button>
+        selected={checked}
+        icon={<DarkModeOutlinedIcon />}
+        label="Dark"
+        ariaLabel="Switch to dark mode"
+      />
     </div>
   );
 };
