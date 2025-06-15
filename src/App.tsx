@@ -4,26 +4,20 @@ import Test from './pages/test/Test';
 import { obiWaniFy } from './utils/obi';
 import { useEffect } from 'react';
 import Settings from './components/settings/Settings';
-import { useThemeCookie } from './utils/ThemeCookie';
 
 function App() {
-  const prefersDark = typeof window !== 'undefined' && window.matchMedia
-    ? window.matchMedia('(prefers-color-scheme: dark)').matches
-    : false;
 
-  const [isDark, setIsDark] = useThemeCookie(prefersDark);
+  useEffect(() => {
+    const img = document.getElementById('obiWan') as HTMLImageElement | null;
+    if (!img) return;
 
-useEffect(() => {
-  const img = document.getElementById('obiWan') as HTMLImageElement | null;
-  if (!img) return;
-
-  if (img.complete && img.naturalWidth !== 0) {
-    obiWaniFy();
-  } else {
-    img.addEventListener('load', obiWaniFy);
-    return () => img.removeEventListener('load', obiWaniFy);
-  }
-}, []);
+    if (img.complete && img.naturalWidth !== 0) {
+      obiWaniFy();
+    } else {
+      img.addEventListener('load', obiWaniFy);
+      return () => img.removeEventListener('load', obiWaniFy);
+    }
+  }, []);
 
   return (
     <>
@@ -34,7 +28,7 @@ useEffect(() => {
         style={{ display: 'none' }}
       />
 
-       <Settings isDark={isDark} onThemeChange={setIsDark} />
+      <Settings isDark={isDark} onThemeChange={setIsDark} />
 
       <BrowserRouter>
         <Routes>
