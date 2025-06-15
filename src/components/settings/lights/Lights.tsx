@@ -1,27 +1,33 @@
+import { useState } from 'react';
 import type { FC } from 'react';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import UniButton from '../../button/UniButton';
 import './Lights.css';
+import { getTheme, setTheme } from '../../../utils/ThemeHandler';
 
-type LightsProps = {
-  checked: boolean; // true = dark mode ON
-  onChange: (checked: boolean) => void;
-};
 
-const Lights: FC<LightsProps> = ({ checked, onChange }) => {
+const Lights: FC = () => {
+  const theme = getTheme();
+  const [isDark, setIsDark] = useState(theme === 'dark');
+
+  const handleChange = (darkMode: boolean) => {
+    setIsDark(darkMode);
+    setTheme(darkMode ? 'dark' : 'light');
+  }
+
   return (
     <div className="lights-group">
       <UniButton
-        onClick={() => onChange(false)}
-        selected={!checked}
+        onClick={() => handleChange(false)}
+        selected={!isDark}
         icon={<LightModeIcon />}
         label="Lights"
         ariaLabel="Switch to light mode"
       />
       <UniButton
-        onClick={() => onChange(true)}
-        selected={checked}
+        onClick={() => handleChange(true)}
+        selected={isDark}
         icon={<DarkModeOutlinedIcon />}
         label="Dark"
         ariaLabel="Switch to dark mode"

@@ -5,12 +5,7 @@ import Lights from './lights/Lights';
 import Radio from './radio/Radio';
 import './Settings.css';
 
-type SettingsProps = {
-    isDark: boolean;
-    onThemeChange: (isDark: boolean) => void;
-};
-
-const Settings: FC<SettingsProps> = ({ isDark, onThemeChange }) => {
+const Settings: FC = () => {
     const [open, setOpen] = useState(false);
     const panelRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +39,7 @@ const Settings: FC<SettingsProps> = ({ isDark, onThemeChange }) => {
                 className={`settings-panel ${open ? 'visible' : 'hidden'}`}
                 ref={panelRef}
             >
-                <Lights checked={isDark} onChange={onThemeChange} />
+                <Lights />
                 <Radio />
             </div>
         </div>
