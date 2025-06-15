@@ -6,73 +6,51 @@ const Motivation = () => {
     const [quoteText, setQuoteText] = useState("");
     const [authorText, setAuthorText] = useState("");
     const [fullQuote, setFullQuote] = useState({ quote: "", author: "" });
-    const [typeNext, setTypeNext] = useState(false);
+
 
     useEffect(() => {
-        if (!typeNext) return;
-        setTypeNext(false);
-        setQuoteText("");
-        setAuthorText("");
-        setFullQuote({ quote: "", author: "" });
-        const randomIndex = Math.floor(Math.random() * motivationQuotes.length);
-        setFullQuote(motivationQuotes[randomIndex]);
-    }, [typeNext]);
+        let cancelled = false;
 
-    useEffect(() => {
-        setTypeNext(true);
+        const typeText = async (fullText: string, setter: React.Dispatch<React.SetStateAction<string>>, optionalSetter?: React.Dispatch<React.SetStateAction<string>>) => {
+            setter("");
+            if (optionalSetter) {
+                optionalSetter("");
+            }
+            for (let i = 0; i < fullText.length; i++) {
+                if (cancelled) return;
+                setter((prev) => prev + fullText[i]);
+                await new Promise((res) => setTimeout(res, 50));
+            }
+        };
+
+        const startTyping = async () => {
+            while (!cancelled) {
+                const randomIndex = Math.floor(Math.random() * motivationQuotes.length);
+                const quote = motivationQuotes[randomIndex];
+                setFullQuote(quote);
+                await typeText('"' + quote.quote + '"', setQuoteText, setAuthorText);
+                await typeText('― ' + quote.author, setAuthorText);
+                await new Promise((res) => setTimeout(res, 15000));
+                if (cancelled) return;
+            }
+        };
+
+        startTyping();
+
+        return () => {
+            cancelled = true;
+        };
     }, []);
-
-    useEffect(() => {
-        typeQuote();
-    }, [fullQuote]);
-
-
-    const typeQuote = () => {
-
-        if (!fullQuote.quote || !fullQuote.author) return;
-
-        let index = -1;
-
-        const interval = setInterval(() => {
-            setQuoteText((prev) => prev + fullQuote.quote[index]);
-            index++;
-
-            if (index === fullQuote.quote.length - 1) {
-                clearInterval(interval);
-                typeAuthor();
-            }
-        }, 30);
-    };
-
-    const typeAuthor = () => {
-
-        if (!fullQuote.quote || !fullQuote.author) return;
-
-        let index = -1;
-
-        const interval = setInterval(() => {
-            setAuthorText((prev) => prev + fullQuote.author[index]);
-            index++;
-
-            if (index === fullQuote.author.length - 1) {
-                clearInterval(interval);
-
-                setTimeout(() => {
-                    setTypeNext(true);
-                }, 10000);
-            }
-        }, 30);
-    };
 
     return (
         <div className="motivation-quote">
             <blockquote>
-                <p className="motivational-quote-placeholder">{fullQuote.quote}</p>
+                <p className="motivational-quote-placeholder">"{fullQuote.quote}"</p>
                 <p>{quoteText}</p>
                 {authorText && (
                     <footer className="motivation-author">
-                        <span className="motivational-quote-placeholder">{fullQuote.author}</span>
-                        <span>{authorText}</span>
+                        <span className="motivational-quote-placeholder"><i>― {fullQuote.author}</i></span>
+                        <span><i>{authorText}</i></span>
                     </footer>
                 )}
             </blockquote>
