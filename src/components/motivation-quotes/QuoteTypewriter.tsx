@@ -66,7 +66,7 @@ const QuoteTypewriter = ({
       return () => {
         if (quoteInterval.current) clearInterval(quoteInterval.current);
         if (authorInterval.current) clearInterval(authorInterval.current);
-        if (completeTimeout.current) clearInterval(completeTimeout.current);
+        if (completeTimeout.current) clearTimeout(completeTimeout.current);
       };
     },
     [nextQuoteInverval, onComplete, quote.author, quote.quote, typeInterval]
