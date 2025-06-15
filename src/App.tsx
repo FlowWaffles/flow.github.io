@@ -6,11 +6,7 @@ import { useEffect } from 'react';
 import GlobalLayout from './GlobalLayout'
 
 function App() {
-
-  useEffect(() => {
-    const img = document.getElementById('obiWan') as HTMLImageElement | null;
-    img?.addEventListener('load', obiWaniFy);
-  }, []);
+  obiWaniFy();
 
   return (
     <>
