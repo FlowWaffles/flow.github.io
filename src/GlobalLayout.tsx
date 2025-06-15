@@ -1,9 +1,14 @@
 import React from 'react';
+import { useLayoutEffect } from 'react';
 import Settings from './components/settings/Settings';
 import { applyTheme } from './utils/ThemeHandler';
 
 function GlobalLayout({ children }: { children: React.ReactNode }) {
-  applyTheme();
+
+  useLayoutEffect(() => {
+    applyTheme();
+  }, []);
+
   return (
     <>
       <Settings />
