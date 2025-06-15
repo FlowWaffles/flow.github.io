@@ -14,11 +14,13 @@ const Motivation = () => {
   };
 
   return (
-    <QuoteTypewriter
-      key={quoteIndex}
-      quote={motivationQuotes[quoteIndex]}
-      onComplete={setNextQuoteIndex}
-    />
+    <div className="motivation-quote-container">
+      <QuoteTypewriter
+        key={quoteIndex}
+        quote={motivationQuotes[quoteIndex]}
+        onComplete={setNextQuoteIndex}
+      />
+    </div>
   );
 };
 

@@ -12,7 +12,7 @@ interface QuoteTypewriterProps {
 const QuoteTypewriter = ({
   quote,
   onComplete,
-  typeInterval = 30,
+  typeInterval = 50,
   nextQuoteInverval = 10000,
 }: QuoteTypewriterProps) => {
   const [quoteText, setQuoteText] = useState("");
@@ -26,13 +26,14 @@ const QuoteTypewriter = ({
   const refCallback = useCallback(
     (node: HTMLDivElement | null) => {
       const typeAuthor = () => {
+        const authorFormated = '- ' + quote.author;
         let index = 0;
 
         authorInterval.current = setInterval(() => {
           index++;
-          setAuthorText(quote.author.slice(0, index));
+          setAuthorText(authorFormated.slice(0, index));
 
-          if (index === quote.author.length) {
+          if (index === authorFormated.length) {
             if (authorInterval.current) {
               clearInterval(authorInterval.current);
             }
@@ -45,13 +46,14 @@ const QuoteTypewriter = ({
       };
 
       const typeQuote = () => {
+        const quoteFormated = '"' + quote.quote + '"';
         let index = 0;
 
         quoteInterval.current = setInterval(() => {
           index++;
-          setQuoteText(quote.quote.slice(0, index));
+          setQuoteText(quoteFormated.slice(0, index));
 
-          if (index === quote.quote.length) {
+          if (index === quoteFormated.length) {
             if (quoteInterval.current) {
               clearInterval(quoteInterval.current);
             }
@@ -74,14 +76,12 @@ const QuoteTypewriter = ({
 
   return (
     <div className="motivation-quote" ref={refCallback}>
-      <blockquote>
-        <p className="motivational-quote-placeholder">{quote.quote}</p>
-        <p>{quoteText}</p>
-        <footer className="motivation-author">
-          <span className="motivational-quote-placeholder">{quote.author}</span>
-          <span>{authorText}</span>
-        </footer>
-      </blockquote>
+      <p className="motivational-quote-placeholder">"{quote.quote}"</p>
+      <p className="animated-text">{quoteText}</p>
+      <footer className="motivation-author">
+        <span className="motivational-quote-placeholder">- {quote.author}</span>
+        <span className="animated-text">{authorText}</span>
+      </footer>
     </div>
   );
 };

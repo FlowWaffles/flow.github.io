@@ -1,13 +1,22 @@
-.motivation-quote {
-    padding: 0.5rem;
-    padding-top: 3rem;
+.motivation-quote-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 3rem;
     display: flex;
-    justify-self: center
+    flex-direction: column;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.motivation-quote {
+    position: relative;
+    justify-self: center;
+    margin: auto;
 }
 
 .motivational-quote-placeholder {
     visibility: hidden;
-    height: 0;
 }
 
 .motivation-quote p {
@@ -18,13 +27,20 @@
 }
 
 .motivation-author {
+    position: relative;
     display: flex;
     justify-self: flex-end;
     flex-direction: column;
 }
 
-@media (min-width: 769px) {
+.animated-text {
+    position: absolute;
+    top: 0;
+}
+
+
+@media (min-width: 666px) {
     .motivation-quote {
-        padding: 3rem;
+        max-width: 80dvw;
     }
 }
