@@ -23,7 +23,6 @@ const Motivation = () => {
     }, []);
 
     useEffect(() => {
-        console.log("Full quote:", fullQuote);
         typeQuote();
     }, [fullQuote]);
 
