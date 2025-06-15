@@ -1,5 +1,7 @@
 .header {
     padding: 1rem;
+    width: fit-content;
+    justify-self: center;
 }
 
 h1 {

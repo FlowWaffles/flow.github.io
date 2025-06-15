@@ -1,0 +1,30 @@
+.motivation-quote {
+    padding: 0.5rem;
+    padding-top: 3rem;
+    display: flex;
+    justify-self: center
+}
+
+.motivational-quote-placeholder {
+    visibility: hidden;
+    height: 0;
+}
+
+.motivation-quote p {
+    font-size: 1.2rem;
+    font-family: 'Orbitron-Regular', monospace;
+    color: white;
+    margin: 0;
+}
+
+.motivation-author {
+    display: flex;
+    justify-self: flex-end;
+    flex-direction: column;
+}
+
+@media (min-width: 769px) {
+    .motivation-quote {
+        padding: 3rem;
+    }
+}
