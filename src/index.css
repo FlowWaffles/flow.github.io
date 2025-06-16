@@ -50,6 +50,7 @@ body {
 }
 
 .light-theme::before {
+  contain: layout paint;
   overflow: hidden;
   content: '';
   z-index: -100;
@@ -60,9 +61,11 @@ body {
   height: 400vh;
   background: linear-gradient(-45deg, #cc35ab, #e266c7, #85dcf0, #2193b0);
   animation: gradientMove 40s linear infinite;
+  will-change: transform;
 }
 
 .dark-theme::before {
+  contain: layout paint;
   overflow: hidden;
   content: '';
   z-index: -100;
@@ -73,6 +76,7 @@ body {
   height: 400vh;
   background: linear-gradient(-45deg, #000000, #1b3742, #8705b1, #0b2834);
   animation: gradientMove 40s linear infinite;
+  will-change: transform;
 }
 
 @keyframes gradientMove {
