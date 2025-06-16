@@ -11,6 +11,7 @@
     padding: 2rem;
     margin: 1rem 1rem 2.5rem;
     overflow-y: scroll;
+    scroll-behavior: smooth;
     overflow-x: hidden;
     flex: 1;
     background: #00000070;
@@ -21,9 +22,9 @@
 
 .privacy h1 {
     padding-top: 2rem;
-    font-size: 2em;
+    font-size: 1.5rem;
     margin-bottom: 2rem;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
     white-space: break-spaces;
 }
 
@@ -49,4 +50,10 @@
 
 .privacy tr {
     padding-right: 1rem;
+}
+
+@media (min-width: 666px) {
+    .privacy h1 {
+        font-size: 2rem;
+    }
 }

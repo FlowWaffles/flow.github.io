@@ -1,9 +1,11 @@
 import './Privacy.css';
+import NyanCat from '../cat/NyanCat.tsx';
 
 const Privacy = () => {
     return (
         <div className="privacy">
-            <h1>Datenschutzerklärung / Privacy Policy</h1>
+            <h1>Pls give Datenschutzerkärung</h1>
+            <NyanCat/>
             <div className="privacy-text">
                 <section>
                     <h2>DE: Datenschutzerklärung</h2>
