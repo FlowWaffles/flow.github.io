@@ -4,6 +4,7 @@ import Test from './pages/test/Test';
 import GlobalLayout from './GlobalLayout'
 import { useEffect } from 'react';
 import { obiWaniFy } from './utils/obi';
+import PrivacyPage from './pages/privacy/PrivacyPage.tsx';
 
 function App() {
   useEffect(() => {
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Fail />} />
             <Route path="/test" element={<Test />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
           </Routes>
         </BrowserRouter>
       </GlobalLayout>
