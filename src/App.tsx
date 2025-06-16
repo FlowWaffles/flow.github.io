@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Fail from './pages/Fail';
-import Test from './pages/test/Test';
 import GlobalLayout from './GlobalLayout'
 import { useEffect } from 'react';
 import { obiWaniFy } from './utils/obi';
+import NotFound from './pages/not-found/NotFound'
 import PrivacyPage from './pages/privacy/PrivacyPage.tsx';
 
 function App() {
@@ -17,8 +17,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Fail />} />
-            <Route path="/test" element={<Test />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </GlobalLayout>
