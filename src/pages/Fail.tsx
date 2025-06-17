@@ -1,13 +1,13 @@
 import Header from "../components/header/Header";
 import UniLogo from "../components/logo/Logo";
-import Motivation from "../components/motivation-quotes/Motivation";
+import DefaultQuotes from "../components/quotes/DefaultQuotes";
 
 const Fail = () => {
   return (
     <>
       <Header />
       <UniLogo />
-      <Motivation />
+      <DefaultQuotes />
     </>
   );
 };

@@ -1,4 +1,4 @@
-.motivation-quote-container {
+.quote-container {
     position: absolute;
     left: 0;
     right: 0;
@@ -9,24 +9,24 @@
     padding-right: 2rem;
 }
 
-.motivation-quote {
+.quote {
     position: relative;
     justify-self: center;
     margin: auto;
 }
 
-.motivational-quote-placeholder {
+.placeholder {
     visibility: hidden;
 }
 
-.motivation-quote p {
+.quote p {
     font-size: 1.2rem;
     font-family: 'Orbitron-Regular', monospace;
     color: white;
     margin: 0;
 }
 
-.motivation-author {
+.author {
     position: relative;
     display: flex;
     justify-self: flex-end;
@@ -40,7 +40,7 @@
 
 
 @media (min-width: 666px) {
-    .motivation-quote {
+    .quote {
         max-width: 80dvw;
     }
 }

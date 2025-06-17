@@ -26,18 +26,21 @@ const QuoteTypewriter = ({
   const refCallback = useCallback(
     (node: HTMLDivElement | null) => {
       const typeAuthor = () => {
+
+        if (!quote.author) return onComplete();
+
         const authorFormated = '- ' + quote.author;
         let index = 0;
 
         authorInterval.current = setInterval(() => {
           index++;
+
           setAuthorText(authorFormated.slice(0, index));
 
           if (index === authorFormated.length) {
             if (authorInterval.current) {
               clearInterval(authorInterval.current);
             }
-
             completeTimeout.current = setTimeout(() => {
               onComplete();
             }, nextQuoteInverval);
@@ -75,11 +78,11 @@ const QuoteTypewriter = ({
   );
 
   return (
-    <div className="motivation-quote" ref={refCallback}>
-      <p className="motivational-quote-placeholder">"{quote.quote}"</p>
+    <div className="quote" ref={refCallback}>
+      <p className="placeholder">"{quote.quote}"</p>
       <p className="animated-text">{quoteText}</p>
-      <footer className="motivation-author">
-        <span className="motivational-quote-placeholder">- {quote.author}</span>
+      <footer className="author">
+        <span className="placeholder">- {quote.author}</span>
         <span className="animated-text">{authorText}</span>
       </footer>
     </div>

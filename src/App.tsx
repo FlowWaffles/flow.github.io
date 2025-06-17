@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import { obiWaniFy } from './utils/obi';
 import NotFound from './pages/not-found/NotFound'
 import PrivacyPage from './pages/privacy/PrivacyPage.tsx';
+import DisplayCustomQuotePage from './pages/quote/DisplayCustomQuotePage.tsx';
+import CreateQuote from './pages/quote/CreateQuote.tsx';
 
 function App() {
   useEffect(() => {
@@ -18,6 +20,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Fail />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/quote" element={<DisplayCustomQuotePage />} />
+            <Route path="/create-quote" element={<CreateQuote />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
