@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Header from "../../components/header/Header";
 import UniLogo from "../../components/logo/Logo";
 
-const b64EncodeUnicode = (str: string) => {
+const b64EncodeUnicode = (str: string): string => {
     return btoa(
         encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_match, p1) =>
             String.fromCharCode(parseInt(p1, 16))
@@ -24,9 +24,7 @@ const CreateQuote = () => {
 
         const encodedQuote = b64EncodeUnicode(quote);
         const encodedAuthor = b64EncodeUnicode(author);
-
-        //const url = new URL("https://flow.fail/quote");
-        const url = new URL("localhost:5173/quote");
+        const url = new URL("/quote", window.location.origin);
         url.searchParams.append("quote", encodedQuote);
         url.searchParams.append("author", encodedAuthor);
 

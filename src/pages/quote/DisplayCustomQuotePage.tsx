@@ -5,7 +5,6 @@ const DisplayCustomQuotePage = () => {
     return (
         <>
             <Header />
-            <UniLogo />
             <DisplayCustomQuote />
         </>
     );

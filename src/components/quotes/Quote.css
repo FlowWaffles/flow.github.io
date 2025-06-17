@@ -9,6 +9,18 @@
     padding-right: 2rem;
 }
 
+.quote-centered {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    max-width: 80dvw;
+    display: flex;
+    flex-direction: column;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin: auto;
+    overflow: hidden;
+}
+
 .quote {
     position: relative;
     justify-self: center;
