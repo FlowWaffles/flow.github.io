@@ -4,6 +4,10 @@
     justify-self: center;
 }
 
+header a {
+    text-decoration: none;
+}
+
 h1 {
     font-size: 14vw;
     font-family: 'Monoton-Regular', monospace;
