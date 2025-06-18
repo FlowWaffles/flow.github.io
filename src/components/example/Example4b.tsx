@@ -1,10 +1,10 @@
 import ExampleContainer from './ExampleContainer.tsx';
 import {memo, useState} from 'react';
 
-const description = '✅ Use useCallback for:\n' +
-    'Memoizing a function to avoid unnecessary re-creation on every render.\n' +
+const description = '❌ Without useCallback:\n' +
+    'The function is re-created on every render, even if its logic hasn’t changed.\n' +
     '\n' +
-    'Especially useful when passing functions to child components or dependencies of other hooks.'
+    'This causes child components wrapped in `memo` to re-render unnecessarily, defeating the purpose of memoization.';
 
 
 const Child = memo(({onClick}: { onClick: () => void }) => {
