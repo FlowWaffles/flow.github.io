@@ -79,8 +79,8 @@ const QuoteTypewriter = ({
 
   return (
     <div className="quote" ref={refCallback}>
-      <p className="placeholder">"{quote.quote}"</p>
-      <p className="animated-text">{quoteText}</p>
+      <p className="placeholder" dangerouslySetInnerHTML={{ __html: '"'+ quote.quote.replace(/\n/g, "<br />") + '"'}}/>
+      <p dangerouslySetInnerHTML={{ __html: quoteText.replace(/\n/g, "<br />") }} />
       <footer className="author">
         <span className="placeholder">- {quote.author}</span>
         <span className="animated-text">{authorText}</span>

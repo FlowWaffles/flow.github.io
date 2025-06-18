@@ -28,6 +28,7 @@
 }
 
 .placeholder {
+    height:0;
     visibility: hidden;
 }
 
