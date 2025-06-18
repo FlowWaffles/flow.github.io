@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import type { FC } from 'react';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import UniButton from '../../button/UniButton';
@@ -7,7 +6,7 @@ import './Lights.css';
 import { getTheme, setTheme } from '../../../utils/ThemeHandler';
 
 
-const Lights: FC = () => {
+const Lights = () => {
   const theme = getTheme();
   const [isDark, setIsDark] = useState(theme === 'dark');
 

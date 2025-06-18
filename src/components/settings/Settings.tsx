@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import type { FC } from 'react';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Lights from './lights/Lights';
 import Radio from './radio/Radio';
 import './Settings.css';
 
-const Settings: FC = () => {
+const Settings = () => {
     const [open, setOpen] = useState(false);
     const panelRef = useRef<HTMLDivElement>(null);
 

@@ -1,4 +1,5 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useSearchParams} from 'react-router-dom';
 import Example1 from '../../components/example/Example1.tsx';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import './Example.css';
@@ -8,7 +9,9 @@ import Example3 from '../../components/example/Example3.tsx';
 import Example4a from '../../components/example/Example4a.tsx';
 import Example4b from '../../components/example/Example4b.tsx';
 import Example5 from '../../components/example/Example5.tsx';
-import {useSearchParams} from 'react-router-dom';
+import Example6 from '../../components/example/Example6.tsx';
+import Example7 from '../../components/example/Example7.tsx';
+import GithubLink from '../../components/example/GithubLink.tsx';
 
 const examples = [
     {id: '1', title: '1', Component: Example1},
@@ -18,6 +21,9 @@ const examples = [
     {id: '4a', title: '4a', Component: Example4a},
     {id: '4b', title: '4b', Component: Example4b},
     {id: '5', title: '5', Component: Example5},
+    {id: '6', title: '6', Component: Example6},
+    {id: '7', title: '7', Component: Example7},
+    {id: 'git', title: 'git', Component: GithubLink},
 ];
 
 const Example = () => {
@@ -32,10 +38,10 @@ const Example = () => {
 
     const [activeIndex, setActiveIndex] = useState(initialIndex);
 
-    const { Component, id } = examples[activeIndex];
+    const {Component, id} = examples[activeIndex];
 
     const updateUrl = (id: string) => {
-        setSearchParams({ id });
+        setSearchParams({id});
     };
 
     useEffect(() => {

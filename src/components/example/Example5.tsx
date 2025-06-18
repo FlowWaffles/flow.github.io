@@ -27,7 +27,7 @@ const code = 'const Input = () => {\n' +
     '};\n'
 
 
-const ExampleTwo = () => {
+const Example5 = () => {
     return (
         <div>
             <ExampleContainer code={code} description={description} children={<Input/>}/>
@@ -35,6 +35,6 @@ const ExampleTwo = () => {
     );
 }
 
-export default ExampleTwo;
+export default Example5;
 
 
