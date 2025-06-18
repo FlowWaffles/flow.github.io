@@ -9,6 +9,15 @@ interface QuoteTypewriterProps {
   nextQuoteInverval?: number;
 }
 
+const renderWithLineBreaks = (text: string) => {
+  return text.split('\n').map((line, index, arr) => (
+      <span key={index}>
+      {line}
+        {index !== arr.length - 1 && <br />}
+    </span>
+  ));
+};
+
 const QuoteTypewriter = ({
   quote,
   onComplete,
@@ -79,8 +88,8 @@ const QuoteTypewriter = ({
 
   return (
     <div className="quote" ref={refCallback}>
-      <p className="placeholder" dangerouslySetInnerHTML={{ __html: '"'+ quote.quote.replace(/\n/g, "<br />") + '"'}}/>
-      <p dangerouslySetInnerHTML={{ __html: quoteText.replace(/\n/g, "<br />") }} />
+      <p className="placeholder">{renderWithLineBreaks(`"${quote.quote}"`)}</p>
+      <p>{renderWithLineBreaks(quoteText)}</p>
       <footer className="author">
         <span className="placeholder">- {quote.author}</span>
         <span className="animated-text">{authorText}</span>
