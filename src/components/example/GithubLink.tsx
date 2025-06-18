@@ -21,7 +21,6 @@ const Component = () => {
 const GithubLink = () => {
     return (
         <div>
-            <a href="https://github.com/typescript-cheatsheets/react#reacttypescript-cheatsheets"> https://github.com/typescript-cheatsheets/react#reacttypescript-cheatsheets</a>
             <ExampleContainer description={'React TypeScript Cheatsheet'} children={<Component/>}/>
         </div>
     );
