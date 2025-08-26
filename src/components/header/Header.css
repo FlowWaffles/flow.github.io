@@ -1,3 +1,9 @@
+.header-wrapper  {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .header {
     padding: 1rem;
     width: fit-content;
