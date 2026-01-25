@@ -43,7 +43,7 @@ const Snowflake = () => {
                 <iframe
                     src="https://snowflake.torproject.org/embed.html"
                     width="320"
-                    height="240"
+                    height="250"
                     frameBorder="0"
                     scrolling="no"
                     title="Snowflake"
