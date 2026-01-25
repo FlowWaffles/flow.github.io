@@ -25,18 +25,21 @@ const Settings = () => {
 
     return (
         <div className="settings-container">
-            {!open && (
-                <button
-                    className={'settings-toggle'}
-                    aria-label="Toggle settings menu"
-                    onClick={() => setOpen(true)}
-                >
-                    <SettingsIcon />
-                </button>
-            )}
+            <button
+                className="settings-toggle"
+                aria-label="Toggle settings menu"
+                onPointerDown={(e) => e.stopPropagation()}   // ✅ important
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen((prev) => !prev);
+                }}
+            >
+                <SettingsIcon />
+            </button>
             <div
                 className={`settings-panel ${open ? 'visible' : 'hidden'}`}
                 ref={panelRef}
+                onPointerDown={(e) => e.stopPropagation()}     // ✅ prevent inside close
             >
                 <Lights />
                 <Radio />

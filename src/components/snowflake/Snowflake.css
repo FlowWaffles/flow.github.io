@@ -16,7 +16,7 @@
 
 .snowflake-container {
     position: fixed;
-    right: 2rem;
+    right: 5rem;
     bottom: 0.5rem;
     z-index: 1000;
     display: flex;
@@ -56,4 +56,26 @@
     backdrop-filter: blur(6px);
     border-radius: 0.5rem;
     padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .snowflake-panel {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .snowflake-blur::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.3);
+        z-index: -1;
+    }
 }

@@ -22,20 +22,23 @@ const Snowflake = () => {
     }, [open]);
 
     return (
-        <div className="snowflake-container">
-            {!open && (
-                <button
-                    className="snowflake-toggle"
-                    aria-label="Toggle Snowflake"
-                    onClick={() => setOpen(true)}
-                >
-                    <AcUnitIcon />
-                </button>
-            )}
+        <div className={`snowflake-container ${open ? 'snowflake-blur' : ''}`}>
+            <button
+                className="snowflake-toggle"
+                aria-label="Toggle Snowflake"
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen((prev) => !prev);
+                }}
+            >
+                <AcUnitIcon />
+            </button>
 
             <div
                 ref={panelRef}
                 className={`snowflake-panel ${open ? 'visible' : 'hidden'}`}
+                onPointerDown={(e) => e.stopPropagation()}
             >
                 <iframe
                     src="https://snowflake.torproject.org/embed.html"

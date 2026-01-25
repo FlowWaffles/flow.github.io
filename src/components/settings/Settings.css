@@ -28,6 +28,7 @@
     .settings-container {
         top: 0.5rem;
         bottom: auto;
+        flex-direction: row-reverse;
     }
 }
 
@@ -68,4 +69,14 @@
 .setting-group {
     display: flex;
     gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .settings-panel {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin-top: 0;
+    }
 }
