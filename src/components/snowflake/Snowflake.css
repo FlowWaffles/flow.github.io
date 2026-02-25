@@ -18,7 +18,7 @@
     position: fixed;
     right: 5rem;
     bottom: 0.5rem;
-    z-index: 1000;
+    z-index: 5;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -28,6 +28,8 @@
     .snowflake-container {
         top: 0.5rem;
         left: 0.5rem;
+        width: 25px;
+        height: 25px;
     }
 }
 
@@ -56,6 +58,7 @@
     backdrop-filter: blur(6px);
     border-radius: 0.5rem;
     padding: 0.5rem;
+    z-index: 1000;
 }
 
 @media (max-width: 768px) {
