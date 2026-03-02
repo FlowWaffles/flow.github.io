@@ -21,7 +21,7 @@ const Lights = () => {
         onClick={() => handleChange(false)}
         selected={!isDark}
         icon={<LightModeIcon />}
-        label="Lights"
+        label="Light"
         ariaLabel="Switch to light mode"
       />
       <UniButton
