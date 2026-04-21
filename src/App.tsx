@@ -7,6 +7,8 @@ import NotFound from './pages/not-found/NotFound'
 import PrivacyPage from './pages/privacy/PrivacyPage.tsx';
 import DisplayCustomQuotePage from './pages/quote/DisplayCustomQuotePage.tsx';
 import CreateQuote from './pages/quote/CreateQuote.tsx';
+import ShareOracle from './pages/quiz/Quiz.tsx';
+import Oracle from './pages/oracle/Oracle.tsx';
 
 function App() {
     useEffect(() => {
@@ -22,6 +24,8 @@ function App() {
                         <Route path="/privacy" element={<PrivacyPage />} />
                         <Route path="/quote" element={<DisplayCustomQuotePage />} />
                         <Route path="/create-quote" element={<CreateQuote />} />
+                        <Route path="/share-wwmt" element={<ShareOracle />} />
+                        <Route path="/wwmt" element={<Oracle />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>

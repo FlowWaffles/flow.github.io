@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import Header from "../../components/header/Header";
 import { compressToEncodedURIComponent } from "lz-string";
+import { TextField, Button, Box, Container, Alert } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const CreateQuote = () => {
     const quoteInputRef = useRef<HTMLTextAreaElement>(null);
@@ -37,51 +39,57 @@ const CreateQuote = () => {
         <>
             <Header />
 
-            <main style={{ padding: "1rem", maxWidth: "600px", margin: "auto" }}>
-                <div style={{ marginBottom: "1rem" }}>
-                    <label>
-                        Quote:
-                        <textarea
-                            ref={quoteInputRef}
-                            rows={3}
-                            style={{ width: "100%", marginTop: "0.5rem" }}
-                            placeholder="Enter your quote"
-                        />
-                    </label>
-                </div>
-                <div style={{ marginBottom: "1rem" }}>
-                    <label>
-                        Author:
-                        <input
-                            type="text"
-                            ref={authorInputRef}
-                            style={{ width: "100%", marginTop: "0.5rem" }}
-                            placeholder="Enter author's name"
-                        />
-                    </label>
-                </div>
-                <button onClick={createUrl}>CopyUrl</button>
-                {copied && (
-                    <span style={{ color: "green", marginLeft: "1rem" }}>Copied!</span>
-                )}
-                <div style={{ marginTop: "1rem" }}>
-                    <label>
-                        Result:
-                        <input
-                            type="text"
-                            ref={resultInputRef}
-                            value={resultUrl}
-                            readOnly
-                            style={{
-                                width: "100%",
-                                marginTop: "0.5rem",
-                                backgroundColor: "#f0f0f0",
-                            }}
-                            onFocus={(e) => e.target.select()}
-                        />
-                    </label>
-                </div>
-            </main>
+            <Container maxWidth="sm" sx={{ py: 4 }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                    <TextField
+                        label="Quote"
+                        multiline
+                        rows={4}
+                        placeholder="Enter your quote"
+                        inputRef={quoteInputRef}
+                        fullWidth
+                        variant="outlined"
+                    />
+
+                    <TextField
+                        label="Author"
+                        type="text"
+                        placeholder="Enter author's name"
+                        inputRef={authorInputRef}
+                        fullWidth
+                        variant="outlined"
+                    />
+
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={createUrl}
+                        endIcon={<ContentCopyIcon />}
+                        size="large"
+                        fullWidth
+                    >
+                        Create & Copy URL
+                    </Button>
+
+                    {copied && (
+                        <Alert severity="success">Copied to clipboard!</Alert>
+                    )}
+
+                    <TextField
+                        label="Result"
+                        type="text"
+                        value={resultUrl}
+                        fullWidth
+                        variant="outlined"
+                        inputRef={resultInputRef}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        onFocus={(e) => e.currentTarget.select()}
+                        helperText="Click to select and copy"
+                    />
+                </Box>
+            </Container>
         </>
     );
 };

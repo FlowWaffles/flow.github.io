@@ -74,9 +74,9 @@
 @media (max-width: 768px) {
     .settings-panel {
         position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        bottom: 0.5rem;
+        right: 0.5rem;
+        transform: none;
         margin-top: 0;
     }
 }

@@ -78,7 +78,7 @@ body {
   left: 0;
   width: 400vw;
   height: 400vh;
-  background: linear-gradient(-45deg, #000000, #1b3742, #8705b1, #0b2834);
+  background: linear-gradient(-45deg, #5c258d, #4389a2, #5c258d, #4389a2);
   animation: gradientMove 40s linear infinite;
   will-change: transform;
 }
@@ -97,9 +97,28 @@ body {
   }
 }
 
+@keyframes gradientShift {
+  0% {
+    background-position: 0% center;
+  }
+
+  50% {
+    background-position: 100% center;
+  }
+
+  100% {
+    background-position: 0% center;
+  }
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+p,
+span {
+  color: white;
 }
 
 :focus-visible {
