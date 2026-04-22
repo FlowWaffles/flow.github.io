@@ -9,6 +9,7 @@ import DisplayCustomQuotePage from './pages/quote/DisplayCustomQuotePage.tsx';
 import CreateQuote from './pages/quote/CreateQuote.tsx';
 import ShareOracle from './pages/quiz/Quiz.tsx';
 import Oracle from './pages/oracle/Oracle.tsx';
+import EightBall from './pages/eightball/EightBall.tsx';
 
 function App() {
     useEffect(() => {
@@ -26,6 +27,7 @@ function App() {
                         <Route path="/create-quote" element={<CreateQuote />} />
                         <Route path="/share-wwmt" element={<ShareOracle />} />
                         <Route path="/wwmt" element={<Oracle />} />
+                        <Route path="/wdm" element={<EightBall />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </BrowserRouter>

@@ -143,7 +143,6 @@ const Oracle = () => {
 
         setIsLoading(true);
 
-        // Simulate thinking/loading for 2 seconds
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         const nameToUse = decodedName || "anonymous";

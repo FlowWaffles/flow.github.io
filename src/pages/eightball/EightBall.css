@@ -1,0 +1,93 @@
+.eightball-title {
+    font-family: 'Monoton-Regular', monospace;
+    color: white;
+    animation: neonGlowPurple 4s infinite alternate ease-in-out;
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 10px #c084fc,
+        0 0 20px #a855f7;
+}
+
+/* ── Shake animation ── */
+.eightball-wrapper {
+    filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.45));
+    transition: filter 0.4s;
+}
+
+.eightball-wrapper.shaking {
+    animation: ballShake 1.4s ease-in-out;
+    filter: drop-shadow(0 0 36px rgba(168, 85, 247, 0.85));
+}
+
+.eightball-wrapper.wobbling {
+    animation: ballWobble 0.45s ease-in-out infinite;
+    filter: drop-shadow(0 0 36px rgba(168, 85, 247, 0.85));
+}
+
+@keyframes ballWobble {
+    0%   { transform: rotate(0deg) scale(1); }
+    20%  { transform: rotate(-12deg) scale(1.06); }
+    40%  { transform: rotate(12deg) scale(1.06); }
+    60%  { transform: rotate(-9deg) scale(1.04); }
+    80%  { transform: rotate(9deg) scale(1.04); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+@keyframes ballShake {
+    0%   { transform: rotate(0deg) scale(1); }
+    10%  { transform: rotate(-14deg) scale(1.07); }
+    20%  { transform: rotate(14deg) scale(1.07); }
+    30%  { transform: rotate(-16deg) scale(1.09); }
+    40%  { transform: rotate(16deg) scale(1.09); }
+    50%  { transform: rotate(-13deg) scale(1.07); }
+    60%  { transform: rotate(13deg) scale(1.07); }
+    70%  { transform: rotate(-8deg) scale(1.04); }
+    80%  { transform: rotate(8deg) scale(1.04); }
+    90%  { transform: rotate(-3deg) scale(1.01); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+/* ── Intro "8" face ── */
+.eightball-eight-face {
+    transition: opacity 0.6s ease;
+}
+.eightball-eight-face.visible { opacity: 1; }
+.eightball-eight-face.hidden  { opacity: 0; }
+
+/* ── Avatar face ── */
+.eightball-avatar-face {
+    transition: opacity 0.6s ease, background-position 0.5s ease;
+}
+.eightball-avatar-face.visible { opacity: 1; }
+.eightball-avatar-face.hidden  { opacity: 0; }
+
+.eightball-avatar-face.loading {
+    /* face switches instantly; wobble is handled by the wrapper */
+}
+
+/* ── Answer overlay ── */
+.eightball-answer-overlay {
+    opacity: 0;
+    transition: opacity 0.7s ease;
+}
+.eightball-answer-overlay.visible {
+    opacity: 1;
+}
+
+/* ── Title glow ── */
+@keyframes neonGlowPurple {
+    0% {
+        text-shadow:
+            0 0 5px #ffffff,
+            0 0 10px #c084fc,
+            0 0 20px #a855f7;
+    }
+    100% {
+        text-shadow:
+            0 0 10px #ffffff,
+            0 0 20px #c084fc,
+            0 0 40px #a855f7,
+            0 0 60px #7c3aed;
+    }
+}
+
