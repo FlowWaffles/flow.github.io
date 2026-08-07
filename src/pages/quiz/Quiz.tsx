@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import Header from "../../components/header/Header";
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 import { TextField, Button, Box, Container, Alert } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useUrlSearchParams } from "../../utils/location";
 
 const ShareOracle = () => {
-    const [searchParams] = useSearchParams();
+    const [searchParams] = useUrlSearchParams();
     const nameInputRef = useRef<HTMLInputElement>(null);
     const resultInputRef = useRef<HTMLInputElement>(null);
 

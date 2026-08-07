@@ -1,4 +1,3 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Fail from './pages/Fail';
 import GlobalLayout from './GlobalLayout'
 import { useEffect } from 'react';
@@ -10,27 +9,44 @@ import CreateQuote from './pages/quote/CreateQuote.tsx';
 import ShareOracle from './pages/quiz/Quiz.tsx';
 import Oracle from './pages/oracle/Oracle.tsx';
 import EightBall from './pages/eightball/EightBall.tsx';
+import { useCurrentLocation } from './utils/location.ts';
 
 function App() {
+    const { pathname } = useCurrentLocation();
+
     useEffect(() => {
         obiWaniFy();
     }, []);
 
+    const normalizedPathname = pathname !== '/' && pathname.endsWith('/')
+        ? pathname.slice(0, -1)
+        : pathname;
+
+    const page = (() => {
+        switch (normalizedPathname) {
+            case '/':
+                return <Fail />;
+            case '/privacy':
+                return <PrivacyPage />;
+            case '/quote':
+                return <DisplayCustomQuotePage />;
+            case '/create-quote':
+                return <CreateQuote />;
+            case '/share-wwmt':
+                return <ShareOracle />;
+            case '/wwmt':
+                return <Oracle />;
+            case '/wdm':
+                return <EightBall />;
+            default:
+                return <NotFound />;
+        }
+    })();
+
     return (
         <>
             <GlobalLayout>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Fail />} />
-                        <Route path="/privacy" element={<PrivacyPage />} />
-                        <Route path="/quote" element={<DisplayCustomQuotePage />} />
-                        <Route path="/create-quote" element={<CreateQuote />} />
-                        <Route path="/share-wwmt" element={<ShareOracle />} />
-                        <Route path="/wwmt" element={<Oracle />} />
-                        <Route path="/wdm" element={<EightBall />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </BrowserRouter>
+                {page}
             </GlobalLayout>
         </>
     );

@@ -1,10 +1,10 @@
-import { useSearchParams } from "react-router-dom";
 import { decompressFromEncodedURIComponent } from "lz-string";
 import type { Quote } from "./Quotes";
 import QuoteTypewriter from "./QuoteTypewriter";
+import { useUrlSearchParams } from "../../utils/location";
 
 const DisplayCustomQuote = () => {
-    const [searchParams] = useSearchParams();
+    const [searchParams] = useUrlSearchParams();
 
     const quoteParam = searchParams.get("quote");
     const authorParam = searchParams.get("author");

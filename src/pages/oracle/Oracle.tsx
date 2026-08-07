@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { decompressFromEncodedURIComponent } from "lz-string";
 import { TextField, Button, Box, Container, Typography } from "@mui/material";
 import "./Oracle.css";
+import { useUrlSearchParams } from "../../utils/location";
 
 interface OracleAnswer {
     reply: string;
@@ -109,7 +109,7 @@ const simpleHash = (str: string): number => {
 };
 
 const Oracle = () => {
-    const [searchParams] = useSearchParams();
+    const [searchParams] = useUrlSearchParams();
     const questionInputRef = useRef<HTMLInputElement>(null);
 
     const [answer, setAnswer] = useState<OracleAnswer | null>(null);

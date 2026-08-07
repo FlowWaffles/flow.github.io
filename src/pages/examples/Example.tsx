@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
 import Example1 from '../../components/example/Example1.tsx';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import './Example.css';
@@ -12,6 +11,7 @@ import Example5 from '../../components/example/Example5.tsx';
 import Example6 from '../../components/example/Example6.tsx';
 import Example7 from '../../components/example/Example7.tsx';
 import GithubLink from '../../components/example/GithubLink.tsx';
+import {useUrlSearchParams} from '../../utils/location.ts';
 
 const examples = [
     {id: '1', title: '1', Component: Example1},
@@ -28,7 +28,7 @@ const examples = [
 
 const Example = () => {
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useUrlSearchParams();
     const idFromUrl = searchParams.get('id');
 
     const initialIndex = useMemo(() => {
