@@ -268,7 +268,6 @@ export default function Commander() {
             player={players[pid]}
             allPlayers={players}
             rotation={rotation}
-            commanders={commanders}
             onLifeChange={delta => updateLife(pid, delta)}
             onLifeSet={life => setLife(pid, life)}
             onPlayerUpdate={update => updatePlayer(pid, update)}

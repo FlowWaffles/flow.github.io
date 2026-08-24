@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import HoldButton from './HoldButton';
 import CommanderDamageGrid from './CommanderDamageGrid';
-import type { Player, CommanderEntry } from './types';
+import type { Player } from './types';
 import {
   CMD_LETHAL, HOLD_INCREMENT, POISON_LETHAL,
   isEffectivelyDead, isOverridingDeath, accentToBg,
@@ -37,7 +37,6 @@ interface PlayerQuadrantProps {
   allPlayers: Player[];
   rotation: 0 | 180;
   compact?: boolean;
-  commanders?: CommanderEntry[];
   onLifeChange: (delta: number) => void;
   onLifeSet: (life: number) => void;
   onPlayerUpdate: (update: Partial<Player>) => void;
@@ -47,7 +46,7 @@ interface PlayerQuadrantProps {
 }
 
 export default function PlayerQuadrant({
-  pid, player, allPlayers, rotation, compact = false, commanders,
+  pid, player, allPlayers, rotation, compact = false,
   onLifeChange, onLifeSet, onPlayerUpdate, onDamageClick, onOpenSettings, sx,
 }: PlayerQuadrantProps) {
   const [editLife, setEditLife] = useState(false);
@@ -101,17 +100,14 @@ export default function PlayerQuadrant({
   const deathCause = player.isDead
     ? 'KO\'d'
     : player.poisonCounters >= POISON_LETHAL
-      ? 'Unalived by poison ☠'
+      ? 'Unalived by poison'
       : lethalCmdAttacker !== undefined
         ? allPlayers[lethalCmdAttacker].commander
           ? `Was killed by\n${allPlayers[lethalCmdAttacker].commander}`
           : `Died to commander damage\nfrom ${allPlayers[lethalCmdAttacker].name}`
-        : '';
-
-  // Only show cause text for non-life-based deaths (skull alone speaks for life)
-  const showDeathCause = player.isDead
-    || player.poisonCounters >= POISON_LETHAL
-    || lethalCmdAttacker !== undefined;
+        : player.life <= 0
+          ? `Life total: ${player.life}`
+          : 'Defeated';
 
   return (
     <Box sx={{
@@ -152,22 +148,33 @@ export default function PlayerQuadrant({
         <Typography
           onClick={onOpenSettings}
           sx={{
-            color: accent, fontWeight: 600, fontSize: nameFontSize,
+            color: overridingDeath ? '#4acc70' : accent,
+            fontWeight: 600,
+            fontSize: overridingDeath ? (compact ? '0.66rem' : '0.74rem') : nameFontSize,
             letterSpacing: '0.04em', cursor: 'pointer', userSelect: 'none',
-            textTransform: 'uppercase',
+            textTransform: overridingDeath ? 'none' : 'uppercase',
             fontFamily: "'Orbitron-Regular', monospace",
             display: 'flex',
             alignItems: 'center',
-            gap: compact ? 0.4 : 0.75,
+            gap: compact ? 0.3 : 0.5,
             textAlign: 'center',
             lineHeight: 1.1,
+            fontStyle: overridingDeath ? 'italic' : 'normal',
           }}
         >
-          <Box component="span">{player.name}</Box>
-          {player.commander && (
-            <Box component="span" sx={{ color: '#ddd', opacity: 0.9, textTransform: 'none', fontSize: compact ? '0.74em' : '0.82em' }}>
-              - {player.commander}
-            </Box>
+          {overridingDeath ? (
+            <>
+              <Box component="span">{aliveQuote}</Box>
+            </>
+          ) : (
+            <>
+              <Box component="span">{player.name}</Box>
+              {player.commander && (
+                <Box component="span" sx={{ color: '#ddd', opacity: 0.9, textTransform: 'none', fontSize: compact ? '0.74em' : '0.82em' }}>
+                  - {player.commander}
+                </Box>
+              )}
+            </>
           )}
         </Typography>
       </Box>
@@ -247,30 +254,6 @@ export default function PlayerQuadrant({
         </HoldButton>
       </Box>
 
-      {/* Poison counter badge */}
-      {player.poisonCounters > 0 && (
-        <Box
-          onClick={onOpenSettings}
-          sx={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5,
-            py: compact ? 0.2 : 0.3, flexShrink: 0,
-            borderTop: `1px solid ${accent}22`,
-            cursor: 'pointer',
-            bgcolor: player.poisonCounters >= POISON_LETHAL
-              ? 'rgba(244,67,54,0.12)' : 'rgba(255,255,255,0.03)',
-          }}
-        >
-          <Typography sx={{
-            fontSize: compact ? '0.68rem' : '0.75rem',
-            color: player.poisonCounters >= POISON_LETHAL ? '#f44336' : '#aaa',
-            fontWeight: 600, userSelect: 'none',
-            fontFamily: "'Orbitron-Regular', monospace",
-          }}>
-            ☠ {player.poisonCounters} poison
-          </Typography>
-        </Box>
-      )}
-
       <CommanderDamageGrid
         pid={pid}
         player={player}
@@ -282,90 +265,85 @@ export default function PlayerQuadrant({
         onSelfClick={onOpenSettings}
       />
 
-      {/* Alive-override strip: shown when player should be dead but clicked "Not dead" */}
-      {overridingDeath && (
-        <Box
-          onClick={() => onPlayerUpdate({ isAliveOverride: false })}
-          sx={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5,
-            py: compact ? 0.25 : 0.4, px: compact ? 0.75 : 1, flexShrink: 0, cursor: 'pointer',
-            borderTop: `1px solid #4acc7033`,
-            bgcolor: 'rgba(74,204,112,0.07)',
-            '&:hover': { bgcolor: 'rgba(74,204,112,0.12)' },
-          }}
-        >
-          <Checkbox
-            checked
-            size="small"
-            readOnly
-            sx={{ color: '#4acc70', '&.Mui-checked': { color: '#4acc70' }, p: 0.25 }}
-          />
-          <Typography sx={{
-            fontSize: compact ? '0.58rem' : '0.65rem', color: 'rgba(74,204,112,0.65)',
-            fontStyle: 'italic', userSelect: 'none',
-            fontFamily: "'Orbitron-Regular', monospace",
-          }}>
-            {aliveQuote}
-          </Typography>
-        </Box>
-      )}
-
       {/* Dead overlay */}
       {dead && (
         <Box sx={{
-          position: 'absolute', inset: 0, zIndex: 10,
-          bgcolor: 'rgba(0,0,0,0.8)',
+          position: 'absolute', inset: 0, zIndex: 60,
+          bgcolor: 'rgba(0,0,0,0.92)',
+          backdropFilter: 'blur(2px)',
           display: 'flex', flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'center', justifyContent: 'center',
           pointerEvents: 'auto',
+          px: 1.5,
         }}>
-          {/* Skull + cause — centered in available space */}
           <Box sx={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center', gap: 1,
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 0.8,
+            textAlign: 'center',
           }}>
             <Typography sx={{
-              fontSize: 'clamp(4rem, 18vw, 9rem)',
-              opacity: 0.22, userSelect: 'none', lineHeight: 1,
+              fontSize: compact ? { xs: '1rem', sm: '1.1rem' } : { xs: '1.1rem', sm: '1.25rem' },
+              color: '#d9dde8',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              fontWeight: 700,
+              userSelect: 'none',
+              fontFamily: "'Orbitron-Regular', monospace",
             }}>
-              💀
+              Dead
             </Typography>
-            {showDeathCause && (
-              <Typography sx={{
-                fontSize: compact ? { xs: '0.65rem', sm: '0.72rem' } : { xs: '0.72rem', sm: '0.8rem' }, color: '#888',
-                userSelect: 'none', textAlign: 'center', px: 1.5,
-                whiteSpace: 'pre-line', lineHeight: 1.4,
-                fontFamily: "'Orbitron-Regular', monospace",
-              }}>
-                {deathCause}
-              </Typography>
-            )}
+            <Typography sx={{
+              fontSize: compact ? { xs: '0.66rem', sm: '0.74rem' } : { xs: '0.74rem', sm: '0.82rem' },
+              color: '#98a3b8',
+              userSelect: 'none',
+              whiteSpace: 'pre-line',
+              lineHeight: 1.4,
+              fontFamily: "'Orbitron-Regular', monospace",
+            }}>
+              {deathCause}
+            </Typography>
           </Box>
 
-          {/* Not dead — anchored to bottom */}
-          <FormControlLabel
-            onClick={e => {
-              e.stopPropagation();
-              onPlayerUpdate({ isDead: false, isAliveOverride: true });
-            }}
-            control={
-              <Checkbox
-                checked={false}
-                size="small"
-                sx={{ color: '#4acc70', '&.Mui-checked': { color: '#4acc70' }, p: 0.5 }}
-              />
-            }
-            label={
-              <Typography sx={{
-                fontSize: compact ? { xs: '0.74rem', sm: '0.82rem' } : { xs: '0.82rem', sm: '0.9rem' }, color: '#4acc70',
-                userSelect: 'none', fontWeight: 600,
-                fontFamily: "'Orbitron-Regular', monospace",
-              }}>
-                Not dead
-              </Typography>
-            }
-            sx={{ m: 0, mb: 1.5, cursor: 'pointer' }}
-          />
+          <Box sx={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 'max(10px, env(safe-area-inset-bottom))',
+            display: 'flex',
+            justifyContent: 'center',
+            px: 1,
+          }}>
+            <FormControlLabel
+              onClick={e => {
+                e.stopPropagation();
+                onPlayerUpdate({ isDead: false, isAliveOverride: true });
+              }}
+              control={
+                <Checkbox
+                  checked={false}
+                  size="small"
+                  sx={{ color: '#4acc70', '&.Mui-checked': { color: '#4acc70' }, p: 0.5 }}
+                />
+              }
+              label={
+                <Typography sx={{
+                  fontSize: compact ? { xs: '0.74rem', sm: '0.82rem' } : { xs: '0.82rem', sm: '0.9rem' }, color: '#4acc70',
+                  userSelect: 'none', fontWeight: 600,
+                  fontFamily: "'Orbitron-Regular', monospace",
+                }}>
+                  Not dead
+                </Typography>
+              }
+              sx={{
+                m: 0,
+                cursor: 'pointer',
+                border: '1px solid #4acc7055',
+                borderRadius: 999,
+                bgcolor: 'rgba(0, 0, 0, 0.35)',
+                pr: 0.6,
+              }}
+            />
+          </Box>
         </Box>
       )}
 
