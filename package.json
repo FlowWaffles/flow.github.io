@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build --mode production && cp ./dist/index.html ./dist/404.html",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "update:commanders": "node ./scripts/update-commanders.mjs"
   },
   "dependencies": {
     "@emotion/styled": "^11.14.0",

@@ -8,6 +8,7 @@ import PlayerQuadrant from './PlayerQuadrant';
 import CommanderDamageModal from './CommanderDamageModal';
 import PlayerSettingsModal from './PlayerSettingsModal';
 import ResetDialog from './ResetDialog';
+import commandersData from './commanders-data';
 import type { Player, ModalState, CommanderEntry } from './types';
 import { mkPlayers, syncAliveOverride } from './types';
 
@@ -100,40 +101,13 @@ function readStoredPlayers(): Player[] {
   }
 }
 
-async function fetchCommanderList(): Promise<CommanderEntry[]> {
-  const cached = sessionStorage.getItem('scryfall_commanders_v1');
-  if (cached) {
-    try { return JSON.parse(cached); } catch { /* ignore */ }
-  }
-
-  const results: CommanderEntry[] = [];
-  let url: string | null = 'https://api.scryfall.com/cards/search?q=is%3Acommander&order=name';
-
-  while (url) {
-    const resp = await fetch(url, { headers: { 'User-Agent': 'MTGCommanderTracker/1.0' } });
-    if (!resp.ok) break;
-    const data = await resp.json();
-    for (const card of data.data) {
-      const artCrop: string =
-        card.image_uris?.art_crop ??
-        card.card_faces?.[0]?.image_uris?.art_crop ??
-        '';
-      results.push({ name: card.name as string, artCrop });
-    }
-    url = data.has_more ? (data.next_page as string) : null;
-    if (url) await new Promise(r => setTimeout(r, 75));
-  }
-
-  try { sessionStorage.setItem('scryfall_commanders_v1', JSON.stringify(results)); } catch { /* ignore */ }
-  return results;
-}
-
 export default function Commander() {
   const [players, setPlayers] = useState<Player[]>(readStoredPlayers);
   const [resetOpen, setResetOpen] = useState(false);
   const [modal, setModal] = useState<ModalState | null>(null);
   const [settingsPid, setSettingsPid] = useState<number | null>(null);
-  const [commanders, setCommanders] = useState<CommanderEntry[]>([]);
+  const [commanders] = useState<CommanderEntry[]>(commandersData);
+  const commandersLoading = false;
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const boardRef = useRef<HTMLDivElement | null>(null);
@@ -143,10 +117,6 @@ export default function Commander() {
   const shortMobileHeight = useMediaQuery('(pointer: coarse) and (max-height: 480px)');
   const rotateMobileSurface = mobileLayout && portraitViewport;
   const compactLayout = narrowMobileWidth || shortMobileHeight;
-
-  useEffect(() => {
-    fetchCommanderList().then(setCommanders).catch(console.error);
-  }, []);
 
   useEffect(() => {
     try {
@@ -398,6 +368,7 @@ export default function Commander() {
             open
             player={{ ...players[settingsPid], seat: settingsPid }}
             commanders={commanders}
+            commandersLoading={commandersLoading}
             onClose={() => setSettingsPid(null)}
             onUpdate={update => updatePlayer(settingsPid, update)}
           />

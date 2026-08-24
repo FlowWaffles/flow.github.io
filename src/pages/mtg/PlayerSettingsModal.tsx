@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box, Button, TextField, Typography, Autocomplete, Backdrop, useMediaQuery,
-  Divider,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -19,10 +18,11 @@ interface PlayerSettingsModalProps {
   onClose: () => void;
   onUpdate: (update: Partial<Player>) => void;
   commanders?: CommanderEntry[];
+  commandersLoading?: boolean;
 }
 
 export default function PlayerSettingsModal({
-  open, player, onClose, onUpdate, commanders = [],
+  open, player, onClose, onUpdate, commanders = [], commandersLoading = false,
 }: PlayerSettingsModalProps) {
   const [name, setName] = useState(player.name);
   const [commanderInput, setCommanderInput] = useState(player.commander);
@@ -51,6 +51,7 @@ export default function PlayerSettingsModal({
   const accent = player.accentColor;
   const modalRotation = getPlayerModalRotation(player.seat ?? 0);
   const landscapeLayout = mobileLayout || Math.abs(modalRotation) % 180 === 90;
+  const showCommanderBox = commandersLoading || commanders.length > 0;
   const contentGap = landscapeLayout ? 1.5 : 2.5;
   const sectionLabelSx = {
     fontSize: '0.72rem',
@@ -117,20 +118,36 @@ export default function PlayerSettingsModal({
             flex: 1,
             minHeight: 0,
             display: 'grid',
-            gridTemplateColumns: landscapeLayout ? 'minmax(0, 1fr) minmax(0, 1fr)' : 'minmax(0, 1fr)',
+            gridTemplateColumns: landscapeLayout && showCommanderBox
+              ? 'minmax(0, 1fr) minmax(0, 1fr)'
+              : 'minmax(0, 1fr)',
             gridTemplateAreas: landscapeLayout
-              ? `
-                "name commander"
-                "color commander"
-                "poison status"
-              `
-              : `
-                "name"
-                "color"
-                "commander"
-                "poison"
-                "status"
-              `,
+              ? showCommanderBox
+                ? `
+                  "name commander"
+                  "color commander"
+                  "poison status"
+                `
+                : `
+                  "name"
+                  "color"
+                  "poison"
+                  "status"
+                `
+              : showCommanderBox
+                ? `
+                  "name"
+                  "color"
+                  "commander"
+                  "poison"
+                  "status"
+                `
+                : `
+                  "name"
+                  "color"
+                  "poison"
+                  "status"
+                `,
             gap: contentGap,
             overflowY: 'auto',
             overflowX: 'hidden',
@@ -197,60 +214,77 @@ export default function PlayerSettingsModal({
           </Box>
         </Box>
 
-        <Box sx={{ gridArea: 'commander', minWidth: 0 }}>
-          <Box>
-            <Typography sx={sectionLabelSx}>
-              Commander
-            </Typography>
-            <Autocomplete
-              disablePortal
-              freeSolo
-              options={commanders}
-              getOptionLabel={(opt) => (typeof opt === 'string' ? opt : opt.name)}
-              filterOptions={(options, state) => {
-                const input = state.inputValue.toLowerCase().trim();
-                if (!input) return [];
-                return options.filter(opt => opt.name.toLowerCase().includes(input)).slice(0, 8);
-              }}
-              inputValue={commanderInput}
-              onInputChange={(_, v) => setCommanderInput(v)}
-              onChange={(_, newValue) => {
-                if (!newValue) {
-                  onUpdate({ commander: '', commanderArtUrl: '' });
-                } else if (typeof newValue === 'string') {
-                  const found = commanders.find(c => c.name.toLowerCase() === newValue.toLowerCase());
-                  onUpdate({ commander: newValue, commanderArtUrl: found?.artCrop ?? '' });
-                } else {
-                  onUpdate({ commander: newValue.name, commanderArtUrl: newValue.artCrop });
-                  setCommanderInput(newValue.name);
-                }
-              }}
-              slotProps={{
-                paper: { sx: { bgcolor: '#222', color: '#eee' } },
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder={commanders.length ? 'Search commanders…' : 'Loading…'}
-                  size="small"
-                  fullWidth
-                  variant="outlined"
-                  onBlur={() => commitCommander(commanderInput)}
-                  inputProps={{ ...params.inputProps, style: { ...((params.inputProps as React.InputHTMLAttributes<HTMLInputElement>).style), color: '#eee' } }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: '#444' },
-                      '&:hover fieldset': { borderColor: `${accent}88` },
-                      '&.Mui-focused fieldset': { borderColor: accent },
-                    },
-                    '& input': { color: '#eee' },
-                    '& .MuiAutocomplete-endAdornment svg': { color: '#888' },
+        {showCommanderBox && (
+          <Box sx={{ gridArea: 'commander', minWidth: 0 }}>
+            <Box>
+              <Typography sx={sectionLabelSx}>
+                Commander
+              </Typography>
+              {commandersLoading ? (
+                <Typography sx={{ color: '#888', fontSize: '0.86rem', py: 1.2 }}>
+                  Loading commanders...
+                </Typography>
+              ) : (
+                <Autocomplete
+                  freeSolo
+                  options={commanders}
+                  getOptionLabel={(opt) => (typeof opt === 'string' ? opt : opt.name)}
+                  filterOptions={(options, state) => {
+                    const input = state.inputValue.toLowerCase().trim();
+                    if (!input) return [];
+                    const matches: CommanderEntry[] = [];
+                    for (const option of options) {
+                      if (option.name.toLowerCase().includes(input)) {
+                        matches.push(option);
+                        if (matches.length >= 8) break;
+                      }
+                    }
+                    return matches;
                   }}
+                  inputValue={commanderInput}
+                  onInputChange={(_, v) => setCommanderInput(v)}
+                  openOnFocus
+                  noOptionsText={commanderInput.trim() ? 'No commanders found' : 'Type to search'}
+                  onChange={(_, newValue) => {
+                    if (!newValue) {
+                      onUpdate({ commander: '', commanderArtUrl: '' });
+                    } else if (typeof newValue === 'string') {
+                      const found = commanders.find(c => c.name.toLowerCase() === newValue.toLowerCase());
+                      onUpdate({ commander: newValue, commanderArtUrl: found?.artCrop ?? '' });
+                    } else {
+                      onUpdate({ commander: newValue.name, commanderArtUrl: newValue.artCrop });
+                      setCommanderInput(newValue.name);
+                    }
+                  }}
+                  slotProps={{
+                    popper: { sx: { zIndex: 2200 } },
+                    paper: { sx: { bgcolor: '#222', color: '#eee' } },
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Search commanders…"
+                      size="small"
+                      fullWidth
+                      variant="outlined"
+                      onBlur={() => commitCommander(commanderInput)}
+                      inputProps={{ ...params.inputProps, style: { ...((params.inputProps as React.InputHTMLAttributes<HTMLInputElement>).style), color: '#eee' } }}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': { borderColor: '#444' },
+                          '&:hover fieldset': { borderColor: `${accent}88` },
+                          '&.Mui-focused fieldset': { borderColor: accent },
+                        },
+                        '& input': { color: '#eee' },
+                        '& .MuiAutocomplete-endAdornment svg': { color: '#888' },
+                      }}
+                    />
+                  )}
                 />
               )}
-            />
+            </Box>
           </Box>
-        </Box>
+        )}
 
         <Box sx={{ gridArea: 'poison', minWidth: 0 }}>
           <Box>
