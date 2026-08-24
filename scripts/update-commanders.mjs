@@ -7,7 +7,8 @@ const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, '..');
 const outputPath = path.join(repoRoot, 'src/pages/mtg/commanders-data.ts');
 const SEARCH_URL = 'https://api.scryfall.com/cards/search?q=is%3Acommander&order=name&unique=cards';
-const MIN_REQUEST_GAP_MS = 160;
+const MIN_REQUEST_GAP_MS = 350;
+const MAX_ATTEMPTS = 2;
 const REQUEST_HEADERS = {
   'User-Agent': 'Flow.Fail Commander Tracker App Data Bot/1.0',
   Accept: 'application/json',
@@ -17,14 +18,17 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function fetchJsonWithRetry(url) {
   let attempt = 0;
-  while (attempt < 6) {
+  while (attempt < MAX_ATTEMPTS) {
     const response = await fetch(url, { headers: REQUEST_HEADERS });
     if (response.ok) return response.json();
 
     if (response.status === 429) {
+      if (attempt + 1 >= MAX_ATTEMPTS) {
+        throw new Error('Scryfall rate-limited this run (429). Keeping existing commanders-data.ts unchanged.');
+      }
       const retryAfterHeader = response.headers.get('retry-after');
       const retryAfterSeconds = retryAfterHeader ? Number(retryAfterHeader) : 60;
-      const retryDelayMs = (Number.isFinite(retryAfterSeconds) ? retryAfterSeconds : 60) * 1000;
+      const retryDelayMs = (Number.isFinite(retryAfterSeconds) ? retryAfterSeconds : 60) * 1000 + MIN_REQUEST_GAP_MS;
       await delay(retryDelayMs);
       attempt += 1;
       continue;
@@ -34,7 +38,7 @@ async function fetchJsonWithRetry(url) {
     throw new Error(`Scryfall request failed (${response.status}): ${body.slice(0, 300)}`);
   }
 
-  throw new Error('Scryfall request failed repeatedly with 429 rate limits.');
+  throw new Error(`Scryfall request failed after ${MAX_ATTEMPTS} attempt(s).`);
 }
 
 async function fetchAllCommanders() {
