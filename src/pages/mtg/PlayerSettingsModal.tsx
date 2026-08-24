@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Box, Button, TextField, Typography, Autocomplete, Backdrop, useMediaQuery,
+  Box, Button, TextField, Typography, Backdrop, useMediaQuery,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SkullIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import HoldButton from './HoldButton';
+import CommanderChipInput from './CommanderChipInput';
 import type { Player, CommanderEntry } from './types';
 import {
   ACCENT_OPTIONS, POISON_LETHAL, HOLD_INCREMENT, getPlayerModalRotation,
@@ -26,27 +27,19 @@ export default function PlayerSettingsModal({
   open, player, onClose, onUpdate, commanders = [], commandersLoading = false, surfaceRotation = 0,
 }: PlayerSettingsModalProps) {
   const [name, setName] = useState(player.name);
-  const [commanderInput, setCommanderInput] = useState(player.commander);
   const [isTyping, setIsTyping] = useState(false);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
 
   useEffect(() => {
     if (open) {
       setName(player.name);
-      setCommanderInput(player.commander);
     }
-  }, [open, player.name, player.commander]);
+  }, [open, player.name]);
 
   const commitName = () => {
     const trimmed = name.trim() || player.name;
     setName(trimmed);
     onUpdate({ name: trimmed });
-  };
-
-  const commitCommander = (input: string) => {
-    const trimmed = input.trim();
-    const found = commanders.find(c => c.name.toLowerCase() === trimmed.toLowerCase());
-    onUpdate({ commander: trimmed, commanderArtUrl: found?.artCrop ?? '' });
   };
 
   const dead = isEffectivelyDead(player);
@@ -233,65 +226,20 @@ export default function PlayerSettingsModal({
                   Loading commanders...
                 </Typography>
               ) : (
-                <Autocomplete
-                  freeSolo
-                  options={commanders}
-                  getOptionLabel={(opt) => (typeof opt === 'string' ? opt : opt.name)}
-                  filterOptions={(options, state) => {
-                    const input = state.inputValue.toLowerCase().trim();
-                    if (!input) return [];
-                    const matches: CommanderEntry[] = [];
-                    for (const option of options) {
-                      if (option.name.toLowerCase().includes(input)) {
-                        matches.push(option);
-                        if (matches.length >= 8) break;
-                      }
-                    }
-                    return matches;
+                <CommanderChipInput
+                  values={[player.commander, player.partnerCommander].filter(Boolean)}
+                  commanders={commanders}
+                  accent={accent}
+                  popperZIndex={2200}
+                  onTypingChange={setIsTyping}
+                  onChange={(names, artUrls) => {
+                    onUpdate({
+                      commander: names[0] ?? '',
+                      commanderArtUrl: artUrls[0] ?? '',
+                      partnerCommander: names[1] ?? '',
+                      partnerCommanderArtUrl: artUrls[1] ?? '',
+                    });
                   }}
-                  inputValue={commanderInput}
-                  onInputChange={(_, v) => setCommanderInput(v)}
-                  openOnFocus
-                  noOptionsText={commanderInput.trim() ? 'No commanders found' : 'Type to search'}
-                  onChange={(_, newValue) => {
-                    if (!newValue) {
-                      onUpdate({ commander: '', commanderArtUrl: '' });
-                    } else if (typeof newValue === 'string') {
-                      const found = commanders.find(c => c.name.toLowerCase() === newValue.toLowerCase());
-                      onUpdate({ commander: newValue, commanderArtUrl: found?.artCrop ?? '' });
-                    } else {
-                      onUpdate({ commander: newValue.name, commanderArtUrl: newValue.artCrop });
-                      setCommanderInput(newValue.name);
-                    }
-                  }}
-                  slotProps={{
-                    popper: { sx: { zIndex: 2200 } },
-                    paper: { sx: { bgcolor: '#222', color: '#eee' } },
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      placeholder="Search commanders…"
-                      size="small"
-                      fullWidth
-                      variant="outlined"
-                      onFocus={() => setIsTyping(true)}
-                      onBlur={() => {
-                        commitCommander(commanderInput);
-                        setIsTyping(false);
-                      }}
-                      inputProps={{ ...params.inputProps, style: { ...((params.inputProps as React.InputHTMLAttributes<HTMLInputElement>).style), color: '#eee' } }}
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': { borderColor: '#444' },
-                          '&:hover fieldset': { borderColor: `${accent}88` },
-                          '&.Mui-focused fieldset': { borderColor: accent },
-                        },
-                        '& input': { color: '#eee' },
-                        '& .MuiAutocomplete-endAdornment svg': { color: '#888' },
-                      }}
-                    />
-                  )}
                 />
               )}
             </Box>

@@ -43,6 +43,8 @@ export interface Player {
   isAliveOverride: boolean;
   commander: string;
   commanderArtUrl: string;
+  partnerCommander: string;
+  partnerCommanderArtUrl: string;
 }
 
 export interface ModalState {
@@ -124,4 +126,6 @@ export const mkPlayers = (): Player[] =>
     isAliveOverride: false,
     commander: '',
     commanderArtUrl: '',
+    partnerCommander: '',
+    partnerCommanderArtUrl: '',
   }));

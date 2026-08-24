@@ -3,8 +3,8 @@ import { keyframes } from '@emotion/react';
 import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material';
 
 const neonGlow = keyframes`
-  0%, 100% { text-shadow: 0 0 5px #ffffff, 0 0 10px #acecec, 0 0 20px #42dcdb; }
-  50%       { text-shadow: 0 0 2px #ffffff, 0 0 5px #acecec, 0 0 10px #42dcdb; }
+  0%, 100% { filter: drop-shadow(0 0 4px #acecec) drop-shadow(0 0 10px #42dcdb); }
+  50%       { filter: drop-shadow(0 0 2px #acecec) drop-shadow(0 0 4px #42dcdb); }
 `;
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -95,6 +95,10 @@ export default function PlayerQuadrant({
         ? '0 0 20px rgba(255,235,59,0.35)'
         : undefined;
 
+  const commanderDisplay = [player.commander, player.partnerCommander].filter(Boolean).join(' // ');
+  const hasPrimaryArt = Boolean(player.commanderArtUrl);
+  const hasPartnerArt = Boolean(player.partnerCommanderArtUrl);
+
   const lethalCmdAttacker = opponents.find(o => player.cmdDmg[o] >= CMD_LETHAL);
 
   const deathCause = player.isDead
@@ -102,8 +106,8 @@ export default function PlayerQuadrant({
     : player.poisonCounters >= POISON_LETHAL
       ? 'Unalived by poison'
       : lethalCmdAttacker !== undefined
-        ? allPlayers[lethalCmdAttacker].commander
-          ? `Was killed by\n${allPlayers[lethalCmdAttacker].commander}`
+      ? [allPlayers[lethalCmdAttacker].commander, allPlayers[lethalCmdAttacker].partnerCommander].filter(Boolean).join(' // ')
+        ? `Was killed by\n${[allPlayers[lethalCmdAttacker].commander, allPlayers[lethalCmdAttacker].partnerCommander].filter(Boolean).join(' // ')}`
           : `Died to commander damage\nfrom ${allPlayers[lethalCmdAttacker].name}`
         : player.life <= 0
           ? `Life total: ${player.life}`
@@ -114,16 +118,10 @@ export default function PlayerQuadrant({
       ...sx,
       display: 'flex', flexDirection: 'column',
       bgcolor: bg,
-      backgroundImage: player.commanderArtUrl
-        ? `
-            linear-gradient(180deg, rgba(6, 10, 18, 0.3), rgba(6, 10, 18, 0.76)),
-            linear-gradient(135deg, ${accent}22, transparent 45%),
-            url(${player.commanderArtUrl})
-          `
-        : `
-            linear-gradient(180deg, rgba(6, 10, 18, 0.12), rgba(6, 10, 18, 0.58)),
-            linear-gradient(135deg, ${accent}24, transparent 42%)
-          `,
+      backgroundImage: `
+        linear-gradient(180deg, rgba(6, 10, 18, 0.12), rgba(6, 10, 18, 0.58)),
+        linear-gradient(135deg, ${accent}24, transparent 42%)
+      `,
       backgroundSize: 'cover',
       backgroundPosition: 'top center',
       backgroundRepeat: 'no-repeat',
@@ -134,8 +132,72 @@ export default function PlayerQuadrant({
       position: 'relative',
       minHeight: 0,
     }}>
+      {hasPrimaryArt && !hasPartnerArt && (
+        <Box sx={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: 'none',
+          backgroundImage: `
+            linear-gradient(180deg, rgba(6, 10, 18, 0.3), rgba(6, 10, 18, 0.76)),
+            linear-gradient(135deg, ${accent}22, transparent 45%),
+            url(${player.commanderArtUrl})
+          `,
+          backgroundSize: 'cover',
+          backgroundPosition: 'top center',
+          backgroundRepeat: 'no-repeat',
+        }}
+        />
+      )}
+      {hasPrimaryArt && hasPartnerArt && (
+        <>
+          <Box sx={{
+            position: 'absolute',
+            left: 0, top: 0, bottom: 0, width: '55%',
+            zIndex: 0,
+            pointerEvents: 'none',
+            backgroundImage: `
+              linear-gradient(180deg, rgba(6, 10, 18, 0.22), rgba(6, 10, 18, 0.72)),
+              linear-gradient(135deg, ${accent}1f, transparent 52%),
+              url(${player.commanderArtUrl})
+            `,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+            clipPath: 'polygon(0 0, 100% 0, 82% 100%, 0 100%)',
+          }}
+          />
+          <Box sx={{
+            position: 'absolute',
+            right: 0, top: 0, bottom: 0, width: '55%',
+            zIndex: 0,
+            pointerEvents: 'none',
+            backgroundImage: `
+              linear-gradient(180deg, rgba(6, 10, 18, 0.22), rgba(6, 10, 18, 0.72)),
+              linear-gradient(225deg, ${accent}1f, transparent 52%),
+              url(${player.partnerCommanderArtUrl})
+            `,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+            clipPath: 'polygon(18% 0, 100% 0, 100% 100%, 0 100%)',
+          }}
+          />
+          <Box sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            pointerEvents: 'none',
+            background: 'linear-gradient(100deg, transparent 49%, rgba(255,255,255,0.28) 50%, transparent 51%)',
+          }}
+          />
+        </>
+      )}
+
       {/* Name row — tap to open settings */}
       <Box sx={{
+        position: 'relative',
+        zIndex: 2,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexShrink: 0,
         px: compact ? 0.75 : 1,
@@ -169,9 +231,9 @@ export default function PlayerQuadrant({
           ) : (
             <>
               <Box component="span">{player.name}</Box>
-              {player.commander && (
+              {commanderDisplay && (
                 <Box component="span" sx={{ color: '#ddd', opacity: 0.9, textTransform: 'none', fontSize: compact ? '0.74em' : '0.82em' }}>
-                  - {player.commander}
+                  - {commanderDisplay}
                 </Box>
               )}
             </>
@@ -180,7 +242,7 @@ export default function PlayerQuadrant({
       </Box>
 
       {/* Life row */}
-      <Box sx={{ flex: 1, display: 'flex', alignItems: 'stretch', minHeight: 0 }}>
+      <Box sx={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', alignItems: 'stretch', minHeight: 0 }}>
         <HoldButton
           onTap={() => onLifeChange(-1)}
           onHold={() => onLifeChange(-HOLD_INCREMENT)}
@@ -230,8 +292,9 @@ export default function PlayerQuadrant({
                 transition: 'color 0.35s',
                 fontFamily: "'Monoton-Regular', monospace",
                 letterSpacing: '-0.04em',
+                willChange: 'filter',
                 ...(lifeTextShadow
-                  ? { textShadow: lifeTextShadow }
+                  ? { filter: `drop-shadow(0 0 8px ${lifeTextShadow.replace('0 0 20px ', '')})` }
                   : { animation: `${neonGlow} 4s infinite alternate ease-in-out` }),
               }}
             >
@@ -254,16 +317,18 @@ export default function PlayerQuadrant({
         </HoldButton>
       </Box>
 
-      <CommanderDamageGrid
-        pid={pid}
-        player={player}
-        allPlayers={allPlayers}
-        accent={accent}
-        rotation={rotation}
-        compact={compact}
-        onDamageClick={onDamageClick}
-        onSelfClick={onOpenSettings}
-      />
+      <Box sx={{ position: 'relative', zIndex: 2, flexShrink: 0 }}>
+        <CommanderDamageGrid
+          pid={pid}
+          player={player}
+          allPlayers={allPlayers}
+          accent={accent}
+          rotation={rotation}
+          compact={compact}
+          onDamageClick={onDamageClick}
+          onSelfClick={onOpenSettings}
+        />
+      </Box>
 
       {/* Dead overlay */}
       {dead && (

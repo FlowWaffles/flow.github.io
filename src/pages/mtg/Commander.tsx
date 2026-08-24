@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { keyframes } from '@emotion/react';
-import { Box, Button, Typography, useMediaQuery } from '@mui/material';
+import { Backdrop, Box, Button, Typography, useMediaQuery } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -8,9 +8,10 @@ import PlayerQuadrant from './PlayerQuadrant';
 import CommanderDamageModal from './CommanderDamageModal';
 import PlayerSettingsModal from './PlayerSettingsModal';
 import ResetDialog from './ResetDialog';
+import QuickSetupDialog from './QuickSetupDialog';
 import commandersData from './commanders-data';
 import type { Player, ModalState, CommanderEntry } from './types';
-import { mkPlayers, syncAliveOverride } from './types';
+import { getPlayerModalRotation, mkPlayers, syncAliveOverride } from './types';
 
 type FullscreenDocument = Document & {
   webkitExitFullscreen?: () => Promise<void> | void;
@@ -93,6 +94,12 @@ function readStoredPlayers(): Player[] {
         commander: typeof player.commander === 'string' ? player.commander : fallback.commander,
         commanderArtUrl:
           typeof player.commanderArtUrl === 'string' ? player.commanderArtUrl : fallback.commanderArtUrl,
+        partnerCommander:
+          typeof player.partnerCommander === 'string' ? player.partnerCommander : fallback.partnerCommander,
+        partnerCommanderArtUrl:
+          typeof player.partnerCommanderArtUrl === 'string'
+            ? player.partnerCommanderArtUrl
+            : fallback.partnerCommanderArtUrl,
       });
     });
   } catch (error) {
@@ -104,6 +111,8 @@ function readStoredPlayers(): Player[] {
 export default function Commander() {
   const [players, setPlayers] = useState<Player[]>(readStoredPlayers);
   const [resetOpen, setResetOpen] = useState(false);
+  const [newGameOpen, setNewGameOpen] = useState(false);
+  const [quickSetupOpen, setQuickSetupOpen] = useState(false);
   const [modal, setModal] = useState<ModalState | null>(null);
   const [settingsPid, setSettingsPid] = useState<number | null>(null);
   const [commanders] = useState<CommanderEntry[]>(commandersData);
@@ -231,6 +240,47 @@ export default function Commander() {
     setModal(null);
   };
 
+  const startNewGame = (refreshCommanders: boolean) => {
+    setPlayers(prev => {
+      const defaults = mkPlayers();
+      return defaults.map((fallback, index) => ({
+        ...fallback,
+        name: prev[index]?.name ?? fallback.name,
+        commander: refreshCommanders ? fallback.commander : (prev[index]?.commander ?? fallback.commander),
+        commanderArtUrl: refreshCommanders ? fallback.commanderArtUrl : (prev[index]?.commanderArtUrl ?? fallback.commanderArtUrl),
+        partnerCommander: refreshCommanders ? fallback.partnerCommander : (prev[index]?.partnerCommander ?? fallback.partnerCommander),
+        partnerCommanderArtUrl: refreshCommanders
+          ? fallback.partnerCommanderArtUrl
+          : (prev[index]?.partnerCommanderArtUrl ?? fallback.partnerCommanderArtUrl),
+      }));
+    });
+    setModal(null);
+    setSettingsPid(null);
+    setNewGameOpen(false);
+  };
+
+  const applyQuickSetup = (entries: Array<{ name: string; commander: string; partnerCommander: string }>) => {
+    setPlayers(prev => prev.map((player, index) => {
+      const entry = entries[index];
+      if (!entry) return player;
+
+      const nextName = entry.name.trim() || player.name;
+      const nextCommander = entry.commander.trim();
+      const nextPartnerCommander = entry.partnerCommander.trim();
+      const found = commanders.find(c => c.name.toLowerCase() === nextCommander.toLowerCase());
+      const foundPartner = commanders.find(c => c.name.toLowerCase() === nextPartnerCommander.toLowerCase());
+      return {
+        ...player,
+        name: nextName,
+        commander: nextCommander,
+        commanderArtUrl: nextCommander ? (found?.artCrop ?? '') : '',
+        partnerCommander: nextPartnerCommander,
+        partnerCommanderArtUrl: nextPartnerCommander ? (foundPartner?.artCrop ?? '') : '',
+      };
+    }));
+    setQuickSetupOpen(false);
+  };
+
   return (
     <Box sx={{
       position: 'fixed', inset: 0,
@@ -336,6 +386,44 @@ export default function Commander() {
           <Button
             variant="outlined"
             size="small"
+            onClick={() => setQuickSetupOpen(true)}
+            sx={{
+              color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
+              fontSize: compactLayout ? '0.75rem' : '0.8rem',
+              minHeight: compactLayout ? 32 : undefined,
+              px: compactLayout ? 1.25 : 1.5,
+              borderRadius: 999,
+              bgcolor: 'rgba(255,255,255,0.02)',
+              '&:hover': {
+                borderColor: 'rgba(191, 219, 254, 0.55)',
+                bgcolor: 'rgba(255,255,255,0.07)',
+              },
+            }}
+          >
+            Quick setup
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => setNewGameOpen(true)}
+            sx={{
+              color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
+              fontSize: compactLayout ? '0.75rem' : '0.8rem',
+              minHeight: compactLayout ? 32 : undefined,
+              px: compactLayout ? 1.25 : 1.5,
+              borderRadius: 999,
+              bgcolor: 'rgba(255,255,255,0.02)',
+              '&:hover': {
+                borderColor: 'rgba(191, 219, 254, 0.55)',
+                bgcolor: 'rgba(255,255,255,0.07)',
+              },
+            }}
+          >
+            New game
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
             startIcon={<RestartAltIcon />}
             onClick={() => setResetOpen(true)}
             sx={{
@@ -381,7 +469,57 @@ export default function Commander() {
           onClose={() => setResetOpen(false)}
           onConfirm={() => { setPlayers(mkPlayers()); setResetOpen(false); }}
         />
+
+        <Backdrop
+          open={newGameOpen}
+          onClick={() => setNewGameOpen(false)}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 230,
+            backdropFilter: 'blur(4px)',
+            bgcolor: 'rgba(0,0,0,0.7)',
+          }}
+        >
+          <Box
+            onClick={e => e.stopPropagation()}
+            sx={{
+              bgcolor: '#1e1e1e',
+              color: '#eee',
+              border: '1px solid #333',
+              borderRadius: 2,
+              boxShadow: '0 0 32px rgba(0,0,0,0.35)',
+              width: mobileLayout ? 'min(78%, 420px)' : 'min(92vw, 420px)',
+              maxWidth: 'calc(100% - 24px)',
+              px: 3,
+              py: 2.5,
+              transform: `rotate(${getPlayerModalRotation(0)}deg)`,
+              transformOrigin: 'center',
+            }}
+          >
+            <Typography sx={{ mb: 2 }}>
+              Start a new game and refresh commanders too?
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, flexWrap: 'wrap' }}>
+              <Button onClick={() => setNewGameOpen(false)} sx={{ color: '#aaa' }}>Cancel</Button>
+              <Button onClick={() => startNewGame(false)} variant="outlined" sx={{ textTransform: 'none' }}>
+                Keep commanders
+              </Button>
+              <Button onClick={() => startNewGame(true)} variant="contained" sx={{ textTransform: 'none' }}>
+                Refresh commanders
+              </Button>
+            </Box>
+          </Box>
+        </Backdrop>
       </Box>
+
+      <QuickSetupDialog
+        open={quickSetupOpen}
+        players={players}
+        commanders={commanders}
+        onClose={() => setQuickSetupOpen(false)}
+        onApply={applyQuickSetup}
+      />
     </Box>
   );
 }
