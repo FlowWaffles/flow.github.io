@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box, Button, TextField, Typography, Backdrop, useMediaQuery,
 } from '@mui/material';
@@ -26,13 +26,13 @@ interface PlayerSettingsModalProps {
 export default function PlayerSettingsModal({
   open, player, onClose, onUpdate, commanders = [], commandersLoading = false, surfaceRotation = 0,
 }: PlayerSettingsModalProps) {
-  const [name, setName] = useState(player.name);
+  const [name, setName] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
 
   useEffect(() => {
     if (open) {
-      setName(player.name);
+      setName('');
     }
   }, [open, player.name]);
 
@@ -160,6 +160,7 @@ export default function PlayerSettingsModal({
             <TextField
               value={name}
               onChange={e => setName(e.target.value)}
+              placeholder={player.name}
               onFocus={() => setIsTyping(true)}
               onBlur={() => {
                 commitName();

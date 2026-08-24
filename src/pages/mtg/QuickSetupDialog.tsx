@@ -27,12 +27,14 @@ export default function QuickSetupDialog({
   onApply,
 }: QuickSetupDialogProps) {
   const [entries, setEntries] = useState<QuickSetupEntry[]>([]);
+  const [originalNames, setOriginalNames] = useState<string[]>([]);
   const compactLayout = useMediaQuery('(max-width: 700px)');
 
   useEffect(() => {
     if (!open) return;
+    setOriginalNames(players.map(p => p.name));
     setEntries(players.map(player => ({
-      name: player.name,
+      name: '',
       commander: player.commander,
       partnerCommander: player.partnerCommander,
     })));
@@ -113,7 +115,7 @@ export default function QuickSetupDialog({
                 value={entry.name}
                 onChange={e => setEntry(index, { name: e.target.value })}
                 size="small"
-                placeholder="Name"
+                placeholder={originalNames[index] ?? `Player ${index + 1}`}
                 fullWidth
                 inputProps={{ style: { color: '#eee' } }}
                 sx={{
@@ -142,7 +144,10 @@ export default function QuickSetupDialog({
         <Box sx={{ px: 3, pb: 2.25, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
           <Button onClick={onClose} sx={{ color: '#aaa' }}>Cancel</Button>
           <Button
-            onClick={() => onApply(entries)}
+            onClick={() => onApply(entries.map((e, i) => ({
+              ...e,
+              name: e.name.trim() || originalNames[i] || `Player ${i + 1}`,
+            })))}
             variant="contained"
             sx={{ textTransform: 'none' }}
           >
