@@ -9,6 +9,7 @@ import CreateQuote from './pages/quote/CreateQuote.tsx';
 import ShareOracle from './pages/quiz/Quiz.tsx';
 import Oracle from './pages/oracle/Oracle.tsx';
 import EightBall from './pages/eightball/EightBall.tsx';
+import Commander from './pages/mtg/Commander.tsx';
 import { useCurrentLocation } from './utils/location.ts';
 
 function App() {
@@ -21,6 +22,11 @@ function App() {
     const normalizedPathname = pathname !== '/' && pathname.endsWith('/')
         ? pathname.slice(0, -1)
         : pathname;
+
+    // Full-screen pages rendered without GlobalLayout chrome
+    if (normalizedPathname === '/mtg') {
+        return <Commander />;
+    }
 
     const page = (() => {
         switch (normalizedPathname) {
