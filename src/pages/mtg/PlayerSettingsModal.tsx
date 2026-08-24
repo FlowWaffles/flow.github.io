@@ -19,13 +19,15 @@ interface PlayerSettingsModalProps {
   onUpdate: (update: Partial<Player>) => void;
   commanders?: CommanderEntry[];
   commandersLoading?: boolean;
+  surfaceRotation?: number;
 }
 
 export default function PlayerSettingsModal({
-  open, player, onClose, onUpdate, commanders = [], commandersLoading = false,
+  open, player, onClose, onUpdate, commanders = [], commandersLoading = false, surfaceRotation = 0,
 }: PlayerSettingsModalProps) {
   const [name, setName] = useState(player.name);
   const [commanderInput, setCommanderInput] = useState(player.commander);
+  const [isTyping, setIsTyping] = useState(false);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
 
   useEffect(() => {
@@ -49,8 +51,10 @@ export default function PlayerSettingsModal({
 
   const dead = isEffectivelyDead(player);
   const accent = player.accentColor;
-  const modalRotation = getPlayerModalRotation(player.seat ?? 0);
-  const landscapeLayout = mobileLayout || Math.abs(modalRotation) % 180 === 90;
+  const baseModalRotation = getPlayerModalRotation(player.seat ?? 0);
+  const normalizedSurfaceRotation = ((surfaceRotation % 360) + 360) % 360;
+  const modalRotation = isTyping ? -normalizedSurfaceRotation : baseModalRotation;
+  const landscapeLayout = !isTyping && (mobileLayout || Math.abs(modalRotation) % 180 === 90);
   const showCommanderBox = commandersLoading || commanders.length > 0;
   const contentGap = landscapeLayout ? 1.5 : 2.5;
   const sectionLabelSx = {
@@ -163,7 +167,11 @@ export default function PlayerSettingsModal({
             <TextField
               value={name}
               onChange={e => setName(e.target.value)}
-              onBlur={commitName}
+              onFocus={() => setIsTyping(true)}
+              onBlur={() => {
+                commitName();
+                setIsTyping(false);
+              }}
               onKeyDown={e => { if (e.key === 'Enter') commitName(); }}
               size="small"
               fullWidth
@@ -267,7 +275,11 @@ export default function PlayerSettingsModal({
                       size="small"
                       fullWidth
                       variant="outlined"
-                      onBlur={() => commitCommander(commanderInput)}
+                      onFocus={() => setIsTyping(true)}
+                      onBlur={() => {
+                        commitCommander(commanderInput);
+                        setIsTyping(false);
+                      }}
                       inputProps={{ ...params.inputProps, style: { ...((params.inputProps as React.InputHTMLAttributes<HTMLInputElement>).style), color: '#eee' } }}
                       sx={{
                         '& .MuiOutlinedInput-root': {

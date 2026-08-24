@@ -116,6 +116,7 @@ export default function Commander() {
   const narrowMobileWidth = useMediaQuery('(pointer: coarse) and (max-width: 480px)');
   const shortMobileHeight = useMediaQuery('(pointer: coarse) and (max-height: 480px)');
   const rotateMobileSurface = mobileLayout && portraitViewport;
+  const surfaceRotation = rotateMobileSurface ? 90 : 0;
   const compactLayout = narrowMobileWidth || shortMobileHeight;
 
   useEffect(() => {
@@ -369,6 +370,7 @@ export default function Commander() {
             player={{ ...players[settingsPid], seat: settingsPid }}
             commanders={commanders}
             commandersLoading={commandersLoading}
+            surfaceRotation={surfaceRotation}
             onClose={() => setSettingsPid(null)}
             onUpdate={update => updatePlayer(settingsPid, update)}
           />
