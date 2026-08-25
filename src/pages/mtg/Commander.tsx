@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { keyframes } from '@emotion/react';
-import { Backdrop, Box, Button, IconButton, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import { Backdrop, Box, Button, IconButton, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -169,6 +169,7 @@ export default function Commander() {
     return (localStorage.getItem('mtg_three_layout') as 'A' | 'B') || 'A';
   });
   const [layoutModalOpen, setLayoutModalOpen] = useState(false);
+  const [lifeTotalModal, setLifeTotalModal] = useState<{ pid: number; value: string } | null>(null);
   const boardRef = useRef<HTMLDivElement | null>(null);
   const fullscreenMenuTimerRef = useRef<number | null>(null);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
@@ -375,6 +376,19 @@ export default function Commander() {
       return syncAliveOverride({ ...p, life });
     }));
 
+  const applyLifeTotalFromModal = () => {
+    if (!lifeTotalModal) return;
+    const parsed = Number.parseInt(lifeTotalModal.value, 10);
+    if (Number.isNaN(parsed)) return;
+    const prevLife = players[lifeTotalModal.pid].life;
+    const delta = parsed - prevLife;
+    setLife(lifeTotalModal.pid, parsed);
+    if (delta !== 0) {
+      pushLifeHistory(lifeTotalModal.pid, { delta, source: 'manual' });
+    }
+    setLifeTotalModal(null);
+  };
+
   const openModal = (victim: number, attacker: number) => {
     const val = players[victim].cmdDmg[attacker];
     setModal({ victim, attacker, value: [val[0], val[1]], original: [val[0], val[1]] });
@@ -505,6 +519,11 @@ export default function Commander() {
     if (!modal) return 0;
     return layoutConfig.activeQuadrants.find(q => q.pid === modal.victim)?.rotation ?? 0;
   }, [layoutConfig.activeQuadrants, modal]);
+  const lifeTotalModalRotation = useMemo(() => {
+    if (!lifeTotalModal) return 0;
+    return layoutConfig.activeQuadrants.find(q => q.pid === lifeTotalModal.pid)?.rotation ?? 0;
+  }, [layoutConfig.activeQuadrants, lifeTotalModal]);
+  const canSubmitLifeTotal = lifeTotalModal !== null && /^-?\d+$/.test(lifeTotalModal.value.trim());
 
   return (
     <Box sx={{
@@ -542,7 +561,7 @@ export default function Commander() {
             startingLife={startingLifeTotal}
             monarchIntroduced={monarchIntroduced}
             onLifeChange={delta => updateLife(pid, delta)}
-            onLifeSet={life => setLife(pid, life)}
+            onOpenLifeSetModal={() => setLifeTotalModal({ pid, value: String(players[pid].life) })}
             onPlayerUpdate={update => updatePlayer(pid, update)}
             onDamageClick={attacker => openModal(pid, attacker)}
             onOpenSettings={() => setSettingsPid(pid)}
@@ -766,6 +785,52 @@ export default function Commander() {
           onClose={closeModal}
           onValueChange={v => setModal(m => m ? { ...m, value: v } : m)}
         />
+
+        <Backdrop
+          open={lifeTotalModal !== null}
+          onClick={() => setLifeTotalModal(null)}
+          sx={{ position: 'absolute', inset: 0, zIndex: 230, backdropFilter: 'blur(4px)', bgcolor: 'rgba(0,0,0,0.7)' }}
+        >
+          <Box
+            onClick={e => e.stopPropagation()}
+            sx={{
+              bgcolor: '#1e1e1e',
+              color: '#eee',
+              border: '1px solid #333',
+              borderRadius: 2,
+              boxShadow: '0 0 32px rgba(0,0,0,0.35)',
+              width: mobileLayout ? 'min(78%, 420px)' : 'min(92vw, 420px)',
+              maxWidth: 'calc(100% - 24px)',
+              px: 3,
+              py: 2.5,
+              transform: `rotate(${lifeTotalModalRotation}deg)`,
+              transformOrigin: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+            }}
+          >
+            <Typography sx={{ textAlign: 'center', fontWeight: 600 }}>Set life total</Typography>
+            <TextField
+              autoFocus
+              fullWidth
+              type="number"
+              value={lifeTotalModal?.value ?? ''}
+              onChange={e => setLifeTotalModal(prev => prev ? { ...prev, value: e.target.value } : prev)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && canSubmitLifeTotal) applyLifeTotalFromModal();
+              }}
+              variant="outlined"
+              inputProps={{ inputMode: 'numeric', pattern: '-?[0-9]*', style: { textAlign: 'center' } }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+              <Button onClick={() => setLifeTotalModal(null)} sx={{ color: '#aaa' }}>Cancel</Button>
+              <Button variant="contained" onClick={applyLifeTotalFromModal} disabled={!canSubmitLifeTotal}>
+                Apply
+              </Button>
+            </Box>
+          </Box>
+        </Backdrop>
 
         {settingsPid !== null && (
           <PlayerSettingsModal

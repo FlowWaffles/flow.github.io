@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { keyframes } from '@emotion/react';
-import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import { Box, Typography, Checkbox, FormControlLabel } from '@mui/material';
 import Icon from '@mdi/react';
 import { mdiCrown, mdiCrownOutline, mdiSkull } from '@mdi/js';
 
@@ -44,7 +44,7 @@ interface PlayerQuadrantProps {
   compact?: boolean;
   monarchIntroduced?: boolean;
   onLifeChange: (delta: number) => void;
-  onLifeSet: (life: number) => void;
+  onOpenLifeSetModal: () => void;
   onPlayerUpdate: (update: Partial<Player>) => void;
   onDamageClick: (attacker: number) => void;
   onOpenSettings: () => void;
@@ -56,24 +56,16 @@ interface PlayerQuadrantProps {
 
 export default function PlayerQuadrant({
   pid, player, allPlayers, rotation, physicalLayout, startingLife, compact = false, monarchIntroduced = false,
-  onLifeChange, onLifeSet, onPlayerUpdate, onDamageClick, onOpenSettings,
+  onLifeChange, onOpenLifeSetModal, onPlayerUpdate, onDamageClick, onOpenSettings,
   lifeHistory, onLifeHistoryCommit, onRevertHistory, sx,
 }: PlayerQuadrantProps) {
-  const [editLife, setEditLife] = useState(false);
-  const [lifeVal, setLifeVal] = useState(String(player.life));
   const [historyOpen, setHistoryOpen] = useState(false);
-  const lifeRef = useRef<HTMLInputElement>(null);
   const [lifeDelta, setLifeDelta] = useState(0);
   const deltaTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingDeltaRef = useRef(0);
   const lastTapRef = useRef<number>(0);
   const onLifeHistoryCommitRef = useRef(onLifeHistoryCommit);
   onLifeHistoryCommitRef.current = onLifeHistoryCommit;
-
-  useEffect(() => { if (!editLife) setLifeVal(String(player.life)); }, [player.life, editLife]);
-  useEffect(() => {
-    if (editLife) { lifeRef.current?.focus(); lifeRef.current?.select(); }
-  }, [editLife]);
 
   // Pick a new mockery quote each time the alive-override is activated
   const aliveQuote = useMemo(
@@ -82,24 +74,11 @@ export default function PlayerQuadrant({
     [player.isAliveOverride],
   );
 
-  const commitLife = () => {
-    const parsed = parseInt(lifeVal, 10);
-    if (!isNaN(parsed)) {
-      const delta = parsed - player.life;
-      onLifeSet(parsed);
-      if (delta !== 0) onLifeHistoryCommitRef.current(delta);
-    } else {
-      setLifeVal(String(player.life));
-    }
-    setEditLife(false);
-  };
-
   const handleLifeTap = () => {
     const now = Date.now();
     if (now - lastTapRef.current < 300) {
       lastTapRef.current = 0;
-      setLifeVal(String(player.life));
-      setEditLife(true);
+      onOpenLifeSetModal();
     } else {
       lastTapRef.current = now;
     }
@@ -381,52 +360,29 @@ export default function PlayerQuadrant({
               {lifeDelta > 0 ? `+${lifeDelta}` : lifeDelta}
             </Typography>
           )}
-          {editLife ? (
-            <TextField
-              inputRef={lifeRef}
-              value={lifeVal}
-              onChange={e => setLifeVal(e.target.value)}
-              onBlur={commitLife}
-              onKeyDown={e => { if (e.key === 'Enter') commitLife(); }}
-              type="number"
-              variant="standard"
-              inputProps={{
-                style: {
-                  textAlign: 'center',
-                  fontSize: lifeFontSize,
-                  fontWeight: 800,
-                  color: lifeColor,
-                  width: compact ? '3ch' : '3.5ch',
-                  fontFamily: "'Monoton-Regular', monospace",
-                },
+          <HoldButton
+            onTap={handleLifeTap}
+            onHold={() => setHistoryOpen(true)}
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <Typography
+              sx={{
+                fontSize: lifeFontSize,
+                fontWeight: 800, lineHeight: 1,
+                color: lifeColor,
+                cursor: 'pointer', userSelect: 'none',
+                transition: 'color 0.35s',
+                fontFamily: "'Monoton-Regular', monospace",
+                letterSpacing: '-0.04em',
+                willChange: 'filter',
+                ...(lifeTextShadow
+                  ? { filter: `drop-shadow(0 0 8px ${lifeTextShadow.replace('0 0 20px ', '')})` }
+                  : { animation: `${neonGlow} 4s infinite alternate ease-in-out` }),
               }}
-              sx={{ '& .MuiInput-underline:before': { borderColor: '#555' } }}
-            />
-          ) : (
-            <HoldButton
-              onTap={handleLifeTap}
-              onHold={() => setHistoryOpen(true)}
-              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
-              <Typography
-                sx={{
-                  fontSize: lifeFontSize,
-                  fontWeight: 800, lineHeight: 1,
-                  color: lifeColor,
-                  cursor: 'pointer', userSelect: 'none',
-                  transition: 'color 0.35s',
-                  fontFamily: "'Monoton-Regular', monospace",
-                  letterSpacing: '-0.04em',
-                  willChange: 'filter',
-                  ...(lifeTextShadow
-                    ? { filter: `drop-shadow(0 0 8px ${lifeTextShadow.replace('0 0 20px ', '')})` }
-                    : { animation: `${neonGlow} 4s infinite alternate ease-in-out` }),
-                }}
-              >
-                {player.life}
-              </Typography>
-            </HoldButton>
-          )}
+              {player.life}
+            </Typography>
+          </HoldButton>
         </Box>
 
         <HoldButton
