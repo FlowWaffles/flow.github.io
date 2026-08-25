@@ -819,7 +819,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Arcanis the Omnipotent",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9d31e3e3-f398-4c0e-a2c9-4c614a4d41de.jpg?1783903955"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9d31e3e3-f398-4c0e-a2c9-4c614a4d41de.jpg?1787563087"
   },
   {
     "name": "Arcee, Sharpshooter // Arcee, Acrobatic Coupe",
@@ -2963,7 +2963,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Drakuseth, Maw of Flames",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e9b40f5-3dd0-4607-a78d-b004d57fa4ea.jpg?1783903947"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e9b40f5-3dd0-4607-a78d-b004d57fa4ea.jpg?1787562797"
   },
   {
     "name": "Dralnu, Lich Lord",
@@ -7159,7 +7159,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Linden, the Steadfast Queen",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e0bb07cd-9b74-4ba7-8089-27a565d74197.jpg?1783903955"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/0/e0bb07cd-9b74-4ba7-8089-27a565d74197.jpg?1787563118"
   },
   {
     "name": "Linessa, Zephyr Mage",
@@ -7463,7 +7463,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Lyra Dawnbringer",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/f/9/f9fa30b6-3a33-46fd-8b32-ac1cfa41500d.jpg?1783903956"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/9/f9fa30b6-3a33-46fd-8b32-ac1cfa41500d.jpg?1787563101"
   },
   {
     "name": "Lyse Hext",
@@ -11727,7 +11727,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Surrak, the Hunt Caller",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/deb328c7-fdda-4d63-9fe4-0482c1de6098.jpg?1783903944"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/deb328c7-fdda-4d63-9fe4-0482c1de6098.jpg?1787562481"
   },
   {
     "name": "Surtr, Fiery Jötun",
