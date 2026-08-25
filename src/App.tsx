@@ -11,6 +11,7 @@ import Oracle from './pages/oracle/Oracle.tsx';
 import EightBall from './pages/eightball/EightBall.tsx';
 import Commander from './pages/mtg/Commander.tsx';
 import { useCurrentLocation } from './utils/location.ts';
+import LinkTree from './pages/linktree/LinkTree.tsx';
 
 function App() {
     const { pathname } = useCurrentLocation();
@@ -44,6 +45,9 @@ function App() {
                 return <Oracle />;
             case '/wdm':
                 return <EightBall />;
+            case '/linktree':
+            case '/links':
+                return <LinkTree />;
             default:
                 return <NotFound />;
         }

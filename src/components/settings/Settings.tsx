@@ -41,7 +41,7 @@ const Settings = () => {
                 ref={panelRef}
                 onPointerDown={(e) => e.stopPropagation()}     // ✅ prevent inside close
             >
-                <Lights />
+                <Lights onThemeSelected={() => setOpen(false)} />
                 <Radio />
             </div>
         </div>

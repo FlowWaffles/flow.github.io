@@ -5,14 +5,18 @@ import UniButton from '../../button/UniButton';
 import './Lights.css';
 import { getTheme, setTheme } from '../../../utils/ThemeHandler';
 
+type LightsProps = {
+  onThemeSelected?: () => void;
+};
 
-const Lights = () => {
+const Lights = ({ onThemeSelected }: LightsProps) => {
   const theme = getTheme();
   const [isDark, setIsDark] = useState(theme === 'dark');
 
   const handleChange = (darkMode: boolean) => {
     setIsDark(darkMode);
     setTheme(darkMode ? 'dark' : 'light');
+    onThemeSelected?.();
   }
 
   return (

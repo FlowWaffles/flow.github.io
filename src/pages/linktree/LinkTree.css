@@ -1,0 +1,85 @@
+.linktree {
+    width: 100dvw;
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    align-items: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.linktree-title {
+    margin: 0;
+    font-size: clamp(2.5rem, 12vw, 5rem);
+    align-self: start;
+}
+
+.linktree-main {
+    align-self: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.linktree-links {
+    width: min(420px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.linktree-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: 'Orbitron-Regular', monospace;
+}
+
+.linktree-link:hover {
+    border-color: #ffffff;
+}
+
+.linktree-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: contain;
+}
+
+.linktree-icon-moxfield {
+    width: 7rem;
+    height: auto;
+}
+
+.linktree-separator {
+    width: min(420px, 100%);
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    margin: 0 0 0.75rem 0;
+}
+
+.linktree-contact {
+    width: min(420px, 100%);
+    align-self: end;
+    justify-self: center;
+}
+
+.linktree-feedback {
+    max-width: 420px;
+    margin: 0 0 0.5rem 0;
+    font-family: 'Orbitron-Regular', monospace;
+}
+
+.linktree-contact-label {
+    margin: 0 0 0.5rem 0;
+    font-family: 'Orbitron-Regular', monospace;
+}
+
+.linktree-email {
+    font-family: 'Orbitron-Regular', monospace;
+}
