@@ -34,17 +34,6 @@ type FullscreenElement = HTMLElement & {
   webkitRequestFullscreen?: () => Promise<void> | void;
 };
 
-type SupportedOrientationLock = 'landscape';
-
-type ScreenOrientationWithLock = ScreenOrientation & {
-  lock?: (orientation: SupportedOrientationLock) => Promise<void>;
-  unlock?: () => void;
-};
-
-type ScreenWithOrientation = Screen & {
-  orientation?: ScreenOrientationWithLock;
-};
-
 const neonGlow = keyframes`
   0%, 100% {
     text-shadow:
@@ -156,7 +145,7 @@ export default function Commander() {
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenMenuVisible, setFullscreenMenuVisible] = useState(false);
-  const [dialogTyping, setDialogTyping] = useState(false);
+  const [, setDialogTyping] = useState(false);
   const [mtgTheme, setMtgThemeState] = useState<AppTheme>(() => getMtgTheme());
   const [startingLifeTotal, setStartingLifeTotal] = useState<20 | 40>(() => {
     const stored = localStorage.getItem('mtg_starting_life');
@@ -180,10 +169,9 @@ export default function Commander() {
   const startingPlayerIntervalRef = useRef<number | null>(null);
   const startingPlayerTimeoutsRef = useRef<number[]>([]);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
-  const portraitViewport = useMediaQuery('(pointer: coarse) and (orientation: portrait)');
   const narrowMobileWidth = useMediaQuery('(pointer: coarse) and (max-width: 480px)');
   const shortMobileHeight = useMediaQuery('(pointer: coarse) and (max-height: 480px)');
-  const rotateMobileSurface = mobileLayout && portraitViewport;
+  const rotateMobileSurface = mobileLayout;
   const surfaceRotation = rotateMobileSurface ? 90 : 0;
   const compactLayout = narrowMobileWidth || shortMobileHeight;
 
@@ -207,15 +195,6 @@ export default function Commander() {
     localStorage.setItem('mtg_starting_life', String(startingLifeTotal));
   }, [startingLifeTotal]);
 
-  const unlockOrientation = useCallback(async () => {
-    if (!mobileLayout) return;
-    try {
-      await (window.screen as ScreenWithOrientation).orientation?.unlock?.();
-    } catch (error) {
-      console.error('Failed to unlock screen orientation.', error);
-    }
-  }, [mobileLayout]);
-
   useEffect(() => {
     const doc = document as FullscreenDocument;
 
@@ -227,7 +206,6 @@ export default function Commander() {
         (doc.documentElement as FullscreenElement).requestFullscreen ||
         (doc.documentElement as FullscreenElement).webkitRequestFullscreen
       ));
-      if (!fullscreenActive) void unlockOrientation();
     };
 
     syncFullscreenState();
@@ -238,7 +216,7 @@ export default function Commander() {
       doc.removeEventListener('fullscreenchange', syncFullscreenState);
       doc.removeEventListener('webkitfullscreenchange', syncFullscreenState as EventListener);
     };
-  }, [unlockOrientation]);
+  }, []);
 
   const clearFullscreenMenuTimer = () => {
     if (fullscreenMenuTimerRef.current === null) return;
@@ -289,28 +267,6 @@ export default function Commander() {
 
   useEffect(() => () => clearStartingPlayerAnimation(), [clearStartingPlayerAnimation]);
 
-  const lockLandscapeOrientation = useCallback(async () => {
-    if (!mobileLayout) return;
-    try {
-      await (window.screen as ScreenWithOrientation).orientation?.lock?.('landscape');
-    } catch (error) {
-      console.error('Failed to lock screen orientation.', error);
-    }
-  }, [mobileLayout]);
-
-  useEffect(() => {
-    if (!isFullscreen || !mobileLayout) return;
-    if (dialogTyping) {
-      void unlockOrientation();
-      return;
-    }
-    void lockLandscapeOrientation();
-  }, [dialogTyping, isFullscreen, mobileLayout, lockLandscapeOrientation, unlockOrientation]);
-
-  useEffect(() => {
-    if (settingsPid === null && !quickSetupOpen) setDialogTyping(false);
-  }, [settingsPid, quickSetupOpen]);
-
   const toggleFullscreen = async () => {
     const doc = document as FullscreenDocument;
     const root = doc.documentElement as FullscreenElement;
@@ -330,8 +286,6 @@ export default function Commander() {
       } else if (root.webkitRequestFullscreen) {
         await root.webkitRequestFullscreen();
       }
-
-      await lockLandscapeOrientation();
     } catch (error) {
       console.error('Failed to toggle fullscreen mode.', error);
     }
