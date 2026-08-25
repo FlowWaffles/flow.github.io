@@ -1,20 +1,21 @@
 import { Box, Typography, Backdrop } from '@mui/material';
 import DamageEditor from './DamageEditor';
 import type { ModalState, Player } from './types';
-import { CMD_LETHAL, getPlayerModalRotation } from './types';
+import { CMD_LETHAL } from './types';
 
 interface CommanderDamageModalProps {
   modal: ModalState | null;
   players: Player[];
+  modalRotation?: number;
   landscapeSurface?: boolean;
   onClose: () => void;
   onValueChange: (v: [number, number]) => void;
 }
 
 export default function CommanderDamageModal({
-  modal, players, landscapeSurface = false, onClose, onValueChange,
+  modal, players, modalRotation = 0, landscapeSurface = false, onClose, onValueChange,
 }: CommanderDamageModalProps) {
-  const rotation = modal ? getPlayerModalRotation(modal.victim) : 0;
+  const rotation = modal ? modalRotation : 0;
   const landscapeLayout = landscapeSurface || Math.abs(rotation) % 180 === 90;
 
   const attacker = modal ? players[modal.attacker] : null;

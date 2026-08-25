@@ -39,6 +39,8 @@ interface PlayerQuadrantProps {
   player: Player;
   allPlayers: Player[];
   rotation: 0 | 180;
+  physicalLayout: (number | null)[];
+  startingLife: 20 | 40;
   compact?: boolean;
   monarchIntroduced?: boolean;
   onLifeChange: (delta: number) => void;
@@ -53,7 +55,7 @@ interface PlayerQuadrantProps {
 }
 
 export default function PlayerQuadrant({
-  pid, player, allPlayers, rotation, compact = false, monarchIntroduced = false,
+  pid, player, allPlayers, rotation, physicalLayout, startingLife, compact = false, monarchIntroduced = false,
   onLifeChange, onLifeSet, onPlayerUpdate, onDamageClick, onOpenSettings,
   lifeHistory, onLifeHistoryCommit, onRevertHistory, sx,
 }: PlayerQuadrantProps) {
@@ -123,18 +125,19 @@ export default function PlayerQuadrant({
   const nameFontSize = compact ? { xs: '0.72rem', sm: '0.78rem' } : { xs: '0.86rem', sm: '0.96rem' };
   const lifeFontSize = compact ? 'clamp(2.2rem, 11vh, 3.4rem)' : 'clamp(2.8rem, 8.8vw, 5.2rem)';
   const actionIconSize = compact ? { xs: '1.8rem', sm: '2rem' } : { xs: '2rem', sm: '2.8rem' };
+  const yellowLifeThreshold = startingLife === 20 ? 15 : 20;
   const lifeColor = player.life <= 5
     ? '#f44336'
     : player.life <= 10
       ? '#ff9800'
-      : player.life <= 20
+      : player.life <= yellowLifeThreshold
         ? '#ffeb3b'
         : '#fff';
   const lifeTextShadow = player.life <= 5
     ? '0 0 20px rgba(244,67,54,0.5)'
     : player.life <= 10
       ? '0 0 20px rgba(255,152,0,0.4)'
-      : player.life <= 20
+      : player.life <= yellowLifeThreshold
         ? '0 0 20px rgba(255,235,59,0.35)'
         : undefined;
 
@@ -448,6 +451,7 @@ export default function PlayerQuadrant({
           allPlayers={allPlayers}
           accent={accent}
           rotation={rotation}
+          physicalLayout={physicalLayout}
           compact={compact}
           onDamageClick={onDamageClick}
           onSelfClick={onOpenSettings}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useMemo } from 'react';
 import { keyframes } from '@emotion/react';
 import { Backdrop, Box, Button, IconButton, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
@@ -7,6 +7,8 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightIcon from '@mui/icons-material/Light';
+import SwapVertIcon from '@mui/icons-material/SwapVert';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { getMtgTheme, setMtgTheme, applyMtgTheme } from '../../utils/ThemeHandler';
 import type { AppTheme } from '../../utils/ThemeHandler';
 import { getPlayerColorsCookie, setPlayerColorsCookie } from '../../utils/ThemeCookie';
@@ -153,6 +155,19 @@ export default function Commander() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenMenuVisible, setFullscreenMenuVisible] = useState(false);
   const [mtgTheme, setMtgThemeState] = useState<AppTheme>(() => getMtgTheme());
+  const [startingLifeTotal, setStartingLifeTotal] = useState<20 | 40>(() => {
+    const stored = localStorage.getItem('mtg_starting_life');
+    if (stored === '20' || stored === '40') return Number(stored) as 20 | 40;
+    return readStoredPlayers().every(p => p.life === 20) ? 20 : 40;
+  });
+  const [playerCount, setPlayerCount] = useState<2 | 3 | 4>(() => {
+    const stored = localStorage.getItem('mtg_player_count');
+    return (stored === '2' ? 2 : stored === '3' ? 3 : 4) as 2 | 3 | 4;
+  });
+  const [threeLayout, setThreeLayout] = useState<'A' | 'B'>(() => {
+    return (localStorage.getItem('mtg_three_layout') as 'A' | 'B') || 'A';
+  });
+  const [layoutModalOpen, setLayoutModalOpen] = useState(false);
   const boardRef = useRef<HTMLDivElement | null>(null);
   const fullscreenMenuTimerRef = useRef<number | null>(null);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
@@ -178,6 +193,10 @@ export default function Commander() {
   useEffect(() => {
     setPlayerColorsCookie(players.map(p => p.accentColor));
   }, [players[0].accentColor, players[1].accentColor, players[2].accentColor, players[3].accentColor]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    localStorage.setItem('mtg_starting_life', String(startingLifeTotal));
+  }, [startingLifeTotal]);
 
   useEffect(() => {
     const doc = document as FullscreenDocument;
@@ -389,9 +408,10 @@ export default function Commander() {
     setSettingsPid(null);
     setNewGameOpen(false);
     setLifeHistory([[], [], [], []]);
+    setStartingLifeTotal(40);
   };
 
-  const applyQuickSetup = (entries: Array<{ name: string; commander: string; partnerCommander: string }>) => {
+  const applyQuickSetup = (entries: Array<{ name: string; commander: string; partnerCommander: string }>, startingLife: 20 | 40) => {
     setPlayers(prev => prev.map((player, index) => {
       const entry = entries[index];
       if (!entry) return player;
@@ -401,19 +421,75 @@ export default function Commander() {
       const nextPartnerCommander = entry.partnerCommander.trim();
       const found = commanders.find(c => c.name.toLowerCase() === nextCommander.toLowerCase());
       const foundPartner = commanders.find(c => c.name.toLowerCase() === nextPartnerCommander.toLowerCase());
-      return {
+      return syncAliveOverride({
         ...player,
         name: nextName,
+        life: startingLife,
+        isDead: false,
         commander: nextCommander,
         commanderArtUrl: nextCommander ? (found?.artCrop ?? '') : '',
         partnerCommander: nextPartnerCommander,
         partnerCommanderArtUrl: nextPartnerCommander ? (foundPartner?.artCrop ?? '') : '',
-      };
+      });
     }));
+    setLifeHistory([[], [], [], []]);
+    setStartingLifeTotal(startingLife);
     setQuickSetupOpen(false);
   };
 
   const showCenterMenu = !isFullscreen || fullscreenMenuVisible;
+
+  const layoutConfig = useMemo(() => {
+    if (playerCount === 2) {
+      return {
+        activeQuadrants: [
+          { pid: 0, rotation: 180 as const, area: 'pa' },
+          { pid: 1, rotation: 0 as const,   area: 'pb' },
+        ],
+        gridTemplateAreas: showCenterMenu ? '"pa" "bar" "pb"' : '"pa" "pb"',
+        gridTemplateColumns: '1fr',
+        // top-left=pid0, top-right=null, bottom-left=pid1, bottom-right=null
+        physicalLayout: [0, null, 1, null] as (number | null)[],
+      };
+    }
+    if (playerCount === 3) {
+      if (threeLayout === 'A') {
+        return {
+          activeQuadrants: [
+            { pid: 0, rotation: 180 as const, area: 'pa' },
+            { pid: 1, rotation: 0 as const,   area: 'pb' },
+            { pid: 2, rotation: 0 as const,   area: 'pc' },
+          ],
+          gridTemplateAreas: showCenterMenu ? '"pa ." "bar bar" "pb pc"' : '"pa ." "pb pc"',
+          gridTemplateColumns: '1fr 1fr',
+          // top-left=pid0, top-right=null, bottom-left=pid1, bottom-right=pid2
+          physicalLayout: [0, null, 1, 2] as (number | null)[],
+        };
+      }
+      return {
+        activeQuadrants: [
+          { pid: 0, rotation: 180 as const, area: 'pa' },
+          { pid: 1, rotation: 180 as const, area: 'pb' },
+          { pid: 2, rotation: 0 as const,   area: 'pc' },
+        ],
+        gridTemplateAreas: showCenterMenu ? '"pa pb" "bar bar" "pc ."' : '"pa pb" "pc ."',
+        gridTemplateColumns: '1fr 1fr',
+        // top-left=pid0, top-right=pid1, bottom-left=pid2, bottom-right=null
+        physicalLayout: [0, 1, 2, null] as (number | null)[],
+      };
+    }
+    return {
+      activeQuadrants: QUADRANTS,
+      gridTemplateAreas: showCenterMenu ? '"p0 p1" "bar bar" "p2 p3"' : '"p0 p1" "p2 p3"',
+      gridTemplateColumns: '1fr 1fr',
+      // top-left=pid2, top-right=pid3, bottom-left=pid1, bottom-right=pid0
+      physicalLayout: [2, 3, 1, 0] as (number | null)[],
+    };
+  }, [playerCount, threeLayout, showCenterMenu]);
+  const modalRotation = useMemo(() => {
+    if (!modal) return 0;
+    return layoutConfig.activeQuadrants.find(q => q.pid === modal.victim)?.rotation ?? 0;
+  }, [layoutConfig.activeQuadrants, modal]);
 
   return (
     <Box sx={{
@@ -428,9 +504,9 @@ export default function Commander() {
           width: mobileLayout ? '100dvmax' : '100%',
           height: mobileLayout ? '100dvmin' : '100%',
           display: 'grid',
-          gridTemplateAreas: showCenterMenu ? '"p0 p1" "bar bar" "p2 p3"' : '"p0 p1" "p2 p3"',
+          gridTemplateAreas: layoutConfig.gridTemplateAreas,
           gridTemplateRows: showCenterMenu ? (compactLayout ? '1fr 44px 1fr' : '1fr 52px 1fr') : '1fr 1fr',
-          gridTemplateColumns: '1fr 1fr',
+          gridTemplateColumns: layoutConfig.gridTemplateColumns,
           gap: compactLayout ? '6px' : '8px',
           p: compactLayout ? '6px' : '8px',
           boxSizing: 'border-box',
@@ -440,13 +516,15 @@ export default function Commander() {
           transformOrigin: 'center',
         }}
       >
-        {QUADRANTS.map(({ pid, rotation, area }) => (
+        {layoutConfig.activeQuadrants.map(({ pid, rotation, area }) => (
           <PlayerQuadrant
             key={pid}
             pid={pid}
             player={players[pid]}
             allPlayers={players}
             rotation={rotation}
+            physicalLayout={layoutConfig.physicalLayout}
+            startingLife={startingLifeTotal}
             monarchIntroduced={monarchIntroduced}
             onLifeChange={delta => updateLife(pid, delta)}
             onLifeSet={life => setLife(pid, life)}
@@ -457,7 +535,11 @@ export default function Commander() {
             onLifeHistoryCommit={delta => pushLifeHistory(pid, { delta, source: 'manual' })}
             onRevertHistory={() => revertLatestHistory(pid)}
             compact={compactLayout}
-            sx={{ gridArea: area, borderRadius: compactLayout ? '10px' : '12px' }}
+            sx={{
+              gridArea: area,
+              borderRadius: compactLayout ? '10px' : '12px',
+              ...(playerCount === 2 ? { width: '100%', maxWidth: '75%', justifySelf: 'center' } : {}),
+            }}
           />
         ))}
 
@@ -466,8 +548,8 @@ export default function Commander() {
             onClickCapture={handleFullscreenMenuInteraction}
             sx={{
               gridArea: 'bar',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2,
-              px: compactLayout ? 1 : 1.25,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,
+              px: compactLayout ? 0.5 : 1,
               mx: compactLayout ? 0.25 : 0.5,
               borderRadius: compactLayout ? '14px' : '18px',
               bgcolor: 'transparent',
@@ -483,9 +565,9 @@ export default function Commander() {
                 onClick={toggleFullscreen}
                 sx={{
                   color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
-                  fontSize: compactLayout ? '0.75rem' : '0.8rem',
+                  fontSize: compactLayout ? '0.72rem' : '0.78rem',
                   minHeight: compactLayout ? 32 : undefined,
-                  px: compactLayout ? 1.25 : 1.5,
+                  px: compactLayout ? 1 : 1.25,
                   borderRadius: 999,
                   bgcolor: 'rgba(255,255,255,0.02)',
                   '&:hover': {
@@ -494,7 +576,7 @@ export default function Commander() {
                   },
                 }}
               >
-                {isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+                {isFullscreen ? 'Exit' : 'Fullscreen'}
               </Button>
             )}
             <Typography
@@ -525,9 +607,9 @@ export default function Commander() {
               onClick={() => setQuickSetupOpen(true)}
               sx={{
                 color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
-                fontSize: compactLayout ? '0.75rem' : '0.8rem',
+                fontSize: compactLayout ? '0.72rem' : '0.78rem',
                 minHeight: compactLayout ? 32 : undefined,
-                px: compactLayout ? 1.25 : 1.5,
+                px: compactLayout ? 1 : 1.25,
                 borderRadius: 999,
                 bgcolor: 'rgba(255,255,255,0.02)',
                 '&:hover': {
@@ -536,7 +618,7 @@ export default function Commander() {
                 },
               }}
             >
-              Quick setup
+              Setup
             </Button>
             <Button
               variant="outlined"
@@ -544,9 +626,9 @@ export default function Commander() {
               onClick={() => setNewGameOpen(true)}
               sx={{
                 color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
-                fontSize: compactLayout ? '0.75rem' : '0.8rem',
+                fontSize: compactLayout ? '0.72rem' : '0.78rem',
                 minHeight: compactLayout ? 32 : undefined,
-                px: compactLayout ? 1.25 : 1.5,
+                px: compactLayout ? 1 : 1.25,
                 borderRadius: 999,
                 bgcolor: 'rgba(255,255,255,0.02)',
                 '&:hover': {
@@ -557,26 +639,46 @@ export default function Commander() {
             >
               New game
             </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              startIcon={<RestartAltIcon />}
-              onClick={() => setResetOpen(true)}
-              sx={{
-                color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
-                fontSize: compactLayout ? '0.75rem' : '0.8rem',
-                minHeight: compactLayout ? 32 : undefined,
-                px: compactLayout ? 1.25 : 1.5,
-                borderRadius: 999,
-                bgcolor: 'rgba(255,255,255,0.02)',
-                '&:hover': {
-                  borderColor: 'rgba(191, 219, 254, 0.55)',
-                  bgcolor: 'rgba(255,255,255,0.07)',
-                },
-              }}
-            >
-              Reset
-            </Button>
+            <Tooltip title="Reset">
+              <IconButton
+                size="small"
+                onClick={() => setResetOpen(true)}
+                sx={{
+                  color: '#d7deef',
+                  border: '1px solid rgba(148, 163, 184, 0.28)',
+                  borderRadius: 999,
+                  width: compactLayout ? 32 : 36,
+                  height: compactLayout ? 32 : 36,
+                  bgcolor: 'rgba(255,255,255,0.02)',
+                  '&:hover': {
+                    borderColor: 'rgba(191, 219, 254, 0.55)',
+                    bgcolor: 'rgba(255,255,255,0.07)',
+                  },
+                }}
+              >
+                <RestartAltIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={`Players: ${playerCount}`}>
+              <IconButton
+                size="small"
+                onClick={() => setLayoutModalOpen(true)}
+                sx={{
+                  color: '#d7deef',
+                  border: '1px solid rgba(148, 163, 184, 0.28)',
+                  borderRadius: 999,
+                  width: compactLayout ? 32 : 36,
+                  height: compactLayout ? 32 : 36,
+                  bgcolor: 'rgba(255,255,255,0.02)',
+                  '&:hover': {
+                    borderColor: 'rgba(191, 219, 254, 0.55)',
+                    bgcolor: 'rgba(255,255,255,0.07)',
+                  },
+                }}
+              >
+                <PeopleAltIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
             <Tooltip title={mtgTheme === 'static' ? 'Switch to light mode' : mtgTheme === 'light' ? 'Switch to dark mode' : 'Switch to static mode'}>
               <IconButton
                 size="small"
@@ -644,6 +746,7 @@ export default function Commander() {
         <CommanderDamageModal
           modal={modal}
           players={players}
+          modalRotation={modalRotation}
           landscapeSurface={mobileLayout}
           onClose={closeModal}
           onValueChange={v => setModal(m => m ? { ...m, value: v } : m)}
@@ -665,8 +768,161 @@ export default function Commander() {
           open={resetOpen}
           landscapeSurface={mobileLayout}
           onClose={() => setResetOpen(false)}
-          onConfirm={() => { setPlayers(mkPlayers()); setMonarchIntroduced(false); setLifeHistory([[], [], [], []]); setResetOpen(false); }}
+          onConfirm={() => { setPlayers(mkPlayers()); setMonarchIntroduced(false); setLifeHistory([[], [], [], []]); setStartingLifeTotal(40); setResetOpen(false); }}
         />
+
+        {/* Layout selection modal */}
+        <Backdrop
+          open={layoutModalOpen}
+          onClick={() => setLayoutModalOpen(false)}
+          sx={{ position: 'absolute', inset: 0, zIndex: 230, backdropFilter: 'blur(4px)', bgcolor: 'rgba(0,0,0,0.7)' }}
+        >
+          <Box
+            onClick={e => e.stopPropagation()}
+            sx={{
+              bgcolor: '#1e1e1e',
+              color: '#eee',
+              border: '1px solid #333',
+              borderRadius: 2,
+              boxShadow: '0 0 32px rgba(0,0,0,0.35)',
+              p: 2.5,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+              transform: `rotate(${getPlayerModalRotation(0)}deg)`,
+              transformOrigin: 'center',
+            }}
+          >
+            <Typography sx={{ fontWeight: 600, textAlign: 'center' }}>Select player layout</Typography>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', flexWrap: 'wrap', justifyContent: 'center' }}>
+
+              {/* 2 players */}
+              <Box
+                onClick={() => { setPlayerCount(2); localStorage.setItem('mtg_player_count', '2'); setLayoutModalOpen(false); }}
+                sx={{
+                  cursor: 'pointer',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
+                  opacity: playerCount === 2 ? 1 : 0.55,
+                  '&:hover': { opacity: 1 },
+                }}
+              >
+                <Box sx={{
+                  width: 80, height: 70, border: `2px solid ${playerCount === 2 ? '#60a5fa' : '#444'}`,
+                  borderRadius: 1.5, overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '3px', p: '4px', boxSizing: 'border-box',
+                  bgcolor: playerCount === 2 ? 'rgba(96,165,250,0.08)' : 'transparent',
+                }}>
+                  <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                  <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                </Box>
+                <Typography variant="caption">2 players</Typography>
+              </Box>
+
+              {/* 3 players layout A — 1 top, 2 bottom */}
+              <Box
+                onClick={() => { setPlayerCount(3); setThreeLayout('A'); localStorage.setItem('mtg_player_count', '3'); localStorage.setItem('mtg_three_layout', 'A'); setLayoutModalOpen(false); }}
+                sx={{
+                  cursor: 'pointer',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
+                  opacity: playerCount === 3 && threeLayout === 'A' ? 1 : 0.55,
+                  '&:hover': { opacity: 1 },
+                }}
+              >
+                <Box sx={{
+                  width: 80, height: 70, border: `2px solid ${playerCount === 3 && threeLayout === 'A' ? '#60a5fa' : '#444'}`,
+                  borderRadius: 1.5, overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '3px', p: '4px', boxSizing: 'border-box',
+                  bgcolor: playerCount === 3 && threeLayout === 'A' ? 'rgba(96,165,250,0.08)' : 'transparent',
+                }}>
+                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                    <Box sx={{ flex: 1, borderRadius: 1 }} />
+                  </Box>
+                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                  </Box>
+                </Box>
+                <Typography variant="caption">3 players (A)</Typography>
+              </Box>
+
+              {/* 3 players layout B — 2 top, 1 bottom */}
+              <Box
+                onClick={() => { setPlayerCount(3); setThreeLayout('B'); localStorage.setItem('mtg_player_count', '3'); localStorage.setItem('mtg_three_layout', 'B'); setLayoutModalOpen(false); }}
+                sx={{
+                  cursor: 'pointer',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
+                  opacity: playerCount === 3 && threeLayout === 'B' ? 1 : 0.55,
+                  '&:hover': { opacity: 1 },
+                }}
+              >
+                <Box sx={{
+                  width: 80, height: 70, border: `2px solid ${playerCount === 3 && threeLayout === 'B' ? '#60a5fa' : '#444'}`,
+                  borderRadius: 1.5, overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '3px', p: '4px', boxSizing: 'border-box',
+                  bgcolor: playerCount === 3 && threeLayout === 'B' ? 'rgba(96,165,250,0.08)' : 'transparent',
+                }}>
+                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                  </Box>
+                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                    <Box sx={{ flex: 1, borderRadius: 1 }} />
+                  </Box>
+                </Box>
+                <Typography variant="caption">3 players (B)</Typography>
+              </Box>
+
+              {/* 4 players */}
+              <Box
+                onClick={() => { setPlayerCount(4); localStorage.setItem('mtg_player_count', '4'); setLayoutModalOpen(false); }}
+                sx={{
+                  cursor: 'pointer',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
+                  opacity: playerCount === 4 ? 1 : 0.55,
+                  '&:hover': { opacity: 1 },
+                }}
+              >
+                <Box sx={{
+                  width: 80, height: 70, border: `2px solid ${playerCount === 4 ? '#60a5fa' : '#444'}`,
+                  borderRadius: 1.5, overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '3px', p: '4px', boxSizing: 'border-box',
+                  bgcolor: playerCount === 4 ? 'rgba(96,165,250,0.08)' : 'transparent',
+                }}>
+                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                  </Box>
+                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
+                  </Box>
+                </Box>
+                <Typography variant="caption">4 players</Typography>
+              </Box>
+
+            </Box>
+
+            {playerCount === 3 && (
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={<SwapVertIcon />}
+                  onClick={() => {
+                    const next = threeLayout === 'A' ? 'B' : 'A';
+                    setThreeLayout(next);
+                    localStorage.setItem('mtg_three_layout', next);
+                  }}
+                  sx={{ color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none', borderRadius: 999 }}
+                >
+                  Swap sides
+                </Button>
+              </Box>
+            )}
+
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button onClick={() => setLayoutModalOpen(false)} sx={{ color: '#aaa' }}>Close</Button>
+            </Box>
+          </Box>
+        </Backdrop>
 
         <Backdrop
           open={newGameOpen}
@@ -715,6 +971,7 @@ export default function Commander() {
         open={quickSetupOpen}
         players={players}
         commanders={commanders}
+        visiblePlayerIds={layoutConfig.activeQuadrants.map(q => q.pid)}
         onClose={() => setQuickSetupOpen(false)}
         onApply={applyQuickSetup}
       />

@@ -11,28 +11,34 @@ type QuickSetupEntry = {
   partnerCommander: string;
 };
 
+type StartingLife = 20 | 40;
+
 interface QuickSetupDialogProps {
   open: boolean;
   players: Player[];
   commanders: CommanderEntry[];
+  visiblePlayerIds: number[];
   onClose: () => void;
-  onApply: (entries: QuickSetupEntry[]) => void;
+  onApply: (entries: QuickSetupEntry[], startingLife: StartingLife) => void;
 }
 
 export default function QuickSetupDialog({
   open,
   players,
   commanders,
+  visiblePlayerIds,
   onClose,
   onApply,
 }: QuickSetupDialogProps) {
   const [entries, setEntries] = useState<QuickSetupEntry[]>([]);
   const [originalNames, setOriginalNames] = useState<string[]>([]);
+  const [startingLife, setStartingLife] = useState<StartingLife>(40);
   const compactLayout = useMediaQuery('(max-width: 700px)');
 
   useEffect(() => {
     if (!open) return;
     setOriginalNames(players.map(p => p.name));
+    setStartingLife(players.every(p => p.life === 20) ? 20 : 40);
     setEntries(players.map(player => ({
       name: '',
       commander: player.commander,
@@ -87,12 +93,31 @@ export default function QuickSetupDialog({
             Quick Setup
           </Typography>
           <Typography sx={{ color: '#98a3b8', fontSize: '0.82rem', mt: 0.6 }}>
-            Set all 4 player names and commanders (including partners) at once.
+            Set visible player names and commanders (including partners), and choose starting life.
           </Typography>
+          <Box sx={{ mt: 1.25, display: 'inline-flex', gap: 0.75 }}>
+            <Button
+              size="small"
+              variant={startingLife === 20 ? 'contained' : 'outlined'}
+              onClick={() => setStartingLife(20)}
+              sx={{ minWidth: 56, textTransform: 'none' }}
+            >
+              20
+            </Button>
+            <Button
+              size="small"
+              variant={startingLife === 40 ? 'contained' : 'outlined'}
+              onClick={() => setStartingLife(40)}
+              sx={{ minWidth: 56, textTransform: 'none' }}
+            >
+              40
+            </Button>
+          </Box>
         </Box>
 
         <Box sx={{ px: 3, pb: 2, overflowY: 'auto', display: 'grid', gap: 1.4 }}>
           {entries.map((entry, index) => (
+            !visiblePlayerIds.includes(index) ? null : (
             <Box
               key={index}
               sx={{
@@ -138,6 +163,7 @@ export default function QuickSetupDialog({
                 }}
               />
             </Box>
+            )
           ))}
         </Box>
 
@@ -147,7 +173,7 @@ export default function QuickSetupDialog({
             onClick={() => onApply(entries.map((e, i) => ({
               ...e,
               name: e.name.trim() || originalNames[i] || `Player ${i + 1}`,
-            })))}
+            })), startingLife)}
             variant="contained"
             sx={{ textTransform: 'none' }}
           >

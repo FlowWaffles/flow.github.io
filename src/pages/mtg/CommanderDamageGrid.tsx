@@ -8,18 +8,30 @@ interface CommanderDamageGridProps {
   allPlayers: Player[];
   accent: string;
   rotation: 0 | 180;
+  physicalLayout: (number | null)[];
   compact?: boolean;
   onDamageClick: (attacker: number) => void;
   onSelfClick: () => void;
 }
 
 export default function CommanderDamageGrid({
-  pid, player, allPlayers, accent, rotation, compact = false, onDamageClick, onSelfClick,
+  pid, player, allPlayers, accent, rotation, physicalLayout, compact = false, onDamageClick, onSelfClick,
 }: CommanderDamageGridProps) {
-  const seatOrder = rotation === 180 ? [0, 1, 3, 2] : [2, 3, 1, 0];
-  const cells: Array<{ kind: 'opp'; id: number } | { kind: 'me' }> = seatOrder.map(id => (
-    id === pid ? { kind: 'me' } : { kind: 'opp', id }
-  ));
+  // physicalLayout = [topLeft, topRight, bottomLeft, bottomRight] → pid or null
+  // For rotation=180 players, CSS flips the grid visually, so reverse the array
+  // so each cell still spatially aligns with the correct board corner.
+  const seatOrder: (number | null)[] = rotation === 180 ? [...physicalLayout].reverse() : physicalLayout;
+  const activePlayerIds = Array.from(new Set(physicalLayout.filter((id): id is number => id !== null)));
+  const isTwoPlayerLayout = activePlayerIds.length === 2;
+  const opponentId = activePlayerIds.find(id => id !== pid);
+  const cells: Array<{ kind: 'opp'; id: number } | { kind: 'me' } | { kind: 'empty' }> = isTwoPlayerLayout && opponentId !== undefined
+    ? (rotation === 180
+      ? [{ kind: 'opp', id: opponentId }, { kind: 'me' }]
+      : [{ kind: 'me' }, { kind: 'opp', id: opponentId }])
+    : seatOrder.map(id => {
+      if (id === null) return { kind: 'empty' };
+      return id === pid ? { kind: 'me' } : { kind: 'opp', id };
+    });
 
   return (
     <Box sx={{
@@ -36,6 +48,10 @@ export default function CommanderDamageGrid({
           borderLeft: isRight ? `1px solid ${accent}22` : undefined,
           borderTop: isBottom ? `1px solid ${accent}22` : undefined,
         };
+
+        if (cell.kind === 'empty') {
+          return <Box key={idx} sx={{ ...borderSx, minHeight: compact ? { xs: 28, sm: 32 } : { xs: 32, sm: 38 } }} />;
+        }
 
         if (cell.kind === 'me') {
           return (
