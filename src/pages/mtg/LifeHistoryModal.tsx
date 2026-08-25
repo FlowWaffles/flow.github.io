@@ -89,7 +89,6 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
               fontSize: '1rem',
               color: entry.delta > 0 ? '#4caf50' : '#f44336',
               minWidth: '4ch',
-              fontFamily: "'Monoton-Regular', monospace",
               textShadow: entry.delta > 0
                 ? '0 0 8px rgba(76,175,80,0.5)'
                 : '0 0 8px rgba(244,67,54,0.5)',
@@ -99,13 +98,13 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
 
             {/* Meta */}
             <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography sx={{ fontSize: '0.7rem', color: '#999', fontStyle: 'italic' }}>
+              <Typography sx={{ fontSize: '0.7rem', color: '#d2d9e8', fontStyle: 'italic' }}>
                 {formatTimeAgo(entry.timestamp, openTime)}
               </Typography>
               {entry.source === 'commander' && (
                 <Typography sx={{
                   fontSize: '0.66rem',
-                  color: entry.attackerAccent ?? '#aaa',
+                  color: entry.attackerAccent ?? '#d2d9e8',
                   mt: 0.1,
                   overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                 }}>
@@ -134,4 +133,3 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
     </Box>
   );
 }
-

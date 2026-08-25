@@ -69,7 +69,7 @@ export default function CommanderDamageModal({
               </Typography>
             );
           })()}
-          <Typography sx={{ textAlign: 'center', mb: 2, fontSize: '0.82rem', color: '#666' }}>
+          <Typography sx={{ textAlign: 'center', mb: 2, fontSize: '0.82rem', color: '#b0b7c6' }}>
             <Box component="span" sx={{ color: attacker.accentColor, fontWeight: 600 }}>
               {attacker.name}
             </Box>
@@ -81,7 +81,7 @@ export default function CommanderDamageModal({
 
           {hasPartner ? (
             <>
-              <Typography sx={{ textAlign: 'center', fontSize: '0.74rem', color: '#888', mb: 0.25 }}>
+              <Typography sx={{ textAlign: 'center', fontSize: '0.74rem', color: '#c1c8d6', mb: 0.25 }}>
                 {attacker.commander || 'Commander 1'}
               </Typography>
               <DamageEditor
@@ -91,7 +91,7 @@ export default function CommanderDamageModal({
               />
 
               <Box sx={{ borderTop: '1px solid #333', mt: 0.5, pt: 1 }}>
-                <Typography sx={{ textAlign: 'center', fontSize: '0.74rem', color: '#888', mb: 0.25 }}>
+                <Typography sx={{ textAlign: 'center', fontSize: '0.74rem', color: '#c1c8d6', mb: 0.25 }}>
                   {attacker.partnerCommander || 'Commander 2'}
                 </Typography>
                 <DamageEditor
@@ -110,7 +110,7 @@ export default function CommanderDamageModal({
             </>
           )}
 
-          <Typography sx={{ textAlign: 'center', mt: 2, fontSize: '0.72rem', color: '#555' }}>
+          <Typography sx={{ textAlign: 'center', mt: 2, fontSize: '0.72rem', color: '#9ea6b7' }}>
             Tap outside to apply & close
           </Typography>
         </Box>

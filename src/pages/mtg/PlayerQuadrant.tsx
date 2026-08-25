@@ -370,7 +370,6 @@ export default function PlayerQuadrant({
               fontSize: compact ? '0.7rem' : '0.85rem',
               fontWeight: 700,
               color: lifeDelta > 0 ? '#4caf50' : '#f44336',
-              fontFamily: "'Orbitron-Regular', monospace",
               lineHeight: 1,
               pointerEvents: 'none',
               userSelect: 'none',
