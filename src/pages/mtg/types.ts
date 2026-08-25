@@ -7,7 +7,7 @@ export const POISON_LETHAL = 10;
 
 export const QUAD_BG = ['#0c1b2e', '#0c2618', '#2e0c0c', '#1e1e08'] as const;
 // Default accent per position — also used as the initial color palette choices
-export const QUAD_ACCENT = ['#4a8fcc', '#4acc70', '#cc4a4a', '#ccbc4a'] as const;
+export const QUAD_ACCENT = ['#ff7acb', '#8fd8ff', '#b98cff', '#ffffff'] as const;
 
 export const ACCENT_OPTIONS = [
   '#4a8fcc', // blue

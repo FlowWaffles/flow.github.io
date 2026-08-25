@@ -4,6 +4,8 @@ import { Backdrop, Box, Button, Typography, useMediaQuery } from '@mui/material'
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import Icon from '@mdi/react';
+import { mdiUnicornVariant } from '@mdi/js';
 import PlayerQuadrant from './PlayerQuadrant';
 import CommanderDamageModal from './CommanderDamageModal';
 import PlayerSettingsModal from './PlayerSettingsModal';
@@ -56,6 +58,7 @@ const QUADRANTS: Array<{ pid: number; rotation: 0 | 180; area: string }> = [
 ];
 
 const PLAYERS_STORAGE_KEY = 'mtg_commander_players_v1';
+const MENU_AUTO_HIDE_MS = 5000;
 
 function readStoredPlayers(): Player[] {
   if (typeof window === 'undefined') return mkPlayers();
@@ -124,7 +127,9 @@ export default function Commander() {
   const commandersLoading = false;
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenMenuVisible, setFullscreenMenuVisible] = useState(false);
   const boardRef = useRef<HTMLDivElement | null>(null);
+  const fullscreenMenuTimerRef = useRef<number | null>(null);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
   const portraitViewport = useMediaQuery('(pointer: coarse) and (orientation: portrait)');
   const narrowMobileWidth = useMediaQuery('(pointer: coarse) and (max-width: 480px)');
@@ -172,6 +177,42 @@ export default function Commander() {
       doc.removeEventListener('webkitfullscreenchange', syncFullscreenState as EventListener);
     };
   }, [mobileLayout]);
+
+  const clearFullscreenMenuTimer = () => {
+    if (fullscreenMenuTimerRef.current === null) return;
+    window.clearTimeout(fullscreenMenuTimerRef.current);
+    fullscreenMenuTimerRef.current = null;
+  };
+
+  const scheduleFullscreenMenuHide = () => {
+    clearFullscreenMenuTimer();
+    fullscreenMenuTimerRef.current = window.setTimeout(() => {
+      setFullscreenMenuVisible(false);
+      fullscreenMenuTimerRef.current = null;
+    }, MENU_AUTO_HIDE_MS);
+  };
+
+  const showFullscreenMenu = () => {
+    setFullscreenMenuVisible(true);
+    scheduleFullscreenMenuHide();
+  };
+
+  const handleFullscreenMenuInteraction = () => {
+    if (!isFullscreen || !fullscreenMenuVisible) return;
+    scheduleFullscreenMenuHide();
+  };
+
+  useEffect(() => {
+    if (!isFullscreen) {
+      setFullscreenMenuVisible(false);
+      clearFullscreenMenuTimer();
+      return;
+    }
+    setFullscreenMenuVisible(false);
+    clearFullscreenMenuTimer();
+  }, [isFullscreen]);
+
+  useEffect(() => () => clearFullscreenMenuTimer(), []);
 
   const lockLandscapeOrientation = async () => {
     if (!mobileLayout) return;
@@ -339,6 +380,8 @@ export default function Commander() {
     setQuickSetupOpen(false);
   };
 
+  const showCenterMenu = !isFullscreen || fullscreenMenuVisible;
+
   return (
     <Box sx={{
       position: 'fixed', inset: 0,
@@ -357,8 +400,8 @@ export default function Commander() {
           width: mobileLayout ? '100dvmax' : '100%',
           height: mobileLayout ? '100dvmin' : '100%',
           display: 'grid',
-          gridTemplateAreas: '"p0 p1" "bar bar" "p2 p3"',
-          gridTemplateRows: compactLayout ? '1fr 44px 1fr' : '1fr 52px 1fr',
+          gridTemplateAreas: showCenterMenu ? '"p0 p1" "bar bar" "p2 p3"' : '"p0 p1" "p2 p3"',
+          gridTemplateRows: showCenterMenu ? (compactLayout ? '1fr 44px 1fr' : '1fr 52px 1fr') : '1fr 1fr',
           gridTemplateColumns: '1fr 1fr',
           gap: compactLayout ? '6px' : '8px',
           p: compactLayout ? '6px' : '8px',
@@ -390,23 +433,68 @@ export default function Commander() {
           />
         ))}
 
-        {/* Center bar */}
-        <Box sx={{
-          gridArea: 'bar',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2,
-          px: compactLayout ? 1 : 1.25,
-          mx: compactLayout ? 0.25 : 0.5,
-          borderRadius: compactLayout ? '14px' : '18px',
-          bgcolor: 'transparent',
-          backdropFilter: 'none',
-          boxShadow: 'none',
-        }}>
-          {fullscreenSupported && (
+        {showCenterMenu && (
+          <Box
+            onClickCapture={handleFullscreenMenuInteraction}
+            sx={{
+              gridArea: 'bar',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2,
+              px: compactLayout ? 1 : 1.25,
+              mx: compactLayout ? 0.25 : 0.5,
+              borderRadius: compactLayout ? '14px' : '18px',
+              bgcolor: 'transparent',
+              backdropFilter: 'none',
+              boxShadow: 'none',
+            }}
+          >
+            {fullscreenSupported && (
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+                onClick={toggleFullscreen}
+                sx={{
+                  color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
+                  fontSize: compactLayout ? '0.75rem' : '0.8rem',
+                  minHeight: compactLayout ? 32 : undefined,
+                  px: compactLayout ? 1.25 : 1.5,
+                  borderRadius: 999,
+                  bgcolor: 'rgba(255,255,255,0.02)',
+                  '&:hover': {
+                    borderColor: 'rgba(191, 219, 254, 0.55)',
+                    bgcolor: 'rgba(255,255,255,0.07)',
+                  },
+                }}
+              >
+                {isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+              </Button>
+            )}
+            <Typography
+              component="a"
+              href="/"
+              aria-label="Home"
+              sx={{
+                color: '#eff6ff',
+                textDecoration: 'none',
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+                fontFamily: "'Monoton-Regular', monospace",
+                fontSize: compactLayout ? '1.15rem' : '1.6rem',
+                lineHeight: 1,
+                animation: `${neonGlow} 4s infinite alternate ease-in-out`,
+                textShadow: `
+                  0 0 5px #ffffff,
+                  0 0 12px rgba(172, 236, 236, 0.8),
+                  0 0 26px rgba(66, 220, 219, 0.65)
+                `,
+              }}
+            >
+              FLOW.FAIL
+            </Typography>
             <Button
               variant="outlined"
               size="small"
-              startIcon={isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-              onClick={toggleFullscreen}
+              onClick={() => setQuickSetupOpen(true)}
               sx={{
                 color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
                 fontSize: compactLayout ? '0.75rem' : '0.8rem',
@@ -420,90 +508,85 @@ export default function Commander() {
                 },
               }}
             >
-              {isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+              Quick setup
             </Button>
-          )}
-          <Typography
-            component="a"
-            href="/"
-            aria-label="Home"
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => setNewGameOpen(true)}
+              sx={{
+                color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
+                fontSize: compactLayout ? '0.75rem' : '0.8rem',
+                minHeight: compactLayout ? 32 : undefined,
+                px: compactLayout ? 1.25 : 1.5,
+                borderRadius: 999,
+                bgcolor: 'rgba(255,255,255,0.02)',
+                '&:hover': {
+                  borderColor: 'rgba(191, 219, 254, 0.55)',
+                  bgcolor: 'rgba(255,255,255,0.07)',
+                },
+              }}
+            >
+              New game
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<RestartAltIcon />}
+              onClick={() => setResetOpen(true)}
+              sx={{
+                color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
+                fontSize: compactLayout ? '0.75rem' : '0.8rem',
+                minHeight: compactLayout ? 32 : undefined,
+                px: compactLayout ? 1.25 : 1.5,
+                borderRadius: 999,
+                bgcolor: 'rgba(255,255,255,0.02)',
+                '&:hover': {
+                  borderColor: 'rgba(191, 219, 254, 0.55)',
+                  bgcolor: 'rgba(255,255,255,0.07)',
+                },
+              }}
+            >
+              Reset
+            </Button>
+          </Box>
+        )}
+
+        {isFullscreen && !showCenterMenu && (
+          <Box
+            onClick={showFullscreenMenu}
+            aria-label="Show menu"
+            role="button"
+            tabIndex={0}
+            onKeyDown={event => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                showFullscreenMenu();
+              }
+            }}
             sx={{
-              color: '#eff6ff',
-              textDecoration: 'none',
-              textAlign: 'center',
-              whiteSpace: 'nowrap',
-              fontFamily: "'Monoton-Regular', monospace",
-              fontSize: compactLayout ? '1.15rem' : '1.6rem',
-              lineHeight: 1,
-              animation: `${neonGlow} 4s infinite alternate ease-in-out`,
-              textShadow: `
-                0 0 5px #ffffff,
-                0 0 12px rgba(172, 236, 236, 0.8),
-                0 0 26px rgba(66, 220, 219, 0.65)
-              `,
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: `translate(-50%, -50%) rotate(${getPlayerModalRotation(1)}deg)`,
+              width: compactLayout ? 44 : 60,
+              height: compactLayout ? 44 : 60,
+              cursor: 'pointer',
+              outline: 'none',
+              zIndex: 6,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            FLOW.FAIL
-          </Typography>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => setQuickSetupOpen(true)}
-            sx={{
-              color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
-              fontSize: compactLayout ? '0.75rem' : '0.8rem',
-              minHeight: compactLayout ? 32 : undefined,
-              px: compactLayout ? 1.25 : 1.5,
-              borderRadius: 999,
-              bgcolor: 'rgba(255,255,255,0.02)',
-              '&:hover': {
-                borderColor: 'rgba(191, 219, 254, 0.55)',
-                bgcolor: 'rgba(255,255,255,0.07)',
-              },
-            }}
-          >
-            Quick setup
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => setNewGameOpen(true)}
-            sx={{
-              color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
-              fontSize: compactLayout ? '0.75rem' : '0.8rem',
-              minHeight: compactLayout ? 32 : undefined,
-              px: compactLayout ? 1.25 : 1.5,
-              borderRadius: 999,
-              bgcolor: 'rgba(255,255,255,0.02)',
-              '&:hover': {
-                borderColor: 'rgba(191, 219, 254, 0.55)',
-                bgcolor: 'rgba(255,255,255,0.07)',
-              },
-            }}
-          >
-            New game
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<RestartAltIcon />}
-            onClick={() => setResetOpen(true)}
-            sx={{
-              color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none',
-              fontSize: compactLayout ? '0.75rem' : '0.8rem',
-              minHeight: compactLayout ? 32 : undefined,
-              px: compactLayout ? 1.25 : 1.5,
-              borderRadius: 999,
-              bgcolor: 'rgba(255,255,255,0.02)',
-              '&:hover': {
-                borderColor: 'rgba(191, 219, 254, 0.55)',
-                bgcolor: 'rgba(255,255,255,0.07)',
-              },
-            }}
-          >
-            Reset
-          </Button>
-        </Box>
+            <Icon
+              path={mdiUnicornVariant}
+              size={compactLayout ? 1.5 : 2.1}
+              color="#fff"
+              style={{ filter: 'drop-shadow(0 0 10px rgba(255, 192, 222, 0.95))' }}
+            />
+          </Box>
+        )}
 
         <CommanderDamageModal
           modal={modal}
