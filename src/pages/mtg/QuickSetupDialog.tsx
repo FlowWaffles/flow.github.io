@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Backdrop, Box, Button, TextField, Typography, useMediaQuery,
 } from '@mui/material';
@@ -33,7 +33,17 @@ export default function QuickSetupDialog({
   const [entries, setEntries] = useState<QuickSetupEntry[]>([]);
   const [originalNames, setOriginalNames] = useState<string[]>([]);
   const [startingLife, setStartingLife] = useState<StartingLife>(40);
-  const compactLayout = useMediaQuery('(max-width: 700px)');
+  const [isTyping, setIsTyping] = useState(false);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const compactViewport = useMediaQuery('(max-width: 700px)');
+  const compactLayout = isTyping || compactViewport;
+
+  useEffect(() => {
+    if (!open) {
+      setIsTyping(false);
+      return;
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -65,16 +75,25 @@ export default function QuickSetupDialog({
       }}
     >
       <Box
+        ref={modalRef}
         onClick={e => e.stopPropagation()}
+        onFocusCapture={() => setIsTyping(true)}
+        onBlurCapture={() => {
+          window.setTimeout(() => {
+            const root = modalRef.current;
+            if (!root) return;
+            if (!root.contains(document.activeElement)) setIsTyping(false);
+          }, 0);
+        }}
         sx={{
           bgcolor: '#1e1e1e',
           color: '#eee',
           border: '1px solid #333',
           borderRadius: 2,
           boxShadow: '0 0 32px rgba(0,0,0,0.35)',
-          width: 'min(96vw, 720px)',
+          width: compactLayout ? 'min(92vw, 420px)' : 'min(96vw, 720px)',
           maxWidth: 'calc(100% - 24px)',
-          height: 'min(94dvh, 760px)',
+          height: compactLayout ? 'auto' : 'min(94dvh, 760px)',
           maxHeight: 'calc(100dvh - 24px)',
           display: 'flex',
           flexDirection: 'column',

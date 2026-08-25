@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Box, Button, TextField, Typography, Backdrop, useMediaQuery, Checkbox, FormControlLabel,
 } from '@mui/material';
@@ -30,6 +30,7 @@ export default function PlayerSettingsModal({
 }: PlayerSettingsModalProps) {
   const [name, setName] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
 
   useEffect(() => {
@@ -89,7 +90,16 @@ export default function PlayerSettingsModal({
       }}
     >
       <Box
+        ref={modalRef}
         onClick={e => e.stopPropagation()}
+        onFocusCapture={() => setIsTyping(true)}
+        onBlurCapture={() => {
+          window.setTimeout(() => {
+            const root = modalRef.current;
+            if (!root) return;
+            if (!root.contains(document.activeElement)) setIsTyping(false);
+          }, 0);
+        }}
         sx={{
           bgcolor: '#1a1a1a',
           color: '#eee',
@@ -166,7 +176,6 @@ export default function PlayerSettingsModal({
               onFocus={() => setIsTyping(true)}
               onBlur={() => {
                 commitName();
-                setIsTyping(false);
               }}
               onKeyDown={e => { if (e.key === 'Enter') commitName(); }}
               size="small"

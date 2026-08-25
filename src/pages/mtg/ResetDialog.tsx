@@ -14,7 +14,7 @@ export default function ResetDialog({ open, landscapeSurface = false, onClose, o
   return (
     <Backdrop
       open={open}
-      onClose={onClose}
+      onClick={onClose}
       sx={{
         position: 'absolute',
         inset: 0,
@@ -40,7 +40,7 @@ export default function ResetDialog({ open, landscapeSurface = false, onClose, o
         }}
       >
         <Typography>
-          Reset all life totals to 40, clear commander selections, and clear all commander damage?
+          Reset the whole game?
         </Typography>
         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
           <Button onClick={onClose} sx={{ color: '#aaa' }}>Cancel</Button>
