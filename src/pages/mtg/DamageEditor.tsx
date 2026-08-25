@@ -7,10 +7,11 @@ import { CMD_LETHAL, HOLD_INCREMENT } from './types';
 
 interface DamageEditorProps {
   value: number;
+  compact?: boolean;
   onChange: (v: number) => void;
 }
 
-export default function DamageEditor({ value, onChange }: DamageEditorProps) {
+export default function DamageEditor({ value, compact = false, onChange }: DamageEditorProps) {
   const [editing, setEditing] = useState(false);
   const [inputVal, setInputVal] = useState(String(value));
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,7 +31,7 @@ export default function DamageEditor({ value, onChange }: DamageEditorProps) {
   const clamp = (v: number) => Math.max(0, v);
 
   const btnSx = {
-    width: 60, height: 60, borderRadius: '50%',
+    width: compact ? 44 : 60, height: compact ? 44 : 60, borderRadius: '50%',
     bgcolor: 'rgba(255,255,255,0.08)', color: '#fff',
     transition: 'background-color 0.15s',
     '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
@@ -38,16 +39,16 @@ export default function DamageEditor({ value, onChange }: DamageEditorProps) {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3, py: 1 }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: compact ? 2 : 3, py: compact ? 0.5 : 1 }}>
       <HoldButton
         onTap={() => onChange(clamp(value - 1))}
         onHold={() => onChange(clamp(value - HOLD_INCREMENT))}
         sx={btnSx}
       >
-        <RemoveIcon sx={{ fontSize: '1.6rem' }} />
+        <RemoveIcon sx={{ fontSize: compact ? '1.2rem' : '1.6rem' }} />
       </HoldButton>
 
-      <Box sx={{ minWidth: 90, textAlign: 'center' }}>
+      <Box sx={{ minWidth: compact ? 60 : 90, textAlign: 'center' }}>
         {editing ? (
           <TextField
             inputRef={inputRef}
@@ -59,7 +60,7 @@ export default function DamageEditor({ value, onChange }: DamageEditorProps) {
             variant="standard"
             inputProps={{
               style: {
-                textAlign: 'center', fontSize: '3rem', fontWeight: 700,
+                textAlign: 'center', fontSize: compact ? '2rem' : '3rem', fontWeight: 700,
                 color: '#fff', width: '3ch',
               },
             }}
@@ -69,7 +70,7 @@ export default function DamageEditor({ value, onChange }: DamageEditorProps) {
           <Typography
             onClick={() => { setInputVal(String(value)); setEditing(true); }}
             sx={{
-              fontSize: '3.5rem', fontWeight: 700,
+              fontSize: compact ? '2.4rem' : '3.5rem', fontWeight: 700,
               color: value >= CMD_LETHAL ? '#f44336' : '#fff',
               cursor: 'pointer', userSelect: 'none',
               transition: 'color 0.3s', lineHeight: 1,
@@ -85,7 +86,7 @@ export default function DamageEditor({ value, onChange }: DamageEditorProps) {
         onHold={() => onChange(value + HOLD_INCREMENT)}
         sx={btnSx}
       >
-        <AddIcon sx={{ fontSize: '1.6rem' }} />
+        <AddIcon sx={{ fontSize: compact ? '1.2rem' : '1.6rem' }} />
       </HoldButton>
     </Box>
   );

@@ -8,7 +8,7 @@ interface CommanderDamageModalProps {
   players: Player[];
   landscapeSurface?: boolean;
   onClose: () => void;
-  onValueChange: (v: number) => void;
+  onValueChange: (v: [number, number]) => void;
 }
 
 export default function CommanderDamageModal({
@@ -16,6 +16,9 @@ export default function CommanderDamageModal({
 }: CommanderDamageModalProps) {
   const rotation = modal ? getPlayerModalRotation(modal.victim) : 0;
   const landscapeLayout = landscapeSurface || Math.abs(rotation) % 180 === 90;
+
+  const attacker = modal ? players[modal.attacker] : null;
+  const hasPartner = Boolean(attacker?.partnerCommander);
 
   return (
     <Backdrop
@@ -29,29 +32,45 @@ export default function CommanderDamageModal({
         bgcolor: 'rgba(0,0,0,0.7)',
       }}
     >
-      {modal && (
+      {modal && attacker && (
         <Box
           onClick={e => e.stopPropagation()}
           sx={{
             bgcolor: '#1a1a1a',
             borderRadius: 2,
-            p: landscapeLayout ? 2.25 : 3,
+            p: hasPartner ? 2 : (landscapeLayout ? 2.25 : 3),
             minWidth: landscapeLayout ? 300 : 280,
             width: landscapeLayout ? 'min(82%, 460px)' : 'min(88vw, 340px)',
-            maxHeight: landscapeLayout ? 'min(82%, 280px)' : 'calc(100dvh - 32px)',
-            border: `1px solid ${players[modal.attacker].accentColor}55`,
-            boxShadow: `0 0 30px ${players[modal.attacker].accentColor}33`,
+            border: `1px solid ${attacker.accentColor}55`,
+            boxShadow: `0 0 30px ${attacker.accentColor}33`,
             transform: `rotate(${rotation}deg)`,
             transformOrigin: 'center',
-            overflowY: 'auto',
           }}
         >
-          <Typography variant="h6" sx={{ textAlign: 'center', mb: 0.5, fontWeight: 700, color: '#ddd' }}>
-            Commander Damage
-          </Typography>
+          {(() => {
+            const lethal1 = modal.value[0] >= CMD_LETHAL;
+            const lethal2 = modal.value[1] >= CMD_LETHAL;
+            const anyLethal = lethal1 || lethal2;
+            const lethalLabel = hasPartner
+              ? lethal1 && lethal2 ? 'Both commanders lethal'
+                : lethal1 ? `${attacker.commander || 'Commander 1'} lethal`
+                : `${attacker.partnerCommander || 'Commander 2'} lethal`
+              : 'Lethal commander damage';
+
+            return anyLethal ? (
+              <Typography variant="h6" sx={{ textAlign: 'center', mb: 0.5, fontWeight: 700, color: '#f44336',
+                transition: 'color 0.3s', fontSize: hasPartner ? '0.95rem' : undefined }}>
+                {lethalLabel}
+              </Typography>
+            ) : (
+              <Typography variant="h6" sx={{ textAlign: 'center', mb: 0.5, fontWeight: 700, color: '#ddd' }}>
+                Commander Damage
+              </Typography>
+            );
+          })()}
           <Typography sx={{ textAlign: 'center', mb: 2, fontSize: '0.82rem', color: '#666' }}>
-            <Box component="span" sx={{ color: players[modal.attacker].accentColor, fontWeight: 600 }}>
-              {players[modal.attacker].name}
+            <Box component="span" sx={{ color: attacker.accentColor, fontWeight: 600 }}>
+              {attacker.name}
             </Box>
             {' → '}
             <Box component="span" sx={{ color: players[modal.victim].accentColor, fontWeight: 600 }}>
@@ -59,15 +78,35 @@ export default function CommanderDamageModal({
             </Box>
           </Typography>
 
-          <DamageEditor value={modal.value} onChange={onValueChange} />
+          {hasPartner ? (
+            <>
+              <Typography sx={{ textAlign: 'center', fontSize: '0.74rem', color: '#888', mb: 0.25 }}>
+                {attacker.commander || 'Commander 1'}
+              </Typography>
+              <DamageEditor
+                compact
+                value={modal.value[0]}
+                onChange={v => onValueChange([v, modal.value[1]])}
+              />
 
-          {modal.value >= CMD_LETHAL && (
-            <Typography sx={{
-              textAlign: 'center', mt: 1, fontSize: '0.78rem',
-              color: '#f44336', fontWeight: 600,
-            }}>
-              ☠ Lethal commander damage
-            </Typography>
+              <Box sx={{ borderTop: '1px solid #333', mt: 0.5, pt: 1 }}>
+                <Typography sx={{ textAlign: 'center', fontSize: '0.74rem', color: '#888', mb: 0.25 }}>
+                  {attacker.partnerCommander || 'Commander 2'}
+                </Typography>
+                <DamageEditor
+                  compact
+                  value={modal.value[1]}
+                  onChange={v => onValueChange([modal.value[0], v])}
+                />
+              </Box>
+            </>
+          ) : (
+            <>
+              <DamageEditor
+                value={modal.value[0]}
+                onChange={v => onValueChange([v, 0])}
+              />
+            </>
           )}
 
           <Typography sx={{ textAlign: 'center', mt: 2, fontSize: '0.72rem', color: '#555' }}>

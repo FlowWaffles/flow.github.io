@@ -73,8 +73,12 @@ export default function CommanderDamageGrid({
         }
 
         const aid = cell.id;
-        const dmg = player.cmdDmg[aid];
-        const lethal = dmg >= CMD_LETHAL;
+        const [dmg1, dmg2] = player.cmdDmg[aid];
+        const attacker = allPlayers[aid];
+        const hasPartner = Boolean(attacker.partnerCommander);
+        const lethal1 = dmg1 >= CMD_LETHAL;
+        const lethal2 = dmg2 >= CMD_LETHAL;
+        const anyLethal = lethal1 || lethal2;
 
         return (
           <Box
@@ -89,21 +93,52 @@ export default function CommanderDamageGrid({
               cursor: 'pointer',
               gap: compact ? 0.1 : 0.15,
               px: compact ? 0.35 : 0.5,
-              bgcolor: lethal ? 'rgba(244,67,54,0.12)' : 'transparent',
+              bgcolor: anyLethal ? 'rgba(244,67,54,0.12)' : 'transparent',
               transition: 'background-color 0.15s',
-              '&:hover': { bgcolor: lethal ? 'rgba(244,67,54,0.22)' : 'rgba(255,255,255,0.06)' },
+              '&:hover': { bgcolor: anyLethal ? 'rgba(244,67,54,0.22)' : 'rgba(255,255,255,0.06)' },
               '&:active': { bgcolor: 'rgba(255,255,255,0.14)' },
             }}
           >
-            <Typography sx={{
-              fontSize: compact ? { xs: '1rem', sm: '1.08rem' } : { xs: '1.12rem', sm: '1.3rem' },
-              fontWeight: 700,
-              lineHeight: 1,
-              color: lethal ? '#f44336' : allPlayers[aid].accentColor,
-              transition: 'color 0.3s',
-            }}>
-              {dmg}
-            </Typography>
+            {hasPartner ? (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: compact ? 0.3 : 0.4 }}>
+                <Typography sx={{
+                  fontSize: compact ? { xs: '0.9rem', sm: '1rem' } : { xs: '1rem', sm: '1.15rem' },
+                  fontWeight: 700,
+                  lineHeight: 1,
+                  color: lethal1 ? '#f44336' : attacker.accentColor,
+                  transition: 'color 0.3s',
+                }}>
+                  {dmg1}
+                </Typography>
+                <Typography sx={{
+                  fontSize: compact ? '0.6rem' : '0.68rem',
+                  color: 'rgb(255 255 255)',
+                  lineHeight: 1,
+                  fontWeight: 400,
+                }}>
+                  |
+                </Typography>
+                <Typography sx={{
+                  fontSize: compact ? { xs: '0.9rem', sm: '1rem' } : { xs: '1rem', sm: '1.15rem' },
+                  fontWeight: 700,
+                  lineHeight: 1,
+                  color: lethal2 ? '#f44336' : attacker.accentColor,
+                  transition: 'color 0.3s',
+                }}>
+                  {dmg2}
+                </Typography>
+              </Box>
+            ) : (
+              <Typography sx={{
+                fontSize: compact ? { xs: '1rem', sm: '1.08rem' } : { xs: '1.12rem', sm: '1.3rem' },
+                fontWeight: 700,
+                lineHeight: 1,
+                color: lethal1 ? '#f44336' : attacker.accentColor,
+                transition: 'color 0.3s',
+              }}>
+                {dmg1}
+              </Typography>
+            )}
           </Box>
         );
       })}

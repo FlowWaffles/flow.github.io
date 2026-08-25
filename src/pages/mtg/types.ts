@@ -32,11 +32,14 @@ export interface CommanderEntry {
   artCrop: string;
 }
 
+// Per-attacker commander damage: [primaryCmdDmg, partnerCmdDmg]
+export type CmdDmgPair = [number, number];
+
 export interface Player {
   seat?: number;
   name: string;
   life: number;
-  cmdDmg: [number, number, number, number];
+  cmdDmg: [CmdDmgPair, CmdDmgPair, CmdDmgPair, CmdDmgPair];
   accentColor: string;
   poisonCounters: number;
   isDead: boolean;
@@ -51,8 +54,9 @@ export interface Player {
 export interface ModalState {
   victim: number;
   attacker: number;
-  value: number;
-  original: number;
+  /** [primaryCmdDmg, partnerCmdDmg] */
+  value: CmdDmgPair;
+  original: CmdDmgPair;
 }
 
 export interface LifeHistoryEntry {
@@ -65,7 +69,7 @@ export interface LifeHistoryEntry {
   attackerCommander?: string; // commander display name or empty
   attackerAccent?: string;
   cmdDmgAttacker?: number; // attacker index, needed for revert
-  cmdDmgFrom?: number;     // original cmdDmg value before this change
+  cmdDmgFrom?: CmdDmgPair; // original cmdDmg pair before this change
 }
 
 export function isEffectivelyDead(p: Player): boolean {
@@ -73,13 +77,13 @@ export function isEffectivelyDead(p: Player): boolean {
   if (p.isAliveOverride) return false;          // override beats auto-conditions
   return p.life <= 0
     || p.poisonCounters >= POISON_LETHAL
-    || p.cmdDmg.some(d => d >= CMD_LETHAL);
+    || p.cmdDmg.some(([d1, d2]) => d1 >= CMD_LETHAL || d2 >= CMD_LETHAL);
 }
 
 /** True when the player is overriding auto-death (alive despite bad stats). */
 export function isOverridingDeath(p: Player): boolean {
   return p.isAliveOverride && !p.isDead
-    && (p.life <= 0 || p.poisonCounters >= POISON_LETHAL || p.cmdDmg.some(d => d >= CMD_LETHAL));
+    && (p.life <= 0 || p.poisonCounters >= POISON_LETHAL || p.cmdDmg.some(([d1, d2]) => d1 >= CMD_LETHAL || d2 >= CMD_LETHAL));
 }
 
 /** Revive: clear dead flag, set alive override. Does NOT touch life/poison/damage. */
@@ -125,7 +129,7 @@ export function syncAliveOverride(p: Player): Player {
   if (!p.isAliveOverride) return p;
   const stillInDanger = p.life <= 0
     || p.poisonCounters >= POISON_LETHAL
-    || p.cmdDmg.some(d => d >= CMD_LETHAL);
+    || p.cmdDmg.some(([d1, d2]) => d1 >= CMD_LETHAL || d2 >= CMD_LETHAL);
   return stillInDanger ? p : { ...p, isAliveOverride: false };
 }
 
@@ -133,7 +137,7 @@ export const mkPlayers = (): Player[] =>
   Array.from({ length: 4 }, (_, i) => ({
     name: `Player ${i + 1}`,
     life: INITIAL_LIFE,
-    cmdDmg: [0, 0, 0, 0],
+    cmdDmg: [[0, 0], [0, 0], [0, 0], [0, 0]] as Player['cmdDmg'],
     accentColor: QUAD_ACCENT[i],
     poisonCounters: 0,
     isDead: false,

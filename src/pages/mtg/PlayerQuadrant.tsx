@@ -64,6 +64,7 @@ export default function PlayerQuadrant({
   const [lifeDelta, setLifeDelta] = useState(0);
   const deltaTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingDeltaRef = useRef(0);
+  const lastTapRef = useRef<number>(0);
   const onLifeHistoryCommitRef = useRef(onLifeHistoryCommit);
   onLifeHistoryCommitRef.current = onLifeHistoryCommit;
 
@@ -81,9 +82,25 @@ export default function PlayerQuadrant({
 
   const commitLife = () => {
     const parsed = parseInt(lifeVal, 10);
-    if (!isNaN(parsed)) onLifeSet(parsed);
-    else setLifeVal(String(player.life));
+    if (!isNaN(parsed)) {
+      const delta = parsed - player.life;
+      onLifeSet(parsed);
+      if (delta !== 0) onLifeHistoryCommitRef.current(delta);
+    } else {
+      setLifeVal(String(player.life));
+    }
     setEditLife(false);
+  };
+
+  const handleLifeTap = () => {
+    const now = Date.now();
+    if (now - lastTapRef.current < 300) {
+      lastTapRef.current = 0;
+      setLifeVal(String(player.life));
+      setEditLife(true);
+    } else {
+      lastTapRef.current = now;
+    }
   };
 
   const handleLifeChange = (delta: number) => {
@@ -138,7 +155,7 @@ export default function PlayerQuadrant({
   const hasPrimaryArt = Boolean(player.commanderArtUrl);
   const hasPartnerArt = Boolean(player.partnerCommanderArtUrl);
 
-  const lethalCmdAttacker = opponents.find(o => player.cmdDmg[o] >= CMD_LETHAL);
+  const lethalCmdAttacker = opponents.find(o => player.cmdDmg[o][0] >= CMD_LETHAL || player.cmdDmg[o][1] >= CMD_LETHAL);
 
   const deathCause = player.isDead
     ? 'KO\'d'
@@ -385,7 +402,7 @@ export default function PlayerQuadrant({
             />
           ) : (
             <HoldButton
-              onTap={() => { setLifeVal(String(player.life)); setEditLife(true); }}
+              onTap={handleLifeTap}
               onHold={() => setHistoryOpen(true)}
               sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >

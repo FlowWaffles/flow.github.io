@@ -76,16 +76,25 @@ function readStoredPlayers(): Player[] {
       if (!candidate || typeof candidate !== 'object') return fallback;
 
       const player = candidate as Record<string, unknown>;
-      const cmdDmg = Array.isArray(player.cmdDmg) && player.cmdDmg.length === fallback.cmdDmg.length
-        ? player.cmdDmg.map((value, damageIndex) => (
-          typeof value === 'number' && Number.isFinite(value) ? value : fallback.cmdDmg[damageIndex]
-        ))
+
+      // Migrate old flat [number,number,number,number] format to [[n,n],[n,n],[n,n],[n,n]]
+      const cmdDmg: Player['cmdDmg'] = Array.isArray(player.cmdDmg) && player.cmdDmg.length === 4
+        ? (player.cmdDmg as unknown[]).map((slot, i): [number, number] => {
+            if (Array.isArray(slot) && slot.length === 2) {
+              const d0 = typeof slot[0] === 'number' && Number.isFinite(slot[0]) ? slot[0] : fallback.cmdDmg[i][0];
+              const d1 = typeof slot[1] === 'number' && Number.isFinite(slot[1]) ? slot[1] : fallback.cmdDmg[i][1];
+              return [d0, d1];
+            }
+            // Legacy flat number — treat as primary commander damage, partner = 0
+            const d0 = typeof slot === 'number' && Number.isFinite(slot) ? slot : 0;
+            return [d0, 0];
+          }) as Player['cmdDmg']
         : fallback.cmdDmg;
 
       return syncAliveOverride({
         name: typeof player.name === 'string' ? player.name : fallback.name,
         life: typeof player.life === 'number' && Number.isFinite(player.life) ? player.life : fallback.life,
-        cmdDmg: cmdDmg as Player['cmdDmg'],
+        cmdDmg,
         accentColor: typeof player.accentColor === 'string' ? player.accentColor : fallback.accentColor,
         poisonCounters:
           typeof player.poisonCounters === 'number' && Number.isFinite(player.poisonCounters)
@@ -272,7 +281,7 @@ export default function Commander() {
         latest.cmdDmgAttacker !== undefined &&
         latest.cmdDmgFrom !== undefined
       ) {
-        const newDmg = [...next.cmdDmg] as [number, number, number, number];
+        const newDmg = [...next.cmdDmg] as Player['cmdDmg'];
         newDmg[latest.cmdDmgAttacker] = latest.cmdDmgFrom;
         next = { ...next, cmdDmg: newDmg };
       }
@@ -310,16 +319,16 @@ export default function Commander() {
 
   const openModal = (victim: number, attacker: number) => {
     const val = players[victim].cmdDmg[attacker];
-    setModal({ victim, attacker, value: val, original: val });
+    setModal({ victim, attacker, value: [val[0], val[1]], original: [val[0], val[1]] });
   };
 
   const closeModal = () => {
     if (!modal) return;
-    const diff = modal.value - modal.original;
+    const diff = (modal.value[0] + modal.value[1]) - (modal.original[0] + modal.original[1]);
     setPlayers(prev => prev.map((p, i) => {
       if (i !== modal.victim) return p;
-      const newDmg = [...p.cmdDmg] as [number, number, number, number];
-      newDmg[modal.attacker] = modal.value;
+      const newDmg = [...p.cmdDmg] as Player['cmdDmg'];
+      newDmg[modal.attacker] = [modal.value[0], modal.value[1]];
       return syncAliveOverride({ ...p, life: p.life - diff, cmdDmg: newDmg });
     }));
     if (diff !== 0) {
@@ -332,7 +341,7 @@ export default function Commander() {
         attackerCommander: [attacker.commander, attacker.partnerCommander].filter(Boolean).join(' // '),
         attackerAccent: attacker.accentColor,
         cmdDmgAttacker: modal.attacker,
-        cmdDmgFrom: modal.original,
+        cmdDmgFrom: [modal.original[0], modal.original[1]],
       });
     }
     setModal(null);
