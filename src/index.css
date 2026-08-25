@@ -83,6 +83,17 @@ body {
   will-change: transform;
 }
 
+.static-theme::before {
+  content: '';
+  z-index: -100;
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at top, rgba(78, 116, 255, 0.18), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(66, 220, 219, 0.16), transparent 28%),
+    linear-gradient(180deg, #10131d 0%, #090b12 52%, #05060b 100%);
+}
+
 @keyframes gradientMove {
   0% {
     transform: translate(-75%, 0);

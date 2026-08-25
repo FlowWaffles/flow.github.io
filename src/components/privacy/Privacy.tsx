@@ -30,7 +30,17 @@ const Privacy = () => {
                         <tbody>
                             <tr>
                                 <td>theme</td>
-                                <td>Speichert die bevorzugte Darstellung (Hell- oder Dunkelmodus)</td>
+                                <td>Speichert die bevorzugte Darstellung (Hell- oder Dunkelmodus) für die Hauptseite</td>
+                                <td>1 Jahr</td>
+                            </tr>
+                            <tr>
+                                <td>theme_mtg</td>
+                                <td>Speichert die bevorzugte Darstellung (Hell-, Dunkel- oder Statisch-Modus) für den MTG Commander Tracker</td>
+                                <td>1 Jahr</td>
+                            </tr>
+                            <tr>
+                                <td>mtg_player_colors</td>
+                                <td>Speichert die gewählten Akzentfarben der vier Spieler im MTG Commander Tracker, damit diese sitzungsübergreifend erhalten bleiben</td>
                                 <td>1 Jahr</td>
                             </tr>
                         </tbody>
@@ -107,7 +117,7 @@ const Privacy = () => {
                             target="_blank" rel="noopener noreferrer">Quelle: LDA Bayern</a>)
                     </p>
 
-                    <p>Stand: Juni 2025</p>
+                    <p>Stand: August 2025</p>
                 </section>
 
                 <section>
@@ -132,7 +142,17 @@ const Privacy = () => {
                         <tbody>
                             <tr>
                                 <td>theme</td>
-                                <td>Saves the user's theme preference (dark or light mode)</td>
+                                <td>Saves the user's theme preference (dark or light mode) for the main site</td>
+                                <td>1 year</td>
+                            </tr>
+                            <tr>
+                                <td>theme_mtg</td>
+                                <td>Saves the theme preference (light, dark, or static mode) for the MTG Commander Tracker</td>
+                                <td>1 year</td>
+                            </tr>
+                            <tr>
+                                <td>mtg_player_colors</td>
+                                <td>Saves the chosen accent colors for all four players in the MTG Commander Tracker so they persist across sessions</td>
                                 <td>1 year</td>
                             </tr>
                         </tbody>
@@ -207,7 +227,7 @@ const Privacy = () => {
                             target="_blank" rel="noopener noreferrer">Source: LDA Bayern</a>)
                     </p>
 
-                    <p>Last updated: June 2025</p>
+                    <p>Last updated: August 2025</p>
                 </section>
 
             </div>

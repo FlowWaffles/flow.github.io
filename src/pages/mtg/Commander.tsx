@@ -1,9 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { keyframes } from '@emotion/react';
-import { Backdrop, Box, Button, Typography, useMediaQuery } from '@mui/material';
+import { Backdrop, Box, Button, IconButton, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import LightIcon from '@mui/icons-material/Light';
+import { getMtgTheme, setMtgTheme, applyMtgTheme } from '../../utils/ThemeHandler';
+import type { AppTheme } from '../../utils/ThemeHandler';
+import { getPlayerColorsCookie, setPlayerColorsCookie } from '../../utils/ThemeCookie';
 import Icon from '@mdi/react';
 import { mdiUnicornVariant } from '@mdi/js';
 import PlayerQuadrant from './PlayerQuadrant';
@@ -64,6 +70,15 @@ function readStoredPlayers(): Player[] {
   if (typeof window === 'undefined') return mkPlayers();
 
   const defaults = mkPlayers();
+
+  // Apply persisted accent colors from cookie onto defaults before checking session
+  const cookieColors = getPlayerColorsCookie();
+  if (cookieColors) {
+    cookieColors.forEach((color, i) => {
+      if (i < defaults.length && color) defaults[i] = { ...defaults[i], accentColor: color };
+    });
+  }
+
   const stored = sessionStorage.getItem(PLAYERS_STORAGE_KEY);
   if (!stored) return defaults;
 
@@ -137,6 +152,7 @@ export default function Commander() {
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenMenuVisible, setFullscreenMenuVisible] = useState(false);
+  const [mtgTheme, setMtgThemeState] = useState<AppTheme>(() => getMtgTheme());
   const boardRef = useRef<HTMLDivElement | null>(null);
   const fullscreenMenuTimerRef = useRef<number | null>(null);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
@@ -147,6 +163,10 @@ export default function Commander() {
   const surfaceRotation = rotateMobileSurface ? 90 : 0;
   const compactLayout = narrowMobileWidth || shortMobileHeight;
 
+  useLayoutEffect(() => {
+    applyMtgTheme();
+  }, []);
+
   useEffect(() => {
     try {
       sessionStorage.setItem(PLAYERS_STORAGE_KEY, JSON.stringify(players));
@@ -154,6 +174,10 @@ export default function Commander() {
       console.error('Failed to persist commander tracker state.', error);
     }
   }, [players]);
+
+  useEffect(() => {
+    setPlayerColorsCookie(players.map(p => p.accentColor));
+  }, [players[0].accentColor, players[1].accentColor, players[2].accentColor, players[3].accentColor]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const doc = document as FullscreenDocument;
@@ -394,11 +418,6 @@ export default function Commander() {
   return (
     <Box sx={{
       position: 'fixed', inset: 0,
-      background: `
-        radial-gradient(circle at top, rgba(78, 116, 255, 0.18), transparent 32%),
-        radial-gradient(circle at bottom right, rgba(66, 220, 219, 0.16), transparent 28%),
-        linear-gradient(180deg, #10131d 0%, #090b12 52%, #05060b 100%)
-      `,
       overflow: 'hidden',
     }}>
       <Box
@@ -558,6 +577,31 @@ export default function Commander() {
             >
               Reset
             </Button>
+            <Tooltip title={mtgTheme === 'static' ? 'Switch to light mode' : mtgTheme === 'light' ? 'Switch to dark mode' : 'Switch to static mode'}>
+              <IconButton
+                size="small"
+                onClick={() => {
+                  const next: AppTheme = mtgTheme === 'static' ? 'light' : mtgTheme === 'light' ? 'dark' : 'static';
+                  setMtgThemeState(next);
+                  setMtgTheme(next);
+                }}
+                sx={{
+                  color: mtgTheme === 'static' ? '#4b5563' : '#d7deef',
+                  border: `1px solid ${mtgTheme === 'static' ? 'rgba(75, 85, 99, 0.4)' : 'rgba(148, 163, 184, 0.28)'}`,
+                  borderRadius: 999,
+                  width: compactLayout ? 32 : 36,
+                  height: compactLayout ? 32 : 36,
+                  bgcolor: 'rgba(255,255,255,0.02)',
+                  '&:hover': {
+                    borderColor: 'rgba(191, 219, 254, 0.55)',
+                    bgcolor: 'rgba(255,255,255,0.07)',
+                    color: '#d7deef',
+                  },
+                }}
+              >
+                {mtgTheme === 'static' ? <LightIcon fontSize="small" /> : mtgTheme === 'light' ? <LightModeIcon fontSize="small" /> : <DarkModeOutlinedIcon fontSize="small" />}
+              </IconButton>
+            </Tooltip>
           </Box>
         )}
 
