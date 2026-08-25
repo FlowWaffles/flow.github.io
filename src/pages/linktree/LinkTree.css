@@ -64,6 +64,7 @@
 }
 
 .linktree-contact {
+    margin-bottom: 2rem;
     width: min(420px, 100%);
     align-self: end;
     justify-self: center;
