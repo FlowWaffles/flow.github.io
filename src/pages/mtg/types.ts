@@ -54,6 +54,19 @@ export interface ModalState {
   original: number;
 }
 
+export interface LifeHistoryEntry {
+  id: string;
+  timestamp: number;
+  delta: number; // life change (positive = gain, negative = loss)
+  source: 'manual' | 'commander';
+  attackerPid?: number;
+  attackerName?: string;
+  attackerCommander?: string; // commander display name or empty
+  attackerAccent?: string;
+  cmdDmgAttacker?: number; // attacker index, needed for revert
+  cmdDmgFrom?: number;     // original cmdDmg value before this change
+}
+
 export function isEffectivelyDead(p: Player): boolean {
   if (p.isDead) return true;                    // manual KO always wins
   if (p.isAliveOverride) return false;          // override beats auto-conditions

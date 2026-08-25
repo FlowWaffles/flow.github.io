@@ -10,7 +10,7 @@ import PlayerSettingsModal from './PlayerSettingsModal';
 import ResetDialog from './ResetDialog';
 import QuickSetupDialog from './QuickSetupDialog';
 import commandersData from './commanders-data';
-import type { Player, ModalState, CommanderEntry } from './types';
+import type { Player, ModalState, CommanderEntry, LifeHistoryEntry } from './types';
 import { getPlayerModalRotation, mkPlayers, syncAliveOverride } from './types';
 
 type FullscreenDocument = Document & {
@@ -110,6 +110,7 @@ function readStoredPlayers(): Player[] {
 
 export default function Commander() {
   const [players, setPlayers] = useState<Player[]>(readStoredPlayers);
+  const [lifeHistory, setLifeHistory] = useState<LifeHistoryEntry[][]>(() => [[], [], [], []]);
   const [resetOpen, setResetOpen] = useState(false);
   const [newGameOpen, setNewGameOpen] = useState(false);
   const [quickSetupOpen, setQuickSetupOpen] = useState(false);
@@ -203,6 +204,42 @@ export default function Commander() {
     }
   };
 
+  const pushLifeHistory = (pid: number, entry: Omit<LifeHistoryEntry, 'id' | 'timestamp'>) => {
+    setLifeHistory(prev => {
+      const next = [...prev];
+      next[pid] = [
+        { ...entry, id: crypto.randomUUID(), timestamp: Date.now() },
+        ...prev[pid],
+      ].slice(0, 10);
+      return next;
+    });
+  };
+
+  const revertLatestHistory = (pid: number) => {
+    const entries = lifeHistory[pid];
+    if (!entries.length) return;
+    const latest = entries[0];
+    setPlayers(prev => prev.map((p, i) => {
+      if (i !== pid) return p;
+      let next = { ...p, life: p.life - latest.delta };
+      if (
+        latest.source === 'commander' &&
+        latest.cmdDmgAttacker !== undefined &&
+        latest.cmdDmgFrom !== undefined
+      ) {
+        const newDmg = [...next.cmdDmg] as [number, number, number, number];
+        newDmg[latest.cmdDmgAttacker] = latest.cmdDmgFrom;
+        next = { ...next, cmdDmg: newDmg };
+      }
+      return syncAliveOverride(next);
+    }));
+    setLifeHistory(prev => {
+      const next = [...prev];
+      next[pid] = prev[pid].slice(1);
+      return next;
+    });
+  };
+
   const updatePlayer = (pid: number, update: Partial<Player>) =>
     setPlayers(prev => prev.map((p, i) => {
       if (i !== pid) return p;
@@ -237,6 +274,19 @@ export default function Commander() {
       newDmg[modal.attacker] = modal.value;
       return syncAliveOverride({ ...p, life: p.life - diff, cmdDmg: newDmg });
     }));
+    if (diff !== 0) {
+      const attacker = players[modal.attacker];
+      pushLifeHistory(modal.victim, {
+        delta: -diff,
+        source: 'commander',
+        attackerPid: modal.attacker,
+        attackerName: attacker.name,
+        attackerCommander: [attacker.commander, attacker.partnerCommander].filter(Boolean).join(' // '),
+        attackerAccent: attacker.accentColor,
+        cmdDmgAttacker: modal.attacker,
+        cmdDmgFrom: modal.original,
+      });
+    }
     setModal(null);
   };
 
@@ -257,6 +307,7 @@ export default function Commander() {
     setModal(null);
     setSettingsPid(null);
     setNewGameOpen(false);
+    setLifeHistory([[], [], [], []]);
   };
 
   const applyQuickSetup = (entries: Array<{ name: string; commander: string; partnerCommander: string }>) => {
@@ -323,6 +374,9 @@ export default function Commander() {
             onPlayerUpdate={update => updatePlayer(pid, update)}
             onDamageClick={attacker => openModal(pid, attacker)}
             onOpenSettings={() => setSettingsPid(pid)}
+            lifeHistory={lifeHistory[pid]}
+            onLifeHistoryCommit={delta => pushLifeHistory(pid, { delta, source: 'manual' })}
+            onRevertHistory={() => revertLatestHistory(pid)}
             compact={compactLayout}
             sx={{ gridArea: area, borderRadius: compactLayout ? '10px' : '12px' }}
           />
@@ -467,7 +521,7 @@ export default function Commander() {
           open={resetOpen}
           landscapeSurface={mobileLayout}
           onClose={() => setResetOpen(false)}
-          onConfirm={() => { setPlayers(mkPlayers()); setResetOpen(false); }}
+          onConfirm={() => { setPlayers(mkPlayers()); setLifeHistory([[], [], [], []]); setResetOpen(false); }}
         />
 
         <Backdrop

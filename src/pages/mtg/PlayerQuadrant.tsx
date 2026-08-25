@@ -10,7 +10,8 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import HoldButton from './HoldButton';
 import CommanderDamageGrid from './CommanderDamageGrid';
-import type { Player } from './types';
+import LifeHistoryModal from './LifeHistoryModal';
+import type { Player, LifeHistoryEntry } from './types';
 import {
   CMD_LETHAL, HOLD_INCREMENT, POISON_LETHAL,
   isEffectivelyDead, isOverridingDeath, accentToBg,
@@ -42,16 +43,26 @@ interface PlayerQuadrantProps {
   onPlayerUpdate: (update: Partial<Player>) => void;
   onDamageClick: (attacker: number) => void;
   onOpenSettings: () => void;
+  lifeHistory: LifeHistoryEntry[];
+  onLifeHistoryCommit: (delta: number) => void;
+  onRevertHistory: () => void;
   sx?: object;
 }
 
 export default function PlayerQuadrant({
   pid, player, allPlayers, rotation, compact = false,
-  onLifeChange, onLifeSet, onPlayerUpdate, onDamageClick, onOpenSettings, sx,
+  onLifeChange, onLifeSet, onPlayerUpdate, onDamageClick, onOpenSettings,
+  lifeHistory, onLifeHistoryCommit, onRevertHistory, sx,
 }: PlayerQuadrantProps) {
   const [editLife, setEditLife] = useState(false);
   const [lifeVal, setLifeVal] = useState(String(player.life));
+  const [historyOpen, setHistoryOpen] = useState(false);
   const lifeRef = useRef<HTMLInputElement>(null);
+  const [lifeDelta, setLifeDelta] = useState(0);
+  const deltaTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingDeltaRef = useRef(0);
+  const onLifeHistoryCommitRef = useRef(onLifeHistoryCommit);
+  onLifeHistoryCommitRef.current = onLifeHistoryCommit;
 
   useEffect(() => { if (!editLife) setLifeVal(String(player.life)); }, [player.life, editLife]);
   useEffect(() => {
@@ -70,6 +81,18 @@ export default function PlayerQuadrant({
     if (!isNaN(parsed)) onLifeSet(parsed);
     else setLifeVal(String(player.life));
     setEditLife(false);
+  };
+
+  const handleLifeChange = (delta: number) => {
+    onLifeChange(delta);
+    pendingDeltaRef.current += delta;
+    setLifeDelta(pendingDeltaRef.current);
+    if (deltaTimerRef.current) clearTimeout(deltaTimerRef.current);
+    deltaTimerRef.current = setTimeout(() => {
+      onLifeHistoryCommitRef.current(pendingDeltaRef.current);
+      pendingDeltaRef.current = 0;
+      setLifeDelta(0);
+    }, 1500);
   };
 
   const accent = player.accentColor;
@@ -95,6 +118,19 @@ export default function PlayerQuadrant({
         ? '0 0 20px rgba(255,235,59,0.35)'
         : undefined;
 
+  const quadrantRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!historyOpen) return;
+    const handlePointerDown = (e: PointerEvent) => {
+      if (quadrantRef.current && !quadrantRef.current.contains(e.target as Node)) {
+        setHistoryOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
+  }, [historyOpen]);
+
   const commanderDisplay = [player.commander, player.partnerCommander].filter(Boolean).join(' // ');
   const hasPrimaryArt = Boolean(player.commanderArtUrl);
   const hasPartnerArt = Boolean(player.partnerCommanderArtUrl);
@@ -114,7 +150,7 @@ export default function PlayerQuadrant({
           : 'Defeated';
 
   return (
-    <Box sx={{
+    <Box ref={quadrantRef} sx={{
       ...sx,
       display: 'flex', flexDirection: 'column',
       bgcolor: bg,
@@ -244,8 +280,8 @@ export default function PlayerQuadrant({
       {/* Life row */}
       <Box sx={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', alignItems: 'stretch', minHeight: 0 }}>
         <HoldButton
-          onTap={() => onLifeChange(-1)}
-          onHold={() => onLifeChange(-HOLD_INCREMENT)}
+          onTap={() => handleLifeChange(-1)}
+          onHold={() => handleLifeChange(-HOLD_INCREMENT)}
           sx={{
             flex: 1, color: 'rgba(255,255,255,0.7)',
             transition: 'background-color 0.12s',
@@ -259,7 +295,28 @@ export default function PlayerQuadrant({
         <Box sx={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           minWidth: compact ? '4ch' : '5ch', px: compact ? 0.25 : 0.5,
+          position: 'relative',
         }}>
+          {lifeDelta !== 0 && (
+            <Typography sx={{
+              position: 'absolute',
+              top: compact ? 2 : 4,
+              left: 'calc(100% + 4px)',
+              fontSize: compact ? '0.7rem' : '0.85rem',
+              fontWeight: 700,
+              color: lifeDelta > 0 ? '#4caf50' : '#f44336',
+              fontFamily: "'Orbitron-Regular', monospace",
+              lineHeight: 1,
+              pointerEvents: 'none',
+              userSelect: 'none',
+              textShadow: lifeDelta > 0
+                ? '0 0 8px rgba(76,175,80,0.7)'
+                : '0 0 8px rgba(244,67,54,0.7)',
+              zIndex: 10,
+            }}>
+              {lifeDelta > 0 ? `+${lifeDelta}` : lifeDelta}
+            </Typography>
+          )}
           {editLife ? (
             <TextField
               inputRef={lifeRef}
@@ -282,30 +339,35 @@ export default function PlayerQuadrant({
               sx={{ '& .MuiInput-underline:before': { borderColor: '#555' } }}
             />
           ) : (
-            <Typography
-              onClick={() => { setLifeVal(String(player.life)); setEditLife(true); }}
-              sx={{
-                fontSize: lifeFontSize,
-                fontWeight: 800, lineHeight: 1,
-                color: lifeColor,
-                cursor: 'pointer', userSelect: 'none',
-                transition: 'color 0.35s',
-                fontFamily: "'Monoton-Regular', monospace",
-                letterSpacing: '-0.04em',
-                willChange: 'filter',
-                ...(lifeTextShadow
-                  ? { filter: `drop-shadow(0 0 8px ${lifeTextShadow.replace('0 0 20px ', '')})` }
-                  : { animation: `${neonGlow} 4s infinite alternate ease-in-out` }),
-              }}
+            <HoldButton
+              onTap={() => { setLifeVal(String(player.life)); setEditLife(true); }}
+              onHold={() => setHistoryOpen(true)}
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
-              {player.life}
-            </Typography>
+              <Typography
+                sx={{
+                  fontSize: lifeFontSize,
+                  fontWeight: 800, lineHeight: 1,
+                  color: lifeColor,
+                  cursor: 'pointer', userSelect: 'none',
+                  transition: 'color 0.35s',
+                  fontFamily: "'Monoton-Regular', monospace",
+                  letterSpacing: '-0.04em',
+                  willChange: 'filter',
+                  ...(lifeTextShadow
+                    ? { filter: `drop-shadow(0 0 8px ${lifeTextShadow.replace('0 0 20px ', '')})` }
+                    : { animation: `${neonGlow} 4s infinite alternate ease-in-out` }),
+                }}
+              >
+                {player.life}
+              </Typography>
+            </HoldButton>
           )}
         </Box>
 
         <HoldButton
-          onTap={() => onLifeChange(1)}
-          onHold={() => onLifeChange(HOLD_INCREMENT)}
+          onTap={() => handleLifeChange(1)}
+          onHold={() => handleLifeChange(HOLD_INCREMENT)}
           sx={{
             flex: 1, color: 'rgba(255,255,255,0.7)',
             transition: 'background-color 0.12s',
@@ -329,6 +391,15 @@ export default function PlayerQuadrant({
           onSelfClick={onOpenSettings}
         />
       </Box>
+
+      {/* Life history modal */}
+      <LifeHistoryModal
+        open={historyOpen}
+        history={lifeHistory}
+        accent={accent}
+        onClose={() => setHistoryOpen(false)}
+        onRevert={() => { onRevertHistory(); setHistoryOpen(false); }}
+      />
 
       {/* Dead overlay */}
       {dead && (
