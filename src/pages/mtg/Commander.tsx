@@ -7,8 +7,6 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightIcon from '@mui/icons-material/Light';
-import SwapVertIcon from '@mui/icons-material/SwapVert';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { getMtgTheme, setMtgTheme, applyMtgTheme } from '../../utils/ThemeHandler';
 import type { AppTheme } from '../../utils/ThemeHandler';
 import { getPlayerColorsCookie, setPlayerColorsCookie } from '../../utils/ThemeCookie';
@@ -19,6 +17,10 @@ import CommanderDamageModal from './CommanderDamageModal';
 import PlayerSettingsModal from './PlayerSettingsModal';
 import ResetDialog from './ResetDialog';
 import QuickSetupDialog from './QuickSetupDialog';
+import DiceMenuButton from './DiceMenuButton';
+import RandomizerModal from './RandomizerModal';
+import PlayerCountMenuButton from './PlayerCountMenuButton';
+import PlayerLayoutModal from './PlayerLayoutModal';
 import commandersData from './commanders-data';
 import type { Player, ModalState, CommanderEntry, LifeHistoryEntry } from './types';
 import { getPlayerModalRotation, mkPlayers, syncAliveOverride } from './types';
@@ -169,9 +171,14 @@ export default function Commander() {
     return (localStorage.getItem('mtg_three_layout') as 'A' | 'B') || 'A';
   });
   const [layoutModalOpen, setLayoutModalOpen] = useState(false);
+  const [randomizerModalOpen, setRandomizerModalOpen] = useState(false);
+  const [startingPlayerHighlightPid, setStartingPlayerHighlightPid] = useState<number | null>(null);
+  const [startingPlayerHighlightPhase, setStartingPlayerHighlightPhase] = useState<'spin' | 'winner' | null>(null);
   const [lifeTotalModal, setLifeTotalModal] = useState<{ pid: number; value: string } | null>(null);
   const boardRef = useRef<HTMLDivElement | null>(null);
   const fullscreenMenuTimerRef = useRef<number | null>(null);
+  const startingPlayerIntervalRef = useRef<number | null>(null);
+  const startingPlayerTimeoutsRef = useRef<number[]>([]);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
   const portraitViewport = useMediaQuery('(pointer: coarse) and (orientation: portrait)');
   const narrowMobileWidth = useMediaQuery('(pointer: coarse) and (max-width: 480px)');
@@ -268,6 +275,19 @@ export default function Commander() {
   }, [isFullscreen]);
 
   useEffect(() => () => clearFullscreenMenuTimer(), []);
+
+  const clearStartingPlayerAnimation = useCallback(() => {
+    if (startingPlayerIntervalRef.current !== null) {
+      window.clearInterval(startingPlayerIntervalRef.current);
+      startingPlayerIntervalRef.current = null;
+    }
+    startingPlayerTimeoutsRef.current.forEach(timeoutId => window.clearTimeout(timeoutId));
+    startingPlayerTimeoutsRef.current = [];
+    setStartingPlayerHighlightPid(null);
+    setStartingPlayerHighlightPhase(null);
+  }, []);
+
+  useEffect(() => () => clearStartingPlayerAnimation(), [clearStartingPlayerAnimation]);
 
   const lockLandscapeOrientation = useCallback(async () => {
     if (!mobileLayout) return;
@@ -465,6 +485,20 @@ export default function Commander() {
     setStartingLifeTotal(startingLife);
     setQuickSetupOpen(false);
   };
+  const setPlayerLayout = (count: 2 | 3 | 4, nextThreeLayout?: 'A' | 'B') => {
+    setPlayerCount(count);
+    localStorage.setItem('mtg_player_count', String(count));
+    if (nextThreeLayout) {
+      setThreeLayout(nextThreeLayout);
+      localStorage.setItem('mtg_three_layout', nextThreeLayout);
+    }
+    setLayoutModalOpen(false);
+  };
+  const swapThreePlayerSides = () => {
+    const next = threeLayout === 'A' ? 'B' : 'A';
+    setThreeLayout(next);
+    localStorage.setItem('mtg_three_layout', next);
+  };
 
   const showCenterMenu = !isFullscreen || fullscreenMenuVisible;
 
@@ -525,6 +559,41 @@ export default function Commander() {
   }, [layoutConfig.activeQuadrants, lifeTotalModal]);
   const canSubmitLifeTotal = lifeTotalModal !== null && /^-?\d+$/.test(lifeTotalModal.value.trim());
 
+  const rollStartingPlayer = useCallback(() => {
+    const visiblePlayerIds = layoutConfig.activeQuadrants.map(q => q.pid);
+    if (!visiblePlayerIds.length) return;
+
+    clearStartingPlayerAnimation();
+    setRandomizerModalOpen(false);
+
+    const randomPid = () => visiblePlayerIds[Math.floor(Math.random() * visiblePlayerIds.length)];
+    const startTimeout = window.setTimeout(() => {
+      setStartingPlayerHighlightPhase('spin');
+      setStartingPlayerHighlightPid(randomPid());
+      startingPlayerIntervalRef.current = window.setInterval(() => {
+        setStartingPlayerHighlightPid(randomPid());
+      }, 90);
+
+      const finalTimeout = window.setTimeout(() => {
+        if (startingPlayerIntervalRef.current !== null) {
+          window.clearInterval(startingPlayerIntervalRef.current);
+          startingPlayerIntervalRef.current = null;
+        }
+        const winner = randomPid();
+        setStartingPlayerHighlightPhase('winner');
+        setStartingPlayerHighlightPid(winner);
+
+        const clearTimeoutId = window.setTimeout(() => {
+          setStartingPlayerHighlightPid(null);
+        }, 900);
+        startingPlayerTimeoutsRef.current.push(clearTimeoutId);
+      }, 2400);
+      startingPlayerTimeoutsRef.current.push(finalTimeout);
+    }, 60);
+
+    startingPlayerTimeoutsRef.current.push(startTimeout);
+  }, [clearStartingPlayerAnimation, layoutConfig.activeQuadrants]);
+
   return (
     <Box sx={{
       position: 'fixed', inset: 0,
@@ -569,6 +638,7 @@ export default function Commander() {
             onLifeHistoryCommit={delta => pushLifeHistory(pid, { delta, source: 'manual' })}
             onRevertHistory={() => revertLatestHistory(pid)}
             compact={compactLayout}
+            startingPlayerHighlightPhase={startingPlayerHighlightPid === pid ? startingPlayerHighlightPhase : null}
             sx={{
               gridArea: area,
               borderRadius: compactLayout ? '10px' : '12px',
@@ -693,26 +763,12 @@ export default function Commander() {
                 <RestartAltIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-            <Tooltip title={`Players: ${playerCount}`}>
-              <IconButton
-                size="small"
-                onClick={() => setLayoutModalOpen(true)}
-                sx={{
-                  color: '#d7deef',
-                  border: '1px solid rgba(148, 163, 184, 0.28)',
-                  borderRadius: 999,
-                  width: compactLayout ? 32 : 36,
-                  height: compactLayout ? 32 : 36,
-                  bgcolor: 'rgba(255,255,255,0.02)',
-                  '&:hover': {
-                    borderColor: 'rgba(191, 219, 254, 0.55)',
-                    bgcolor: 'rgba(255,255,255,0.07)',
-                  },
-                }}
-              >
-                <PeopleAltIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            <PlayerCountMenuButton
+              compact={compactLayout}
+              playerCount={playerCount}
+              onClick={() => setLayoutModalOpen(true)}
+            />
+            <DiceMenuButton compact={compactLayout} onClick={() => setRandomizerModalOpen(true)} />
             <Tooltip title={mtgTheme === 'static' ? 'Switch to light mode' : mtgTheme === 'light' ? 'Switch to dark mode' : 'Switch to static mode'}>
               <IconButton
                 size="small"
@@ -852,158 +908,18 @@ export default function Commander() {
           onConfirm={() => { setPlayers(mkPlayers()); setMonarchIntroduced(false); setLifeHistory([[], [], [], []]); setStartingLifeTotal(40); setResetOpen(false); }}
         />
 
-        {/* Layout selection modal */}
-        <Backdrop
+        <PlayerLayoutModal
           open={layoutModalOpen}
-          onClick={() => setLayoutModalOpen(false)}
-          sx={{ position: 'absolute', inset: 0, zIndex: 230, backdropFilter: 'blur(4px)', bgcolor: 'rgba(0,0,0,0.7)' }}
-        >
-          <Box
-            onClick={e => e.stopPropagation()}
-            sx={{
-              bgcolor: '#1e1e1e',
-              color: '#eee',
-              border: '1px solid #333',
-              borderRadius: 2,
-              boxShadow: '0 0 32px rgba(0,0,0,0.35)',
-              p: 2.5,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2,
-              transform: `rotate(${getPlayerModalRotation(0)}deg)`,
-              transformOrigin: 'center',
-            }}
-          >
-            <Typography sx={{ fontWeight: 600, textAlign: 'center' }}>Select player layout</Typography>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', flexWrap: 'wrap', justifyContent: 'center' }}>
-
-              {/* 2 players */}
-              <Box
-                onClick={() => { setPlayerCount(2); localStorage.setItem('mtg_player_count', '2'); setLayoutModalOpen(false); }}
-                sx={{
-                  cursor: 'pointer',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-                  opacity: playerCount === 2 ? 1 : 0.55,
-                  '&:hover': { opacity: 1 },
-                }}
-              >
-                <Box sx={{
-                  width: 80, height: 70, border: `2px solid ${playerCount === 2 ? '#60a5fa' : '#444'}`,
-                  borderRadius: 1.5, overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '3px', p: '4px', boxSizing: 'border-box',
-                  bgcolor: playerCount === 2 ? 'rgba(96,165,250,0.08)' : 'transparent',
-                }}>
-                  <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                  <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                </Box>
-                <Typography variant="caption">2 players</Typography>
-              </Box>
-
-              {/* 3 players layout A — 1 top, 2 bottom */}
-              <Box
-                onClick={() => { setPlayerCount(3); setThreeLayout('A'); localStorage.setItem('mtg_player_count', '3'); localStorage.setItem('mtg_three_layout', 'A'); setLayoutModalOpen(false); }}
-                sx={{
-                  cursor: 'pointer',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-                  opacity: playerCount === 3 && threeLayout === 'A' ? 1 : 0.55,
-                  '&:hover': { opacity: 1 },
-                }}
-              >
-                <Box sx={{
-                  width: 80, height: 70, border: `2px solid ${playerCount === 3 && threeLayout === 'A' ? '#60a5fa' : '#444'}`,
-                  borderRadius: 1.5, overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '3px', p: '4px', boxSizing: 'border-box',
-                  bgcolor: playerCount === 3 && threeLayout === 'A' ? 'rgba(96,165,250,0.08)' : 'transparent',
-                }}>
-                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                    <Box sx={{ flex: 1, borderRadius: 1 }} />
-                  </Box>
-                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                  </Box>
-                </Box>
-                <Typography variant="caption">3 players (A)</Typography>
-              </Box>
-
-              {/* 3 players layout B — 2 top, 1 bottom */}
-              <Box
-                onClick={() => { setPlayerCount(3); setThreeLayout('B'); localStorage.setItem('mtg_player_count', '3'); localStorage.setItem('mtg_three_layout', 'B'); setLayoutModalOpen(false); }}
-                sx={{
-                  cursor: 'pointer',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-                  opacity: playerCount === 3 && threeLayout === 'B' ? 1 : 0.55,
-                  '&:hover': { opacity: 1 },
-                }}
-              >
-                <Box sx={{
-                  width: 80, height: 70, border: `2px solid ${playerCount === 3 && threeLayout === 'B' ? '#60a5fa' : '#444'}`,
-                  borderRadius: 1.5, overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '3px', p: '4px', boxSizing: 'border-box',
-                  bgcolor: playerCount === 3 && threeLayout === 'B' ? 'rgba(96,165,250,0.08)' : 'transparent',
-                }}>
-                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                  </Box>
-                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                    <Box sx={{ flex: 1, borderRadius: 1 }} />
-                  </Box>
-                </Box>
-                <Typography variant="caption">3 players (B)</Typography>
-              </Box>
-
-              {/* 4 players */}
-              <Box
-                onClick={() => { setPlayerCount(4); localStorage.setItem('mtg_player_count', '4'); setLayoutModalOpen(false); }}
-                sx={{
-                  cursor: 'pointer',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1,
-                  opacity: playerCount === 4 ? 1 : 0.55,
-                  '&:hover': { opacity: 1 },
-                }}
-              >
-                <Box sx={{
-                  width: 80, height: 70, border: `2px solid ${playerCount === 4 ? '#60a5fa' : '#444'}`,
-                  borderRadius: 1.5, overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '3px', p: '4px', boxSizing: 'border-box',
-                  bgcolor: playerCount === 4 ? 'rgba(96,165,250,0.08)' : 'transparent',
-                }}>
-                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                  </Box>
-                  <Box sx={{ flex: 1, display: 'flex', gap: '3px' }}>
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                    <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
-                  </Box>
-                </Box>
-                <Typography variant="caption">4 players</Typography>
-              </Box>
-
-            </Box>
-
-            {playerCount === 3 && (
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<SwapVertIcon />}
-                  onClick={() => {
-                    const next = threeLayout === 'A' ? 'B' : 'A';
-                    setThreeLayout(next);
-                    localStorage.setItem('mtg_three_layout', next);
-                  }}
-                  sx={{ color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none', borderRadius: 999 }}
-                >
-                  Swap sides
-                </Button>
-              </Box>
-            )}
-
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button onClick={() => setLayoutModalOpen(false)} sx={{ color: '#aaa' }}>Close</Button>
-            </Box>
-          </Box>
-        </Backdrop>
+          playerCount={playerCount}
+          threeLayout={threeLayout}
+          rotation={getPlayerModalRotation(0)}
+          onClose={() => setLayoutModalOpen(false)}
+          onSelectTwoPlayers={() => setPlayerLayout(2)}
+          onSelectThreePlayersLayoutA={() => setPlayerLayout(3, 'A')}
+          onSelectThreePlayersLayoutB={() => setPlayerLayout(3, 'B')}
+          onSelectFourPlayers={() => setPlayerLayout(4)}
+          onSwapThreePlayerSides={swapThreePlayerSides}
+        />
 
         <Backdrop
           open={newGameOpen}
@@ -1046,6 +962,14 @@ export default function Commander() {
             </Box>
           </Box>
         </Backdrop>
+
+        <RandomizerModal
+          open={randomizerModalOpen}
+          mobileLayout={mobileLayout}
+          rotation={getPlayerModalRotation(0)}
+          onClose={() => setRandomizerModalOpen(false)}
+          onRollStartingPlayer={rollStartingPlayer}
+        />
       </Box>
 
       <QuickSetupDialog

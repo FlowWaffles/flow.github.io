@@ -8,6 +8,54 @@ const neonGlow = keyframes`
   0%, 100% { filter: drop-shadow(0 0 4px #acecec) drop-shadow(0 0 10px #42dcdb); }
   50%       { filter: drop-shadow(0 0 2px #acecec) drop-shadow(0 0 4px #42dcdb); }
 `;
+
+const startingPlayerSpinGlow = keyframes`
+  0% {
+    box-shadow:
+      0 18px 36px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 0 10px rgba(255, 255, 255, 0.55),
+      0 0 22px rgba(172, 236, 236, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 18px 36px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 0 16px rgba(255, 255, 255, 0.95),
+      0 0 36px rgba(172, 236, 236, 0.8);
+  }
+  100% {
+    box-shadow:
+      0 18px 36px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 0 10px rgba(255, 255, 255, 0.55),
+      0 0 22px rgba(172, 236, 236, 0.5);
+  }
+`;
+
+const startingPlayerWinnerGlow = keyframes`
+  0% {
+    box-shadow:
+      0 18px 36px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 0 14px rgba(255, 255, 255, 0.8),
+      0 0 30px rgba(172, 236, 236, 0.6);
+  }
+  40% {
+    box-shadow:
+      0 18px 36px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 0 24px rgba(255, 255, 255, 1),
+      0 0 48px rgba(172, 236, 236, 0.95);
+  }
+  100% {
+    box-shadow:
+      0 18px 36px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 0 18px rgba(255, 255, 255, 0.9),
+      0 0 36px rgba(172, 236, 236, 0.78);
+  }
+`;
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import HoldButton from './HoldButton';
@@ -43,6 +91,7 @@ interface PlayerQuadrantProps {
   startingLife: 20 | 40;
   compact?: boolean;
   monarchIntroduced?: boolean;
+  startingPlayerHighlightPhase?: 'spin' | 'winner' | null;
   onLifeChange: (delta: number) => void;
   onOpenLifeSetModal: () => void;
   onPlayerUpdate: (update: Partial<Player>) => void;
@@ -56,6 +105,7 @@ interface PlayerQuadrantProps {
 
 export default function PlayerQuadrant({
   pid, player, allPlayers, rotation, physicalLayout, startingLife, compact = false, monarchIntroduced = false,
+  startingPlayerHighlightPhase = null,
   onLifeChange, onOpenLifeSetModal, onPlayerUpdate, onDamageClick, onOpenSettings,
   lifeHistory, onLifeHistoryCommit, onRevertHistory, sx,
 }: PlayerQuadrantProps) {
@@ -153,7 +203,6 @@ export default function PlayerQuadrant({
 
   return (
     <Box ref={quadrantRef} sx={{
-      ...sx,
       display: 'flex', flexDirection: 'column',
       bgcolor: bg,
       backgroundImage: `
@@ -169,6 +218,12 @@ export default function PlayerQuadrant({
       overflow: 'hidden',
       position: 'relative',
       minHeight: 0,
+      animation: startingPlayerHighlightPhase === 'winner'
+        ? `${startingPlayerWinnerGlow} 0.45s ease-out 1 forwards`
+        : startingPlayerHighlightPhase === 'spin'
+          ? `${startingPlayerSpinGlow} 0.45s ease-in-out infinite`
+          : 'none',
+      ...sx,
     }}>
       {hasPrimaryArt && !hasPartnerArt && (
         <Box sx={{
