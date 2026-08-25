@@ -49,7 +49,7 @@ export default function PlayerSettingsModal({
   const baseModalRotation = getPlayerModalRotation(player.seat ?? 0);
   const normalizedSurfaceRotation = ((surfaceRotation % 360) + 360) % 360;
   const modalRotation = isTyping ? -normalizedSurfaceRotation : baseModalRotation;
-  const landscapeLayout = !isTyping && (mobileLayout || Math.abs(modalRotation) % 180 === 90);
+  const landscapeLayout = (!isTyping || normalizedSurfaceRotation === 0) && (mobileLayout || Math.abs(modalRotation) % 180 === 90);
   const showCommanderBox = commandersLoading || commanders.length > 0;
   const contentGap = landscapeLayout ? 1.5 : 2.5;
   const sectionLabelSx = {
