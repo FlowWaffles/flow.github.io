@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Button, TextField, Typography, Backdrop, useMediaQuery,
+  Box, Button, TextField, Typography, Backdrop, useMediaQuery, Checkbox, FormControlLabel,
 } from '@mui/material';
+import Icon from '@mdi/react';
+import { mdiCrown } from '@mdi/js';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SkullIcon from '@mui/icons-material/SentimentVeryDissatisfied';
@@ -286,7 +288,7 @@ export default function PlayerSettingsModal({
             <Typography sx={{ ...sectionLabelSx, mb: 1 }}>
               Status
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
               <Button
                 variant={player.isDead ? 'contained' : 'outlined'}
                 color="error"
@@ -311,6 +313,24 @@ export default function PlayerSettingsModal({
                   ✓ Not dead
                 </Button>
               )}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={!!player.isMonarch}
+                    onChange={e => onUpdate({ isMonarch: e.target.checked })}
+                    size="small"
+                    icon={<Icon path={mdiCrown} size={0.85} color="#555" />}
+                    checkedIcon={<Icon path={mdiCrown} size={0.85} color={accent} />}
+                    sx={{ p: 0.5 }}
+                  />
+                }
+                label={
+                  <Typography sx={{ fontSize: '0.8rem', color: player.isMonarch ? accent : '#888', userSelect: 'none' }}>
+                    Monarch
+                  </Typography>
+                }
+                sx={{ ml: 0, gap: 0.5 }}
+              />
             </Box>
           </Box>
         </Box>

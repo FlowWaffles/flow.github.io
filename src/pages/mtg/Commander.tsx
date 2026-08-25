@@ -91,6 +91,7 @@ function readStoredPlayers(): Player[] {
         isDead: typeof player.isDead === 'boolean' ? player.isDead : fallback.isDead,
         isAliveOverride:
           typeof player.isAliveOverride === 'boolean' ? player.isAliveOverride : fallback.isAliveOverride,
+        isMonarch: typeof player.isMonarch === 'boolean' ? player.isMonarch : fallback.isMonarch,
         commander: typeof player.commander === 'string' ? player.commander : fallback.commander,
         commanderArtUrl:
           typeof player.commanderArtUrl === 'string' ? player.commanderArtUrl : fallback.commanderArtUrl,
@@ -110,6 +111,9 @@ function readStoredPlayers(): Player[] {
 
 export default function Commander() {
   const [players, setPlayers] = useState<Player[]>(readStoredPlayers);
+  const [monarchIntroduced, setMonarchIntroduced] = useState(
+    () => readStoredPlayers().some(p => p.isMonarch),
+  );
   const [lifeHistory, setLifeHistory] = useState<LifeHistoryEntry[][]>(() => [[], [], [], []]);
   const [resetOpen, setResetOpen] = useState(false);
   const [newGameOpen, setNewGameOpen] = useState(false);
@@ -240,13 +244,16 @@ export default function Commander() {
     });
   };
 
-  const updatePlayer = (pid: number, update: Partial<Player>) =>
+  const updatePlayer = (pid: number, update: Partial<Player>) => {
+    if (update.isMonarch === true) setMonarchIntroduced(true);
     setPlayers(prev => prev.map((p, i) => {
+      if (update.isMonarch === true && i !== pid) return { ...p, isMonarch: false };
       if (i !== pid) return p;
       const next = { ...p, ...update };
       if (update.isDead === true) next.isAliveOverride = false;
       return syncAliveOverride(next);
     }));
+  };
 
   const updateLife = (pid: number, delta: number) =>
     setPlayers(prev => prev.map((p, i) => {
@@ -369,6 +376,7 @@ export default function Commander() {
             player={players[pid]}
             allPlayers={players}
             rotation={rotation}
+            monarchIntroduced={monarchIntroduced}
             onLifeChange={delta => updateLife(pid, delta)}
             onLifeSet={life => setLife(pid, life)}
             onPlayerUpdate={update => updatePlayer(pid, update)}
@@ -521,7 +529,7 @@ export default function Commander() {
           open={resetOpen}
           landscapeSurface={mobileLayout}
           onClose={() => setResetOpen(false)}
-          onConfirm={() => { setPlayers(mkPlayers()); setLifeHistory([[], [], [], []]); setResetOpen(false); }}
+          onConfirm={() => { setPlayers(mkPlayers()); setMonarchIntroduced(false); setLifeHistory([[], [], [], []]); setResetOpen(false); }}
         />
 
         <Backdrop

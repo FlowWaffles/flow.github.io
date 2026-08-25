@@ -41,6 +41,7 @@ export interface Player {
   poisonCounters: number;
   isDead: boolean;
   isAliveOverride: boolean;
+  isMonarch: boolean;
   commander: string;
   commanderArtUrl: string;
   partnerCommander: string;
@@ -137,6 +138,7 @@ export const mkPlayers = (): Player[] =>
     poisonCounters: 0,
     isDead: false,
     isAliveOverride: false,
+    isMonarch: false,
     commander: '',
     commanderArtUrl: '',
     partnerCommander: '',

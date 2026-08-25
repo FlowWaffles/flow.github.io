@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { keyframes } from '@emotion/react';
 import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import Icon from '@mdi/react';
+import { mdiCrown, mdiCrownOutline, mdiSkull } from '@mdi/js';
 
 const neonGlow = keyframes`
   0%, 100% { filter: drop-shadow(0 0 4px #acecec) drop-shadow(0 0 10px #42dcdb); }
@@ -38,6 +40,7 @@ interface PlayerQuadrantProps {
   allPlayers: Player[];
   rotation: 0 | 180;
   compact?: boolean;
+  monarchIntroduced?: boolean;
   onLifeChange: (delta: number) => void;
   onLifeSet: (life: number) => void;
   onPlayerUpdate: (update: Partial<Player>) => void;
@@ -50,7 +53,7 @@ interface PlayerQuadrantProps {
 }
 
 export default function PlayerQuadrant({
-  pid, player, allPlayers, rotation, compact = false,
+  pid, player, allPlayers, rotation, compact = false, monarchIntroduced = false,
   onLifeChange, onLifeSet, onPlayerUpdate, onDamageClick, onOpenSettings,
   lifeHistory, onLifeHistoryCommit, onRevertHistory, sx,
 }: PlayerQuadrantProps) {
@@ -243,6 +246,48 @@ export default function PlayerQuadrant({
         bgcolor: 'rgba(6, 10, 18, 0.28)',
         backdropFilter: 'blur(6px)',
       }}>
+        {(monarchIntroduced || player.poisonCounters > 0) && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              ...(pid % 2 === 1 ? { left: compact ? 4 : 6 } : { right: compact ? 4 : 6 }),
+              display: 'inline-flex',
+              flexDirection: pid % 2 === 1 ? 'row' : 'row-reverse',
+              alignItems: 'center',
+              gap: compact ? 0.4 : 0.6,
+            }}
+          >
+            {monarchIntroduced && (
+              <Box
+                onClick={e => { e.stopPropagation(); if (!player.isMonarch) onPlayerUpdate({ isMonarch: true }); }}
+                sx={{
+                  display: 'inline-flex', alignItems: 'center',
+                  color: player.isMonarch ? accent : '#484848',
+                  cursor: player.isMonarch ? 'default' : 'pointer',
+                  transition: 'color 0.15s',
+                  '&:hover': player.isMonarch ? {} : { color: '#777' },
+                }}
+              >
+                <Icon path={player.isMonarch ? mdiCrown : mdiCrownOutline} size={compact ? 0.65 : 0.8} />
+              </Box>
+            )}
+            {player.poisonCounters > 0 && (
+              <Box
+                sx={{
+                  display: 'inline-flex', alignItems: 'center', gap: 0.3,
+                  color: player.poisonCounters >= POISON_LETHAL ? '#f44336' : accent,
+                }}
+              >
+                <Box component="span" sx={{ fontSize: compact ? '0.6rem' : '0.7rem', fontWeight: 700, lineHeight: 1 }}>
+                  {player.poisonCounters}
+                </Box>
+                <Icon path={mdiSkull} size={compact ? 0.55 : 0.7} />
+              </Box>
+            )}
+          </Box>
+        )}
         <Typography
           onClick={onOpenSettings}
           sx={{
