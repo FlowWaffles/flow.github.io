@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { keyframes } from '@emotion/react';
 import { Backdrop, Box, Button, IconButton, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
@@ -154,6 +154,7 @@ export default function Commander() {
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenMenuVisible, setFullscreenMenuVisible] = useState(false);
+  const [dialogTyping, setDialogTyping] = useState(false);
   const [mtgTheme, setMtgThemeState] = useState<AppTheme>(() => getMtgTheme());
   const [startingLifeTotal, setStartingLifeTotal] = useState<20 | 40>(() => {
     const stored = localStorage.getItem('mtg_starting_life');
@@ -198,16 +199,17 @@ export default function Commander() {
     localStorage.setItem('mtg_starting_life', String(startingLifeTotal));
   }, [startingLifeTotal]);
 
+  const unlockOrientation = useCallback(async () => {
+    if (!mobileLayout) return;
+    try {
+      await (window.screen as ScreenWithOrientation).orientation?.unlock?.();
+    } catch (error) {
+      console.error('Failed to unlock screen orientation.', error);
+    }
+  }, [mobileLayout]);
+
   useEffect(() => {
     const doc = document as FullscreenDocument;
-    const unlockOrientation = () => {
-      if (!mobileLayout) return;
-      try {
-        (window.screen as ScreenWithOrientation).orientation?.unlock?.();
-      } catch (error) {
-        console.error('Failed to unlock screen orientation.', error);
-      }
-    };
 
     const syncFullscreenState = () => {
       const fullscreenActive = Boolean(doc.fullscreenElement ?? doc.webkitFullscreenElement);
@@ -217,7 +219,7 @@ export default function Commander() {
         (doc.documentElement as FullscreenElement).requestFullscreen ||
         (doc.documentElement as FullscreenElement).webkitRequestFullscreen
       ));
-      if (!fullscreenActive) unlockOrientation();
+      if (!fullscreenActive) void unlockOrientation();
     };
 
     syncFullscreenState();
@@ -228,7 +230,7 @@ export default function Commander() {
       doc.removeEventListener('fullscreenchange', syncFullscreenState);
       doc.removeEventListener('webkitfullscreenchange', syncFullscreenState as EventListener);
     };
-  }, [mobileLayout]);
+  }, [unlockOrientation]);
 
   const clearFullscreenMenuTimer = () => {
     if (fullscreenMenuTimerRef.current === null) return;
@@ -266,14 +268,27 @@ export default function Commander() {
 
   useEffect(() => () => clearFullscreenMenuTimer(), []);
 
-  const lockLandscapeOrientation = async () => {
+  const lockLandscapeOrientation = useCallback(async () => {
     if (!mobileLayout) return;
     try {
       await (window.screen as ScreenWithOrientation).orientation?.lock?.('landscape');
     } catch (error) {
       console.error('Failed to lock screen orientation.', error);
     }
-  };
+  }, [mobileLayout]);
+
+  useEffect(() => {
+    if (!isFullscreen || !mobileLayout) return;
+    if (dialogTyping) {
+      void unlockOrientation();
+      return;
+    }
+    void lockLandscapeOrientation();
+  }, [dialogTyping, isFullscreen, mobileLayout, lockLandscapeOrientation, unlockOrientation]);
+
+  useEffect(() => {
+    if (settingsPid === null && !quickSetupOpen) setDialogTyping(false);
+  }, [settingsPid, quickSetupOpen]);
 
   const toggleFullscreen = async () => {
     const doc = document as FullscreenDocument;
@@ -759,6 +774,7 @@ export default function Commander() {
             commanders={commanders}
             commandersLoading={commandersLoading}
             surfaceRotation={surfaceRotation}
+            onTypingChange={setDialogTyping}
             onClose={() => setSettingsPid(null)}
             onUpdate={update => updatePlayer(settingsPid, update)}
           />
@@ -973,6 +989,7 @@ export default function Commander() {
         commanders={commanders}
         visiblePlayerIds={layoutConfig.activeQuadrants.map(q => q.pid)}
         onClose={() => setQuickSetupOpen(false)}
+        onTypingChange={setDialogTyping}
         onApply={applyQuickSetup}
       />
     </Box>

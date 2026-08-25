@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Backdrop, Box, Button, TextField, Typography, useMediaQuery,
 } from '@mui/material';
@@ -19,6 +19,7 @@ interface QuickSetupDialogProps {
   commanders: CommanderEntry[];
   visiblePlayerIds: number[];
   onClose: () => void;
+  onTypingChange?: (typing: boolean) => void;
   onApply: (entries: QuickSetupEntry[], startingLife: StartingLife) => void;
 }
 
@@ -28,6 +29,7 @@ export default function QuickSetupDialog({
   commanders,
   visiblePlayerIds,
   onClose,
+  onTypingChange,
   onApply,
 }: QuickSetupDialogProps) {
   const [entries, setEntries] = useState<QuickSetupEntry[]>([]);
@@ -38,12 +40,17 @@ export default function QuickSetupDialog({
   const compactViewport = useMediaQuery('(max-width: 700px)');
   const compactLayout = isTyping || compactViewport;
 
+  const setTyping = useCallback((typing: boolean) => {
+    setIsTyping(typing);
+    onTypingChange?.(typing);
+  }, [onTypingChange]);
+
   useEffect(() => {
     if (!open) {
-      setIsTyping(false);
+      setTyping(false);
       return;
     }
-  }, [open]);
+  }, [open, setTyping]);
 
   useEffect(() => {
     if (!open) return;
@@ -77,12 +84,12 @@ export default function QuickSetupDialog({
       <Box
         ref={modalRef}
         onClick={e => e.stopPropagation()}
-        onFocusCapture={() => setIsTyping(true)}
+        onFocusCapture={() => setTyping(true)}
         onBlurCapture={() => {
           window.setTimeout(() => {
             const root = modalRef.current;
             if (!root) return;
-            if (!root.contains(document.activeElement)) setIsTyping(false);
+            if (!root.contains(document.activeElement)) setTyping(false);
           }, 0);
         }}
         sx={{
@@ -180,6 +187,7 @@ export default function QuickSetupDialog({
                     partnerCommander: names[1] ?? '',
                   });
                 }}
+                onTypingChange={setTyping}
               />
             </Box>
             )

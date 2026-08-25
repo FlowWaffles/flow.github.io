@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Box, Button, TextField, Typography, Backdrop, useMediaQuery, Checkbox, FormControlLabel,
 } from '@mui/material';
@@ -20,18 +20,30 @@ interface PlayerSettingsModalProps {
   player: Player;
   onClose: () => void;
   onUpdate: (update: Partial<Player>) => void;
+  onTypingChange?: (typing: boolean) => void;
   commanders?: CommanderEntry[];
   commandersLoading?: boolean;
   surfaceRotation?: number;
 }
 
 export default function PlayerSettingsModal({
-  open, player, onClose, onUpdate, commanders = [], commandersLoading = false, surfaceRotation = 0,
+  open, player, onClose, onUpdate, onTypingChange, commanders = [], commandersLoading = false, surfaceRotation = 0,
 }: PlayerSettingsModalProps) {
   const [name, setName] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
+
+  const setTyping = useCallback((typing: boolean) => {
+    setIsTyping(typing);
+    onTypingChange?.(typing);
+  }, [onTypingChange]);
+
+  useEffect(() => {
+    if (!open) {
+      setTyping(false);
+    }
+  }, [open, setTyping]);
 
   useEffect(() => {
     if (open) {
@@ -92,12 +104,12 @@ export default function PlayerSettingsModal({
       <Box
         ref={modalRef}
         onClick={e => e.stopPropagation()}
-        onFocusCapture={() => setIsTyping(true)}
+        onFocusCapture={() => setTyping(true)}
         onBlurCapture={() => {
           window.setTimeout(() => {
             const root = modalRef.current;
             if (!root) return;
-            if (!root.contains(document.activeElement)) setIsTyping(false);
+            if (!root.contains(document.activeElement)) setTyping(false);
           }, 0);
         }}
         sx={{
@@ -173,7 +185,7 @@ export default function PlayerSettingsModal({
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder={player.name}
-              onFocus={() => setIsTyping(true)}
+              onFocus={() => setTyping(true)}
               onBlur={() => {
                 commitName();
               }}
@@ -243,7 +255,7 @@ export default function PlayerSettingsModal({
                   commanders={commanders}
                   accent={accent}
                   popperZIndex={2200}
-                  onTypingChange={setIsTyping}
+                  onTypingChange={setTyping}
                   onChange={(names, artUrls) => {
                     onUpdate({
                       commander: names[0] ?? '',
