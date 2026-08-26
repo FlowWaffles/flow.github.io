@@ -638,8 +638,7 @@ export default function Commander() {
               </Button>
             )}
             <Typography
-              component="a"
-              href="/"
+              component="p"
               aria-label="Home"
               sx={{
                 color: '#eff6ff',
