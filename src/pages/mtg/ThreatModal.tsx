@@ -48,14 +48,11 @@ const threatTextPop = keyframes`
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 `;
 
-type ActiveQuadrant = { pid: number; rotation: 0 | 180; area: string };
-
 type ThreatModalProps = {
   open: boolean;
   rotation: number;
   players: Player[];
   physicalLayout: (number | null)[];
-  activeQuadrants: ActiveQuadrant[];
   onClose: () => void;
 };
 
@@ -64,7 +61,6 @@ export default function ThreatModal({
   rotation,
   players,
   physicalLayout,
-  activeQuadrants,
   onClose,
 }: ThreatModalProps) {
   const [selectedPids, setSelectedPids] = useState<Set<number>>(new Set());

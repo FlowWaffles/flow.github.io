@@ -16,6 +16,7 @@ import { mdiUnicornVariant } from '@mdi/js';
 import PlayerQuadrant from './PlayerQuadrant';
 import CommanderDamageModal from './CommanderDamageModal';
 import PlayerSettingsModal from './PlayerSettingsModal';
+import PlayerStatusModal from './PlayerStatusModal';
 import ResetDialog from './ResetDialog';
 import QuickSetupDialog from './QuickSetupDialog';
 import DiceMenuButton from './DiceMenuButton';
@@ -59,6 +60,9 @@ const QUADRANTS: Array<{ pid: number; rotation: 0 | 180; area: string }> = [
 ];
 
 const PLAYERS_STORAGE_KEY = 'mtg_commander_players_v1';
+const STARTING_LIFE_STORAGE_KEY = 'mtg_starting_life';
+const PLAYER_COUNT_STORAGE_KEY = 'mtg_player_count';
+const THREE_LAYOUT_STORAGE_KEY = 'mtg_three_layout';
 const MENU_AUTO_HIDE_MS = 5000;
 
 function readStoredPlayers(): Player[] {
@@ -142,6 +146,7 @@ export default function Commander() {
   const [quickSetupOpen, setQuickSetupOpen] = useState(false);
   const [modal, setModal] = useState<ModalState | null>(null);
   const [settingsPid, setSettingsPid] = useState<number | null>(null);
+  const [statusPid, setStatusPid] = useState<number | null>(null);
   const [commanders] = useState<CommanderEntry[]>(commandersData);
   const commandersLoading = false;
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
@@ -149,19 +154,18 @@ export default function Commander() {
   const [fullscreenMenuVisible, setFullscreenMenuVisible] = useState(false);
   const [isTwaMode] = useState(() => window.matchMedia('(display-mode: fullscreen)').matches);
   const [twaMenuCollapsed, setTwaMenuCollapsed] = useState(false);
-  const [, setDialogTyping] = useState(false);
   const [mtgTheme, setMtgThemeState] = useState<AppTheme>(() => getMtgTheme());
   const [startingLifeTotal, setStartingLifeTotal] = useState<20 | 40>(() => {
-    const stored = localStorage.getItem('mtg_starting_life');
+    const stored = localStorage.getItem(STARTING_LIFE_STORAGE_KEY);
     if (stored === '20' || stored === '40') return Number(stored) as 20 | 40;
     return readStoredPlayers().every(p => p.life === 20) ? 20 : 40;
   });
   const [playerCount, setPlayerCount] = useState<2 | 3 | 4>(() => {
-    const stored = localStorage.getItem('mtg_player_count');
+    const stored = localStorage.getItem(PLAYER_COUNT_STORAGE_KEY);
     return (stored === '2' ? 2 : stored === '3' ? 3 : 4) as 2 | 3 | 4;
   });
   const [threeLayout, setThreeLayout] = useState<'A' | 'B'>(() => {
-    return (localStorage.getItem('mtg_three_layout') as 'A' | 'B') || 'A';
+    return (localStorage.getItem(THREE_LAYOUT_STORAGE_KEY) as 'A' | 'B') || 'A';
   });
   const [layoutModalOpen, setLayoutModalOpen] = useState(false);
   const [randomizerModalOpen, setRandomizerModalOpen] = useState(false);
@@ -177,7 +181,6 @@ export default function Commander() {
   const narrowMobileWidth = useMediaQuery('(pointer: coarse) and (max-width: 480px)');
   const shortMobileHeight = useMediaQuery('(pointer: coarse) and (max-height: 480px)');
   const rotateMobileSurface = mobileLayout;
-  const surfaceRotation = rotateMobileSurface ? 90 : 0;
   const compactLayout = narrowMobileWidth || shortMobileHeight;
 
   useLayoutEffect(() => {
@@ -197,7 +200,7 @@ export default function Commander() {
   }, [players[0].accentColor, players[1].accentColor, players[2].accentColor, players[3].accentColor]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    localStorage.setItem('mtg_starting_life', String(startingLifeTotal));
+    localStorage.setItem(STARTING_LIFE_STORAGE_KEY, String(startingLifeTotal));
   }, [startingLifeTotal]);
 
   useEffect(() => {
@@ -444,19 +447,33 @@ export default function Commander() {
     setStartingLifeTotal(startingLife);
     setQuickSetupOpen(false);
   };
+  const clearStoredData = () => {
+    localStorage.removeItem('mtg-known-players');
+    localStorage.removeItem(STARTING_LIFE_STORAGE_KEY);
+    localStorage.removeItem(PLAYER_COUNT_STORAGE_KEY);
+    localStorage.removeItem(THREE_LAYOUT_STORAGE_KEY);
+    sessionStorage.removeItem(PLAYERS_STORAGE_KEY);
+    setPlayers(mkPlayers());
+    setLifeHistory([[], [], [], []]);
+    setMonarchIntroduced(false);
+    setStartingLifeTotal(40);
+    setPlayerCount(4);
+    setThreeLayout('A');
+    setQuickSetupOpen(false);
+  };
   const setPlayerLayout = (count: 2 | 3 | 4, nextThreeLayout?: 'A' | 'B') => {
     setPlayerCount(count);
-    localStorage.setItem('mtg_player_count', String(count));
+    localStorage.setItem(PLAYER_COUNT_STORAGE_KEY, String(count));
     if (nextThreeLayout) {
       setThreeLayout(nextThreeLayout);
-      localStorage.setItem('mtg_three_layout', nextThreeLayout);
+      localStorage.setItem(THREE_LAYOUT_STORAGE_KEY, nextThreeLayout);
     }
     setLayoutModalOpen(false);
   };
   const swapThreePlayerSides = () => {
     const next = threeLayout === 'A' ? 'B' : 'A';
     setThreeLayout(next);
-    localStorage.setItem('mtg_three_layout', next);
+    localStorage.setItem(THREE_LAYOUT_STORAGE_KEY, next);
   };
 
   const showCenterMenu = isTwaMode ? !twaMenuCollapsed : (!isFullscreen || fullscreenMenuVisible);
@@ -512,6 +529,10 @@ export default function Commander() {
     if (!modal) return 0;
     return layoutConfig.activeQuadrants.find(q => q.pid === modal.victim)?.rotation ?? 0;
   }, [layoutConfig.activeQuadrants, modal]);
+  const statusModalRotation = useMemo(() => {
+    if (statusPid === null) return 0;
+    return layoutConfig.activeQuadrants.find(q => q.pid === statusPid)?.rotation ?? 0;
+  }, [layoutConfig.activeQuadrants, statusPid]);
   const lifeTotalModalRotation = useMemo(() => {
     if (!lifeTotalModal) return 0;
     return layoutConfig.activeQuadrants.find(q => q.pid === lifeTotalModal.pid)?.rotation ?? 0;
@@ -593,6 +614,7 @@ export default function Commander() {
             onPlayerUpdate={update => updatePlayer(pid, update)}
             onDamageClick={attacker => openModal(pid, attacker)}
             onOpenSettings={() => setSettingsPid(pid)}
+            onOpenStatus={() => setStatusPid(pid)}
             lifeHistory={lifeHistory[pid]}
             onLifeHistoryCommit={delta => pushLifeHistory(pid, { delta, source: 'manual' })}
             onRevertHistory={() => revertLatestHistory(pid)}
@@ -868,16 +890,13 @@ export default function Commander() {
           </Box>
         </Backdrop>
 
-        {settingsPid !== null && (
-          <PlayerSettingsModal
+        {statusPid !== null && (
+          <PlayerStatusModal
             open
-            player={{ ...players[settingsPid], seat: settingsPid }}
-            commanders={commanders}
-            commandersLoading={commandersLoading}
-            surfaceRotation={surfaceRotation}
-            onTypingChange={setDialogTyping}
-            onClose={() => setSettingsPid(null)}
-            onUpdate={update => updatePlayer(settingsPid, update)}
+            player={{ ...players[statusPid], seat: statusPid }}
+            modalRotation={statusModalRotation}
+            onClose={() => setStatusPid(null)}
+            onUpdate={update => updatePlayer(statusPid, update)}
           />
         )}
 
@@ -960,7 +979,6 @@ export default function Commander() {
           rotation={getPlayerModalRotation(0)}
           players={players}
           physicalLayout={layoutConfig.physicalLayout}
-          activeQuadrants={layoutConfig.activeQuadrants}
           onClose={() => setThreatModalOpen(false)}
         />
       </Box>
@@ -971,9 +989,19 @@ export default function Commander() {
         commanders={commanders}
         visiblePlayerIds={layoutConfig.activeQuadrants.map(q => q.pid)}
         onClose={() => setQuickSetupOpen(false)}
-        onTypingChange={setDialogTyping}
+        onClearStoredData={clearStoredData}
         onApply={applyQuickSetup}
       />
+      {settingsPid !== null && (
+        <PlayerSettingsModal
+          open
+          player={{ ...players[settingsPid], seat: settingsPid }}
+          commanders={commanders}
+          commandersLoading={commandersLoading}
+          onClose={() => setSettingsPid(null)}
+          onUpdate={update => updatePlayer(settingsPid, update)}
+        />
+      )}
     </Box>
   );
 }

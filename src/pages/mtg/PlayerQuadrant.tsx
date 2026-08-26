@@ -58,6 +58,7 @@ const startingPlayerWinnerGlow = keyframes`
 `;
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import SettingsIcon from '@mui/icons-material/Settings';
 import HoldButton from './HoldButton';
 import CommanderDamageGrid from './CommanderDamageGrid';
 import LifeHistoryModal from './LifeHistoryModal';
@@ -97,6 +98,7 @@ interface PlayerQuadrantProps {
   onPlayerUpdate: (update: Partial<Player>) => void;
   onDamageClick: (attacker: number) => void;
   onOpenSettings: () => void;
+  onOpenStatus: () => void;
   lifeHistory: LifeHistoryEntry[];
   onLifeHistoryCommit: (delta: number) => void;
   onRevertHistory: () => void;
@@ -106,7 +108,7 @@ interface PlayerQuadrantProps {
 export default function PlayerQuadrant({
   pid, player, allPlayers, rotation, physicalLayout, startingLife, compact = false, monarchIntroduced = false,
   startingPlayerHighlightPhase = null,
-  onLifeChange, onOpenLifeSetModal, onPlayerUpdate, onDamageClick, onOpenSettings,
+  onLifeChange, onOpenLifeSetModal, onPlayerUpdate, onDamageClick, onOpenSettings, onOpenStatus,
   lifeHistory, onLifeHistoryCommit, onRevertHistory, sx,
 }: PlayerQuadrantProps) {
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -287,7 +289,7 @@ export default function PlayerQuadrant({
         </>
       )}
 
-      {/* Name row — tap to open settings */}
+      {/* Name row — tap to open status */}
       <Box sx={{
         position: 'relative',
         zIndex: 2,
@@ -300,6 +302,23 @@ export default function PlayerQuadrant({
         bgcolor: 'rgba(6, 10, 18, 0.28)',
         backdropFilter: 'blur(6px)',
       }}>
+        {/* Settings icon - inner top corner */}
+        <Box
+          onClick={e => { e.stopPropagation(); onOpenSettings(); }}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            ...(pid % 2 === 0 ? { left: compact ? 4 : 6 } : { right: compact ? 4 : 6 }),
+            display: 'inline-flex', alignItems: 'center',
+            color: '#a1a0a0',
+            cursor: 'pointer',
+            transition: 'color 0.15s',
+            '&:hover': { color: '#888' },
+          }}
+        >
+          <SettingsIcon sx={{ fontSize: compact ? '0.9rem' : '1rem' }} />
+        </Box>
         {(monarchIntroduced || player.poisonCounters > 0) && (
           <Box
             sx={{
@@ -343,7 +362,7 @@ export default function PlayerQuadrant({
           </Box>
         )}
         <Typography
-          onClick={onOpenSettings}
+          onClick={onOpenStatus}
           sx={{
             color: overridingDeath ? '#4acc70' : accent,
             fontWeight: 600,
