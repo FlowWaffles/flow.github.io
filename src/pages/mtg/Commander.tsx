@@ -3,7 +3,7 @@ import { keyframes } from '@emotion/react';
 import { Backdrop, Box, Button, IconButton, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -636,7 +636,7 @@ export default function Commander() {
                     },
                   }}
                 >
-                  <KeyboardArrowDownIcon fontSize="small" />
+                  <UnfoldLessIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             ) : fullscreenSupported && (
