@@ -1,0 +1,76 @@
+.mtg-download {
+    width: 100dvw;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+.mtg-download-card {
+    width: min(560px, 100%);
+    text-align: center;
+    padding: 2.25rem 1.5rem 1.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.mtg-download-kicker {
+    margin: 0 0 0.5rem;
+    font-family: 'Orbitron-Regular', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.mtg-download-title {
+    margin: 0 0 1rem;
+    display: grid;
+    gap: 0.15rem;
+    font-size: clamp(2rem, 7vw, 3.5rem);
+    line-height: 0.92;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+}
+
+.mtg-download-title-main,
+.mtg-download-title-sub {
+    display: block;
+}
+
+.mtg-download-copy {
+    margin: 0 auto 1rem;
+    max-width: 34rem;
+    line-height: 1.35;
+}
+
+.mtg-download-version,
+.mtg-download-filename {
+    margin: 0;
+    font-family: 'Orbitron-Regular', monospace;
+}
+
+.mtg-download-version {
+    margin-bottom: 1rem;
+}
+
+.mtg-download-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 12rem;
+    padding: 0.9rem 1.6rem;
+    margin-bottom: 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    text-decoration: none;
+    font-family: 'Orbitron-Regular', monospace;
+    background: linear-gradient(90deg, #e266c7, #85dcf0);
+    color: #fff;
+    box-shadow: 0 0 18px rgba(226, 102, 199, 0.35);
+}
+
+.mtg-download-button:hover {
+    box-shadow: 0 0 24px rgba(226, 102, 199, 0.55);
+}

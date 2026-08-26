@@ -23,8 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 android.keystore
+.env
 
 # Android release artifacts
 app-release-*.apk
 *.aab
+public/downloads/*.apk
+public/downloads/latest.json
 app-release-signed.apk.idsig
+/android.keystore.pkcs12.bak

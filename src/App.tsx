@@ -12,6 +12,7 @@ import EightBall from './pages/eightball/EightBall.tsx';
 import Commander from './pages/mtg/Commander.tsx';
 import { useCurrentLocation } from './utils/location.ts';
 import LinkTree from './pages/linktree/LinkTree.tsx';
+import MtgDownload from './pages/mtg-download/MtgDownload.tsx';
 
 function App() {
     const { pathname } = useCurrentLocation();
@@ -27,6 +28,10 @@ function App() {
     // Full-screen pages rendered without GlobalLayout chrome
     if (normalizedPathname === '/mtg') {
         return <Commander />;
+    }
+
+    if (normalizedPathname === '/mtg-download') {
+        return <MtgDownload />;
     }
 
     const page = (() => {
