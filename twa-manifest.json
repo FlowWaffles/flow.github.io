@@ -14,14 +14,14 @@
   "enableNotifications": true,
   "startUrl": "/mtg",
   "iconUrl": "https://flow.fail/assets/icon-512.png",
-  "maskableIconUrl": "https://flow.fail/assets/icon-512-maskable.png",
+  "maskableIconUrl": "https://flow.fail/assets/icon-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "/Users/fkuenzel/IdeaProjects/flow.github.io/android.keystore",
     "alias": "android"
   },
-  "appVersionName": "2",
-  "appVersionCode": 2,
+  "appVersionName": "3",
+  "appVersionCode": 3,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://flow.fail/manifest.json",
@@ -43,5 +43,5 @@
   "fileHandlers": [],
   "launchHandlerClientMode": "",
   "displayOverride": [],
-  "appVersion": "2"
+  "appVersion": "3"
 }
