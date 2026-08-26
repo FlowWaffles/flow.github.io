@@ -37,6 +37,27 @@ type FullscreenElement = HTMLElement & {
   webkitRequestFullscreen?: () => Promise<void> | void;
 };
 
+type LegacyOrientationWindow = Window & {
+  orientation?: number;
+};
+
+const getLandscapeRotation = (): 90 | -90 => {
+  const screenAngle = window.screen?.orientation?.angle;
+  if (typeof screenAngle === 'number') {
+    const normalizedAngle = ((screenAngle % 360) + 360) % 360;
+    if (normalizedAngle === 270) return -90;
+    if (normalizedAngle === 90) return 90;
+  }
+
+  const legacyAngle = (window as LegacyOrientationWindow).orientation;
+  if (typeof legacyAngle === 'number') {
+    if (legacyAngle === -90 || legacyAngle === 270) return -90;
+    if (legacyAngle === 90) return 90;
+  }
+
+  return 90;
+};
+
 const neonGlow = keyframes`
   0%, 100% {
     text-shadow:
@@ -182,6 +203,7 @@ export default function Commander() {
   const narrowMobileWidth = useMediaQuery('(pointer: coarse) and (max-width: 480px)');
   const shortMobileHeight = useMediaQuery('(pointer: coarse) and (max-height: 480px)');
   const compactLayout = narrowMobileWidth || shortMobileHeight;
+  const [mobileRotation, setMobileRotation] = useState<90 | -90>(() => getLandscapeRotation());
 
   useLayoutEffect(() => {
     applyMtgTheme();
@@ -223,6 +245,19 @@ export default function Commander() {
     return () => {
       doc.removeEventListener('fullscreenchange', syncFullscreenState);
       doc.removeEventListener('webkitfullscreenchange', syncFullscreenState as EventListener);
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateRotation = () => setMobileRotation(getLandscapeRotation());
+
+    updateRotation();
+    window.addEventListener('orientationchange', updateRotation);
+    window.screen?.orientation?.addEventListener?.('change', updateRotation);
+
+    return () => {
+      window.removeEventListener('orientationchange', updateRotation);
+      window.screen?.orientation?.removeEventListener?.('change', updateRotation);
     };
   }, []);
 
@@ -594,7 +629,7 @@ export default function Commander() {
           p: compactLayout ? '6px' : '8px',
           boxSizing: 'border-box',
           transform: portraitMobileLayout
-            ? 'translate(-50%, -50%) rotate(90deg)'
+            ? `translate(-50%, -50%) rotate(${mobileRotation}deg)`
             : 'none',
           transformOrigin: 'center',
         }}
