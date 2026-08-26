@@ -609,6 +609,7 @@ export default function Commander() {
             physicalLayout={layoutConfig.physicalLayout}
             startingLife={startingLifeTotal}
             monarchIntroduced={monarchIntroduced}
+            showCenterMenu={showCenterMenu}
             onLifeChange={delta => updateLife(pid, delta)}
             onOpenLifeSetModal={() => setLifeTotalModal({ pid, value: String(players[pid].life) })}
             onPlayerUpdate={update => updatePlayer(pid, update)}

@@ -92,6 +92,7 @@ interface PlayerQuadrantProps {
   startingLife: 20 | 40;
   compact?: boolean;
   monarchIntroduced?: boolean;
+  showCenterMenu?: boolean;
   startingPlayerHighlightPhase?: 'spin' | 'winner' | null;
   onLifeChange: (delta: number) => void;
   onOpenLifeSetModal: () => void;
@@ -107,6 +108,7 @@ interface PlayerQuadrantProps {
 
 export default function PlayerQuadrant({
   pid, player, allPlayers, rotation, physicalLayout, startingLife, compact = false, monarchIntroduced = false,
+  showCenterMenu = true,
   startingPlayerHighlightPhase = null,
   onLifeChange, onOpenLifeSetModal, onPlayerUpdate, onDamageClick, onOpenSettings, onOpenStatus,
   lifeHistory, onLifeHistoryCommit, onRevertHistory, sx,
@@ -156,6 +158,7 @@ export default function PlayerQuadrant({
   const nameFontSize = compact ? { xs: '0.72rem', sm: '0.78rem' } : { xs: '0.86rem', sm: '0.96rem' };
   const lifeFontSize = compact ? 'clamp(2.2rem, 11vh, 3.4rem)' : 'clamp(2.8rem, 8.8vw, 5.2rem)';
   const actionIconSize = compact ? { xs: '1.8rem', sm: '2rem' } : { xs: '2rem', sm: '2.8rem' };
+  const innerCounterInset = showCenterMenu ? (compact ? 4 : 6) : (compact ? 18 : 24);
   const yellowLifeThreshold = startingLife === 20 ? 15 : 20;
   const lifeColor = player.life <= 5
     ? '#f44336'
@@ -325,9 +328,9 @@ export default function PlayerQuadrant({
               position: 'absolute',
               top: '50%',
               transform: 'translateY(-50%)',
-              ...(pid % 2 === 1 ? { left: compact ? 4 : 6 } : { right: compact ? 4 : 6 }),
+              ...(pid % 2 === 0 ? { left: innerCounterInset } : { right: innerCounterInset }),
               display: 'inline-flex',
-              flexDirection: pid % 2 === 1 ? 'row' : 'row-reverse',
+              flexDirection: pid % 2 === 0 ? 'row' : 'row-reverse',
               alignItems: 'center',
               gap: compact ? 0.4 : 0.6,
             }}
