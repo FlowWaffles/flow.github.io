@@ -3,6 +3,7 @@ import { keyframes } from '@emotion/react';
 import { Backdrop, Box, Button, IconButton, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -145,6 +146,8 @@ export default function Commander() {
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenMenuVisible, setFullscreenMenuVisible] = useState(false);
+  const [isTwaMode] = useState(() => window.matchMedia('(display-mode: fullscreen)').matches);
+  const [twaMenuCollapsed, setTwaMenuCollapsed] = useState(false);
   const [, setDialogTyping] = useState(false);
   const [mtgTheme, setMtgThemeState] = useState<AppTheme>(() => getMtgTheme());
   const [startingLifeTotal, setStartingLifeTotal] = useState<20 | 40>(() => {
@@ -454,7 +457,7 @@ export default function Commander() {
     localStorage.setItem('mtg_three_layout', next);
   };
 
-  const showCenterMenu = !isFullscreen || fullscreenMenuVisible;
+  const showCenterMenu = isTwaMode ? !twaMenuCollapsed : (!isFullscreen || fullscreenMenuVisible);
 
   const layoutConfig = useMemo(() => {
     if (playerCount === 2) {
@@ -615,7 +618,28 @@ export default function Commander() {
               boxShadow: 'none',
             }}
           >
-            {fullscreenSupported && (
+            {isTwaMode ? (
+              <Tooltip title="Collapse menu">
+                <IconButton
+                  size="small"
+                  onClick={() => setTwaMenuCollapsed(true)}
+                  sx={{
+                    color: '#d7deef',
+                    border: '1px solid rgba(148, 163, 184, 0.28)',
+                    borderRadius: 999,
+                    width: compactLayout ? 32 : 36,
+                    height: compactLayout ? 32 : 36,
+                    bgcolor: 'rgba(255,255,255,0.02)',
+                    '&:hover': {
+                      borderColor: 'rgba(191, 219, 254, 0.55)',
+                      bgcolor: 'rgba(255,255,255,0.07)',
+                    },
+                  }}
+                >
+                  <KeyboardArrowDownIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            ) : fullscreenSupported && (
               <Button
                 variant="outlined"
                 size="small"
@@ -750,16 +774,17 @@ export default function Commander() {
           </Box>
         )}
 
-        {isFullscreen && !showCenterMenu && (
+        {(isFullscreen || isTwaMode) && !showCenterMenu && (
           <Box
-            onClick={showFullscreenMenu}
+            onClick={isTwaMode ? () => setTwaMenuCollapsed(false) : showFullscreenMenu}
             aria-label="Show menu"
             role="button"
             tabIndex={0}
             onKeyDown={event => {
               if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                showFullscreenMenu();
+                if (isTwaMode) setTwaMenuCollapsed(false);
+                else showFullscreenMenu();
               }
             }}
             sx={{
