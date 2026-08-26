@@ -179,6 +179,8 @@ function PlayerSetupStep({
     const cmds = [entry.commander.trim(), entry.partnerCommander.trim()].filter(Boolean);
     if (!name || !cmds.length) return;
     onSaveCombo(name, cmds);
+    setSelectedComboIdx(0);
+    setShowManualInputs(false);
     onTypingChange(false);
   };
 
