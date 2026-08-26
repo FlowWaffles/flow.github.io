@@ -359,34 +359,55 @@ function ManageView({ knownPlayers, onRemovePlayer, onRemoveCombo, onClearAll }:
   if (!selectedPlayerName) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 0.25 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'stretch', mb: 0.25 }}>
           {confirmClearAll ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Typography sx={{ fontSize: '0.78rem', color: '#ffb3b3' }}>Delete all saved data?</Typography>
-              <IconButton
-                size="small"
-                onClick={() => {
-                  onClearAll();
-                  setConfirmClearAll(false);
-                  setConfirmPlayer(null);
-                }}
-                sx={{ p: 0.2, color: '#ff8080', '&:hover': { color: '#ff3f3f' } }}
-              >
-                <CheckIcon sx={{ fontSize: 14 }} />
-              </IconButton>
-              <IconButton
-                size="small"
-                onClick={() => setConfirmClearAll(false)}
-                sx={{ p: 0.2, color: '#b7c0d9', '&:hover': { color: '#e0e6f7' } }}
-              >
-                <CloseIcon sx={{ fontSize: 14 }} />
-              </IconButton>
+            <Box
+              sx={{
+                width: '100%',
+                borderRadius: 1.5,
+                border: '1px solid rgba(244, 67, 54, 0.35)',
+                bgcolor: 'rgba(244, 67, 54, 0.08)',
+                px: 1.5,
+                py: 1.25,
+              }}
+            >
+              <Typography sx={{ fontSize: '0.92rem', fontWeight: 600, color: '#ffd3d3' }}>
+                Delete all saved data?
+              </Typography>
+              <Typography sx={{ fontSize: '0.8rem', color: '#ffb3b3', mt: 0.4 }}>
+                This removes all saved players and commander combos on this device.
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 1.25 }}>
+                <Button
+                  size="small"
+                  variant="text"
+                  onClick={() => setConfirmClearAll(false)}
+                  sx={{ textTransform: 'none', color: '#c8d1e6' }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  startIcon={<CheckIcon sx={{ fontSize: 16 }} />}
+                  onClick={() => {
+                    onClearAll();
+                    setConfirmClearAll(false);
+                    setConfirmPlayer(null);
+                  }}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Delete all
+                </Button>
+              </Box>
             </Box>
           ) : (
             <Button
               size="small"
               color="error"
               variant="outlined"
+              fullWidth
               onClick={() => {
                 setConfirmClearAll(true);
                 setConfirmPlayer(null);
