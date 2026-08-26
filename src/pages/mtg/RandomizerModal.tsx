@@ -20,6 +20,7 @@ type RandomizerModalProps = {
   rotation: number;
   onClose: () => void;
   onRollStartingPlayer: () => void;
+  onOpenThreatModal: () => void;
 };
 
 export default function RandomizerModal({
@@ -28,6 +29,7 @@ export default function RandomizerModal({
   rotation,
   onClose,
   onRollStartingPlayer,
+  onOpenThreatModal,
 }: RandomizerModalProps) {
   const [isRandomizing, setIsRandomizing] = useState(false);
   const [showControls, setShowControls] = useState(true);
@@ -146,9 +148,6 @@ export default function RandomizerModal({
         {showControls && (
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 1.5, alignItems: 'stretch' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'center', color: '#fff' }}>
-                <Icon path={mdiHandCoin} size={0.8} />
-              </Box>
               <Button
                 variant="outlined"
                 onClick={spinCoin}
@@ -159,9 +158,6 @@ export default function RandomizerModal({
               </Button>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'center', color: '#fff' }}>
-                <Icon path={mdiDice5} size={0.8} />
-              </Box>
               <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1 }}>
                 {DICE_SIDES_OPTIONS.map(sides => (
                   <Button
@@ -204,6 +200,16 @@ export default function RandomizerModal({
             sx={{ color: '#fff', borderColor: '#fff', textTransform: 'none' }}
           >
             Roll starting player
+          </Button>
+        )}
+        {showControls && (
+          <Button
+            variant="outlined"
+            onClick={onOpenThreatModal}
+            disabled={isRandomizing}
+            sx={{ color: '#f87171', borderColor: '#f87171', textTransform: 'none' }}
+          >
+            Who is the threat?
           </Button>
         )}
 

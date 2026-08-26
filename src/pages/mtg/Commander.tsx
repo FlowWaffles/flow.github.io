@@ -22,6 +22,7 @@ import DiceMenuButton from './DiceMenuButton';
 import RandomizerModal from './RandomizerModal';
 import PlayerCountMenuButton from './PlayerCountMenuButton';
 import PlayerLayoutModal from './PlayerLayoutModal';
+import ThreatModal from './ThreatModal';
 import commandersData from './commanders-data';
 import type { Player, ModalState, CommanderEntry, LifeHistoryEntry } from './types';
 import { getPlayerModalRotation, mkPlayers, syncAliveOverride } from './types';
@@ -164,6 +165,7 @@ export default function Commander() {
   });
   const [layoutModalOpen, setLayoutModalOpen] = useState(false);
   const [randomizerModalOpen, setRandomizerModalOpen] = useState(false);
+  const [threatModalOpen, setThreatModalOpen] = useState(false);
   const [startingPlayerHighlightPid, setStartingPlayerHighlightPid] = useState<number | null>(null);
   const [startingPlayerHighlightPhase, setStartingPlayerHighlightPhase] = useState<'spin' | 'winner' | null>(null);
   const [lifeTotalModal, setLifeTotalModal] = useState<{ pid: number; value: string } | null>(null);
@@ -796,7 +798,7 @@ export default function Commander() {
               height: compactLayout ? 44 : 60,
               cursor: 'pointer',
               outline: 'none',
-              zIndex: 6,
+              zIndex: 65,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -947,6 +949,19 @@ export default function Commander() {
           rotation={getPlayerModalRotation(0)}
           onClose={() => setRandomizerModalOpen(false)}
           onRollStartingPlayer={rollStartingPlayer}
+          onOpenThreatModal={() => {
+            setRandomizerModalOpen(false);
+            setThreatModalOpen(true);
+          }}
+        />
+
+        <ThreatModal
+          open={threatModalOpen}
+          rotation={getPlayerModalRotation(0)}
+          players={players}
+          physicalLayout={layoutConfig.physicalLayout}
+          activeQuadrants={layoutConfig.activeQuadrants}
+          onClose={() => setThreatModalOpen(false)}
         />
       </Box>
 
