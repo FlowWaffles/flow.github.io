@@ -299,7 +299,7 @@ export default function ThreatModal({
               boxShadow: '0 0 12px rgba(180,30,30,0.5)',
             }}
           >
-            Determine threat
+            Determine Threat
           </Button>
         )}
 
@@ -314,7 +314,7 @@ export default function ThreatModal({
             }}
             sx={{ color: '#fff', borderColor: '#555', textTransform: 'none' }}
           >
-            Roll again
+            Roll Again
           </Button>
         )}
 

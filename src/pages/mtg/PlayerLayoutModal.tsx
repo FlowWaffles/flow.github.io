@@ -48,7 +48,7 @@ export default function PlayerLayoutModal({
           transformOrigin: 'center',
         }}
       >
-        <Typography sx={{ fontWeight: 600, textAlign: 'center' }}>Select player layout</Typography>
+        <Typography sx={{ fontWeight: 600, textAlign: 'center' }}>Select Player Layout</Typography>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', flexWrap: 'wrap', justifyContent: 'center' }}>
 
           <Box
@@ -68,7 +68,7 @@ export default function PlayerLayoutModal({
               <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
               <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
             </Box>
-            <Typography variant="caption">2 players</Typography>
+            <Typography variant="caption">2 Players</Typography>
           </Box>
 
           <Box
@@ -94,7 +94,7 @@ export default function PlayerLayoutModal({
                 <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
               </Box>
             </Box>
-            <Typography variant="caption">3 players (A)</Typography>
+            <Typography variant="caption">3 Players (A)</Typography>
           </Box>
 
           <Box
@@ -120,7 +120,7 @@ export default function PlayerLayoutModal({
                 <Box sx={{ flex: 1, borderRadius: 1 }} />
               </Box>
             </Box>
-            <Typography variant="caption">3 players (B)</Typography>
+            <Typography variant="caption">3 Players (B)</Typography>
           </Box>
 
           <Box
@@ -146,7 +146,7 @@ export default function PlayerLayoutModal({
                 <Box sx={{ flex: 1, bgcolor: '#334155', borderRadius: 1 }} />
               </Box>
             </Box>
-            <Typography variant="caption">4 players</Typography>
+            <Typography variant="caption">4 Players</Typography>
           </Box>
 
         </Box>
@@ -160,7 +160,7 @@ export default function PlayerLayoutModal({
               onClick={onSwapThreePlayerSides}
               sx={{ color: '#d7deef', borderColor: 'rgba(148, 163, 184, 0.28)', textTransform: 'none', borderRadius: 999 }}
             >
-              Swap sides
+              Swap Sides
             </Button>
           </Box>
         )}

@@ -154,7 +154,7 @@ export default function RandomizerModal({
                 disabled={isRandomizing}
                 sx={{ textTransform: 'none', color: '#fff', borderColor: '#fff' }}
               >
-                Flip coin
+                Flip Coin
               </Button>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
@@ -199,7 +199,7 @@ export default function RandomizerModal({
             disabled={isRandomizing}
             sx={{ color: '#fff', borderColor: '#fff', textTransform: 'none' }}
           >
-            Roll starting player
+            Roll Starting Player
           </Button>
         )}
         {showControls && (
@@ -209,7 +209,7 @@ export default function RandomizerModal({
             disabled={isRandomizing}
             sx={{ color: '#f87171', borderColor: '#f87171', textTransform: 'none' }}
           >
-            Who is the threat?
+            Who Is the Threat?
           </Button>
         )}
 

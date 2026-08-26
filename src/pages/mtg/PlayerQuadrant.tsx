@@ -302,19 +302,19 @@ export default function PlayerQuadrant({
         bgcolor: 'rgba(6, 10, 18, 0.28)',
         backdropFilter: 'blur(6px)',
       }}>
-        {/* Settings icon - inner top corner */}
+        {/* Settings icon - outer top corner */}
         <Box
           onClick={e => { e.stopPropagation(); onOpenSettings(); }}
           sx={{
             position: 'absolute',
             top: '50%',
             transform: 'translateY(-50%)',
-            ...(pid % 2 === 0 ? { left: compact ? 4 : 6 } : { right: compact ? 4 : 6 }),
+            ...(pid % 2 === 0 ? { right: compact ? 4 : 6 } : { left: compact ? 4 : 6 }),
             display: 'inline-flex', alignItems: 'center',
-            color: '#a1a0a0',
+            color: '#c8d2de',
             cursor: 'pointer',
             transition: 'color 0.15s',
-            '&:hover': { color: '#888' },
+            '&:hover': { color: '#f0f6ff' },
           }}
         >
           <SettingsIcon sx={{ fontSize: compact ? '0.9rem' : '1rem' }} />

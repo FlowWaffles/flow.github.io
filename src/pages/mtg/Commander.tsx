@@ -742,7 +742,7 @@ export default function Commander() {
                 },
               }}
             >
-              New game
+              New Game
             </Button>
             <Tooltip title="Reset">
               <IconButton
@@ -948,15 +948,15 @@ export default function Commander() {
             }}
           >
             <Typography sx={{ mb: 2 }}>
-              Start a new game and refresh commanders too?
+              Start a New Game and Refresh Commanders Too?
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, flexWrap: 'wrap' }}>
               <Button onClick={() => setNewGameOpen(false)} sx={{ color: '#aaa' }}>Cancel</Button>
               <Button onClick={() => startNewGame(false)} variant="outlined" sx={{ textTransform: 'none' }}>
-                Keep commanders
+                Keep Commanders
               </Button>
               <Button onClick={() => startNewGame(true)} variant="contained" sx={{ textTransform: 'none' }}>
-                Refresh commanders
+                Refresh Commanders
               </Button>
             </Box>
           </Box>

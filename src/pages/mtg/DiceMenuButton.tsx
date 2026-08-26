@@ -9,7 +9,7 @@ type DiceMenuButtonProps = {
 
 export default function DiceMenuButton({ compact, onClick }: DiceMenuButtonProps) {
   return (
-    <Tooltip title="Dice & coin">
+    <Tooltip title="Dice & Coin">
       <IconButton
         size="small"
         onClick={onClick}
