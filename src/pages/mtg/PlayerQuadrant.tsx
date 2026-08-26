@@ -340,10 +340,10 @@ export default function PlayerQuadrant({
                 onClick={e => { e.stopPropagation(); if (!player.isMonarch) onPlayerUpdate({ isMonarch: true }); }}
                 sx={{
                   display: 'inline-flex', alignItems: 'center',
-                  color: player.isMonarch ? accent : '#484848',
+                  color: player.isMonarch ? accent : '#7c8798',
                   cursor: player.isMonarch ? 'default' : 'pointer',
                   transition: 'color 0.15s',
-                  '&:hover': player.isMonarch ? {} : { color: '#777' },
+                  '&:hover': player.isMonarch ? {} : { color: '#b1bccf' },
                 }}
               >
                 <Icon path={player.isMonarch ? mdiCrown : mdiCrownOutline} size={compact ? 0.65 : 0.8} />
