@@ -5,6 +5,7 @@
   "start_url": "/mtg",
   "scope": "/mtg",
   "display": "fullscreen",
+  "orientation": "portrait",
   "theme_color": "#e266c7",
   "background_color": "#1a0a1a",
   "icons": [

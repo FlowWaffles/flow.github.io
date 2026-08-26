@@ -30,7 +30,7 @@ export default function PlayerLayoutModal({
     <Backdrop
       open={open}
       onClick={onClose}
-      sx={{ position: 'absolute', inset: 0, zIndex: 230, backdropFilter: 'blur(4px)', bgcolor: 'rgba(0,0,0,0.7)' }}
+      sx={{ position: 'fixed', inset: 0, zIndex: 240, backdropFilter: 'blur(4px)', bgcolor: 'rgba(0,0,0,0.7)' }}
     >
       <Box
         onClick={e => e.stopPropagation()}

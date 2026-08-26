@@ -178,9 +178,9 @@ export default function Commander() {
   const startingPlayerIntervalRef = useRef<number | null>(null);
   const startingPlayerTimeoutsRef = useRef<number[]>([]);
   const mobileLayout = useMediaQuery('(pointer: coarse)');
+  const portraitMobileLayout = useMediaQuery('(pointer: coarse) and (orientation: portrait)');
   const narrowMobileWidth = useMediaQuery('(pointer: coarse) and (max-width: 480px)');
   const shortMobileHeight = useMediaQuery('(pointer: coarse) and (max-height: 480px)');
-  const rotateMobileSurface = mobileLayout;
   const compactLayout = narrowMobileWidth || shortMobileHeight;
 
   useLayoutEffect(() => {
@@ -583,9 +583,9 @@ export default function Commander() {
         ref={boardRef}
         sx={{
           position: 'absolute',
-          inset: mobileLayout ? '50%' : 0,
-          width: mobileLayout ? '100dvmax' : '100%',
-          height: mobileLayout ? '100dvmin' : '100%',
+          inset: portraitMobileLayout ? '50%' : 0,
+          width: portraitMobileLayout ? '100dvh' : '100%',
+          height: portraitMobileLayout ? '100dvw' : '100%',
           display: 'grid',
           gridTemplateAreas: layoutConfig.gridTemplateAreas,
           gridTemplateRows: showCenterMenu ? (compactLayout ? '1fr 44px 1fr' : '1fr 52px 1fr') : '1fr 1fr',
@@ -593,8 +593,8 @@ export default function Commander() {
           gap: compactLayout ? '6px' : '8px',
           p: compactLayout ? '6px' : '8px',
           boxSizing: 'border-box',
-          transform: mobileLayout
-            ? `translate(-50%, -50%)${rotateMobileSurface ? ' rotate(90deg)' : ''}`
+          transform: portraitMobileLayout
+            ? 'translate(-50%, -50%) rotate(90deg)'
             : 'none',
           transformOrigin: 'center',
         }}
@@ -908,19 +908,6 @@ export default function Commander() {
           onConfirm={() => { setPlayers(mkPlayers()); setMonarchIntroduced(false); setLifeHistory([[], [], [], []]); setStartingLifeTotal(40); setResetOpen(false); }}
         />
 
-        <PlayerLayoutModal
-          open={layoutModalOpen}
-          playerCount={playerCount}
-          threeLayout={threeLayout}
-          rotation={getPlayerModalRotation(0)}
-          onClose={() => setLayoutModalOpen(false)}
-          onSelectTwoPlayers={() => setPlayerLayout(2)}
-          onSelectThreePlayersLayoutA={() => setPlayerLayout(3, 'A')}
-          onSelectThreePlayersLayoutB={() => setPlayerLayout(3, 'B')}
-          onSelectFourPlayers={() => setPlayerLayout(4)}
-          onSwapThreePlayerSides={swapThreePlayerSides}
-        />
-
         <Backdrop
           open={newGameOpen}
           onClick={() => setNewGameOpen(false)}
@@ -987,11 +974,27 @@ export default function Commander() {
       <QuickSetupDialog
         open={quickSetupOpen}
         players={players}
+        initialStartingLife={startingLifeTotal}
+        playerCount={playerCount}
+        threeLayout={threeLayout}
         commanders={commanders}
         visiblePlayerIds={layoutConfig.activeQuadrants.map(q => q.pid)}
         onClose={() => setQuickSetupOpen(false)}
+        onOpenPlayerLayout={() => setLayoutModalOpen(true)}
         onClearStoredData={clearStoredData}
         onApply={applyQuickSetup}
+      />
+      <PlayerLayoutModal
+        open={layoutModalOpen}
+        playerCount={playerCount}
+        threeLayout={threeLayout}
+        rotation={getPlayerModalRotation(0)}
+        onClose={() => setLayoutModalOpen(false)}
+        onSelectTwoPlayers={() => setPlayerLayout(2)}
+        onSelectThreePlayersLayoutA={() => setPlayerLayout(3, 'A')}
+        onSelectThreePlayersLayoutB={() => setPlayerLayout(3, 'B')}
+        onSelectFourPlayers={() => setPlayerLayout(4)}
+        onSwapThreePlayerSides={swapThreePlayerSides}
       />
       {settingsPid !== null && (
         <PlayerSettingsModal

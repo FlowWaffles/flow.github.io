@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Autocomplete, Backdrop, Box, Button, Divider, IconButton,
-  MenuItem, Select, TextField, Typography,
+  MenuItem, Select, TextField, Typography, useMediaQuery,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
@@ -21,9 +21,13 @@ type StartingLife = 20 | 40;
 interface QuickSetupDialogProps {
   open: boolean;
   players: Player[];
+  initialStartingLife: StartingLife;
+  playerCount: 2 | 3 | 4;
+  threeLayout: 'A' | 'B';
   commanders: CommanderEntry[];
   visiblePlayerIds: number[];
   onClose: () => void;
+  onOpenPlayerLayout?: () => void;
   onTypingChange?: (typing: boolean) => void;
   onClearStoredData?: () => void;
   onApply: (entries: QuickSetupEntry[], startingLife: StartingLife) => void;
@@ -261,6 +265,7 @@ function PlayerSetupStep({
               onClick={() => {
                 setSelectedComboIdx(-1);
                 setShowManualInputs(true);
+                onUpdate({ commander: '', partnerCommander: '' });
               }}
               sx={{ textTransform: 'none' }}
             >
@@ -531,9 +536,11 @@ function ManageView({ knownPlayers, onRemovePlayer, onRemoveCombo, onClearAll }:
 // ---------------------------------------------------------------------------
 
 export default function QuickSetupDialog({
-  open, players, commanders, visiblePlayerIds, onClose, onTypingChange, onClearStoredData, onApply,
+  open, players, initialStartingLife, playerCount, threeLayout, commanders, visiblePlayerIds,
+  onClose, onOpenPlayerLayout, onTypingChange, onClearStoredData, onApply,
 }: QuickSetupDialogProps) {
   const { knownPlayers, saveCombo, removeCombo, removePlayer, clearAllPlayers } = useKnownPlayers();
+  const landscapeMobileLayout = useMediaQuery('(pointer: coarse) and (orientation: landscape)');
   const [entries, setEntries] = useState<QuickSetupEntry[]>([]);
   const [originalNames, setOriginalNames] = useState<string[]>([]);
   const [startingLife, setStartingLife] = useState<StartingLife>(40);
@@ -554,13 +561,13 @@ export default function QuickSetupDialog({
   useEffect(() => {
     if (!open) return;
     setOriginalNames(players.map(p => p.name));
-    setStartingLife(players.every(p => p.life === 20) ? 20 : 40);
+    setStartingLife(initialStartingLife);
     setEntries(players.map(player => ({
       name: '',
       commander: player.commander,
       partnerCommander: player.partnerCommander,
     })));
-  }, [open, players]);
+  }, [open, players, initialStartingLife]);
 
   const setEntry = (index: number, update: Partial<QuickSetupEntry>) => {
     setEntries(prev => prev.map((e, i) => (i === index ? { ...e, ...update } : e)));
@@ -575,6 +582,12 @@ export default function QuickSetupDialog({
   const totalSteps = visibleSteps.length;
   const currentPlayerIdx = visibleSteps[currentStep] ?? 0;
   const isLastStep = currentStep === totalSteps - 1;
+  const playerLayoutLabel = playerCount === 3 ? `3 Players (${threeLayout})` : `${playerCount} Players`;
+
+  useEffect(() => {
+    if (currentStep < totalSteps) return;
+    setCurrentStep(Math.max(totalSteps - 1, 0));
+  }, [currentStep, totalSteps]);
 
   const usedNames = visibleSteps
     .filter((_, i) => i !== currentStep)
@@ -604,12 +617,14 @@ export default function QuickSetupDialog({
           border: '1px solid #333',
           borderRadius: 2,
           boxShadow: '0 0 32px rgba(0,0,0,0.35)',
-          width: 'min(92vw, 460px)',
-          maxWidth: 'calc(100% - 24px)',
-          maxHeight: 'calc(100dvh - 24px)',
+          width: landscapeMobileLayout ? 'min(92dvh, 460px)' : 'min(92vw, 460px)',
+          maxWidth: landscapeMobileLayout ? 'calc(100dvh - 24px)' : 'calc(100% - 24px)',
+          maxHeight: landscapeMobileLayout ? 'calc(100dvw - 24px)' : 'calc(100dvh - 24px)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
+          transform: landscapeMobileLayout ? 'rotate(90deg)' : 'none',
+          transformOrigin: 'center',
         }}
       >
         {/* Header */}
@@ -623,9 +638,38 @@ export default function QuickSetupDialog({
                 {view === 'manage' ? 'Saved Players' : 'Quick Setup'}
               </Typography>
               {view === 'setup' && (
-                <Typography sx={{ color: '#98a3b8', fontSize: '0.82rem', mt: 0.4 }}>
-                  Player {currentStep + 1} of {totalSteps}
-                </Typography>
+                <>
+                  <Box sx={{ mt: 1, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1 }}>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography sx={{ color: '#98a3b8', fontSize: '0.72rem', mb: 0.45, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                        Starting Life
+                      </Typography>
+                      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 0.75 }}>
+                        <Button size="small" variant={startingLife === 20 ? 'contained' : 'outlined'}
+                          onClick={() => setStartingLife(20)} sx={{ minWidth: 0, textTransform: 'none' }}>20</Button>
+                        <Button size="small" variant={startingLife === 40 ? 'contained' : 'outlined'}
+                          onClick={() => setStartingLife(40)} sx={{ minWidth: 0, textTransform: 'none' }}>40</Button>
+                      </Box>
+                    </Box>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography sx={{ color: '#98a3b8', fontSize: '0.72rem', mb: 0.45, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                        Players
+                      </Typography>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={onOpenPlayerLayout}
+                        fullWidth
+                        sx={{ minWidth: 0, textTransform: 'none' }}
+                      >
+                        {playerLayoutLabel}
+                      </Button>
+                    </Box>
+                  </Box>
+                  <Typography sx={{ color: '#98a3b8', fontSize: '0.82rem', mt: 0.75 }}>
+                    Player {currentStep + 1} of {totalSteps}
+                  </Typography>
+                </>
               )}
             </Box>
             {view === 'setup' && (
@@ -645,14 +689,6 @@ export default function QuickSetupDialog({
               </Box>
             )}
           </Box>
-          {view === 'setup' && (
-            <Box sx={{ mt: 1.25, display: 'inline-flex', gap: 0.75 }}>
-              <Button size="small" variant={startingLife === 20 ? 'contained' : 'outlined'}
-                onClick={() => setStartingLife(20)} sx={{ minWidth: 56, textTransform: 'none' }}>20</Button>
-              <Button size="small" variant={startingLife === 40 ? 'contained' : 'outlined'}
-                onClick={() => setStartingLife(40)} sx={{ minWidth: 56, textTransform: 'none' }}>40</Button>
-            </Box>
-          )}
         </Box>
 
         {/* Content */}

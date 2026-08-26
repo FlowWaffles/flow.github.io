@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Autocomplete, Box, Button, MenuItem, Select, TextField, Typography, Backdrop,
+  Autocomplete, Box, Button, MenuItem, Select, TextField, Typography, Backdrop, useMediaQuery,
 } from '@mui/material';
 import type { Player, CommanderEntry } from './types';
 import { useKnownPlayers } from './useKnownPlayers';
@@ -19,6 +19,7 @@ export default function PlayerSettingsModal({
   open, player, onClose, onUpdate, commanders = [], commandersLoading = false,
 }: PlayerSettingsModalProps) {
   const { knownPlayers, saveCombo } = useKnownPlayers();
+  const landscapeMobileLayout = useMediaQuery('(pointer: coarse) and (orientation: landscape)');
   const [name, setName] = useState('');
   const [selectedComboIdx, setSelectedComboIdx] = useState<number>(-1);
   const [showManualCommanderInputs, setShowManualCommanderInputs] = useState(false);
@@ -109,11 +110,13 @@ export default function PlayerSettingsModal({
           border: `1px solid ${accent}55`,
           boxShadow: `0 0 40px ${accent}22`,
           borderRadius: 2,
-          width: 'min(92vw, 420px)',
-          maxHeight: 'calc(100dvh - 32px)',
+          width: landscapeMobileLayout ? 'min(92dvh, 420px)' : 'min(92vw, 420px)',
+          maxHeight: landscapeMobileLayout ? 'calc(100dvw - 32px)' : 'calc(100dvh - 32px)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
+          transform: landscapeMobileLayout ? 'rotate(90deg)' : 'none',
+          transformOrigin: 'center',
         }}
       >
         <Box sx={{ px: 3, pt: 2.25, pb: 1.25, color: accent, fontWeight: 700, fontSize: '1rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
