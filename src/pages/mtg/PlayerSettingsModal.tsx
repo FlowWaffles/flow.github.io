@@ -27,10 +27,24 @@ export default function PlayerSettingsModal({
   useEffect(() => {
     if (open) {
       setName('');
-      setSelectedComboIdx(-1);
       setShowManualCommanderInputs(false);
+
+      const kp = knownPlayers.find(
+        p => p.name.toLowerCase() === player.name.trim().toLowerCase(),
+      );
+      const combos = kp?.combos ?? [];
+      const currentCombo = [player.commander.trim(), player.partnerCommander.trim()].filter(Boolean);
+
+      const matchIdx = currentCombo.length
+        ? combos.findIndex(combo => (
+          combo.length === currentCombo.length
+          && combo.every((namePart, i) => namePart.toLowerCase() === currentCombo[i].toLowerCase())
+        ))
+        : -1;
+
+      setSelectedComboIdx(matchIdx);
     }
-  }, [open, player.name]);
+  }, [open, player.name, player.commander, player.partnerCommander, knownPlayers]);
 
   const commitName = () => {
     const trimmed = name.trim() || player.name;
@@ -138,275 +152,275 @@ export default function PlayerSettingsModal({
             '&::-webkit-scrollbar': { display: 'none' },
           }}
         >
-        <Box sx={{ minWidth: 0 }}>
-          <Box>
-            <Typography sx={sectionLabelSx}>
-              Name
-            </Typography>
-            <Autocomplete
-              freeSolo
-              options={knownPlayers.map(p => p.name)}
-              inputValue={name}
-              onInputChange={(_, v) => setName(v)}
-              onChange={(_, v) => {
-                if (typeof v === 'string') handleNameChange(v);
-              }}
-              onBlur={commitName}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder={player.name}
-                  onBlur={commitName}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      commitName();
-                    }
-                  }}
-                  size="small"
-                  fullWidth
-                  variant="outlined"
-                  inputProps={{ ...params.inputProps, style: { color: '#eee' } }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: '#444' },
-                      '&:hover fieldset': { borderColor: `${accent}88` },
-                      '&.Mui-focused fieldset': { borderColor: accent },
-                    },
-                    '& .MuiAutocomplete-endAdornment svg': { color: '#666' },
-                  }}
-                />
-              )}
-              slotProps={{
-                paper: { sx: { bgcolor: '#222', color: '#eee' } },
-              }}
-            />
-          </Box>
-        </Box>
-
-        <Box sx={{ minWidth: 0 }}>
-          <Box>
-            <Typography sx={{ ...sectionLabelSx, mb: 1 }}>
-              Color
-            </Typography>
-            <Box sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 1,
-              alignItems: 'center',
-            }}>
-              {ACCENT_OPTIONS.map(color => (
-                <Box
-                  key={color}
-                  onClick={() => onUpdate({ accentColor: color })}
-                  sx={{
-                    width: colorSwatchSize,
-                    height: colorSwatchSize,
-                    minWidth: colorSwatchSize,
-                    borderRadius: '50%',
-                    bgcolor: color,
-                    cursor: 'pointer',
-                    outline: player.accentColor === color ? `3px solid ${color}` : '3px solid transparent',
-                    outlineOffset: '2px',
-                    transition: 'transform 0.12s, outline 0.12s',
-                    '&:hover': { transform: 'scale(1.2)' },
-                  }}
-                />
-              ))}
-            </Box>
-          </Box>
-        </Box>
-
-        {showCommanderBox && (
           <Box sx={{ minWidth: 0 }}>
             <Box>
               <Typography sx={sectionLabelSx}>
-                Commander
+                Name
               </Typography>
-              {commandersLoading ? (
-                <Typography sx={{ color: '#888', fontSize: '0.86rem', py: 1.2 }}>
-                  Loading commanders...
-                </Typography>
-              ) : (
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  {knownCombos.length > 0 && !showManualCommanderInputs && (
-                    <>
-                      <Select
-                        size="small"
-                        value={selectedComboIdx}
-                        onChange={(e) => {
-                          const idx = e.target.value as number;
-                          setSelectedComboIdx(idx);
-                          const combo = knownCombos[idx] ?? [];
-                          applyCommanderPair(combo[0] ?? '', combo[1] ?? '');
-                        }}
-                        displayEmpty
-                        sx={{
-                          color: selectedComboIdx === -1 ? '#666' : '#ccc',
-                          '& .MuiOutlinedInput-notchedOutline': { borderColor: '#444' },
-                          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: `${accent}88` },
-                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: accent },
-                          '& .MuiSvgIcon-root': { color: '#555' },
-                        }}
-                        MenuProps={{ sx: { '& .MuiPaper-root': { bgcolor: '#222', color: '#eee' } } }}
-                      >
-                        <MenuItem value={-1} sx={{ color: '#666', fontSize: '0.85rem' }}>
-                          Select commander
-                        </MenuItem>
-                        {knownCombos.map((combo, i) => (
-                          <MenuItem key={i} value={i} sx={{ fontSize: '0.85rem' }}>
-                            {combo.join(' / ')}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={() => {
-                            setSelectedComboIdx(-1);
-                            setShowManualCommanderInputs(true);
-                            applyCommanderPair('', '');
-                          }}
-                          sx={{ textTransform: 'none' }}
-                        >
-                          Add new commander
-                        </Button>
-                      </Box>
-                    </>
-                  )}
+              <Autocomplete
+                freeSolo
+                options={knownPlayers.map(p => p.name)}
+                inputValue={name}
+                onInputChange={(_, v) => setName(v)}
+                onChange={(_, v) => {
+                  if (typeof v === 'string') handleNameChange(v);
+                }}
+                onBlur={commitName}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder={player.name}
+                    onBlur={commitName}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        commitName();
+                      }
+                    }}
+                    size="small"
+                    fullWidth
+                    variant="outlined"
+                    inputProps={{ ...params.inputProps, style: { color: '#eee' } }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: '#444' },
+                        '&:hover fieldset': { borderColor: `${accent}88` },
+                        '&.Mui-focused fieldset': { borderColor: accent },
+                      },
+                      '& .MuiAutocomplete-endAdornment svg': { color: '#666' },
+                    }}
+                  />
+                )}
+                slotProps={{
+                  paper: { sx: { bgcolor: '#222', color: '#eee' } },
+                }}
+              />
+            </Box>
+          </Box>
 
-                  {(knownCombos.length === 0 || showManualCommanderInputs) && (
-                    <>
-                      {knownCombos.length > 0 && (
+          <Box sx={{ minWidth: 0 }}>
+            <Box>
+              <Typography sx={{ ...sectionLabelSx, mb: 1 }}>
+                Color
+              </Typography>
+              <Box sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 1,
+                alignItems: 'center',
+              }}>
+                {ACCENT_OPTIONS.map(color => (
+                  <Box
+                    key={color}
+                    onClick={() => onUpdate({ accentColor: color })}
+                    sx={{
+                      width: colorSwatchSize,
+                      height: colorSwatchSize,
+                      minWidth: colorSwatchSize,
+                      borderRadius: '50%',
+                      bgcolor: color,
+                      cursor: 'pointer',
+                      outline: player.accentColor === color ? `3px solid ${color}` : '3px solid transparent',
+                      outlineOffset: '2px',
+                      transition: 'transform 0.12s, outline 0.12s',
+                      '&:hover': { transform: 'scale(1.2)' },
+                    }}
+                  />
+                ))}
+              </Box>
+            </Box>
+          </Box>
+
+          {showCommanderBox && (
+            <Box sx={{ minWidth: 0 }}>
+              <Box>
+                <Typography sx={sectionLabelSx}>
+                  Commander
+                </Typography>
+                {commandersLoading ? (
+                  <Typography sx={{ color: '#888', fontSize: '0.86rem', py: 1.2 }}>
+                    Loading commanders...
+                  </Typography>
+                ) : (
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    {knownCombos.length > 0 && !showManualCommanderInputs && (
+                      <>
+                        <Select
+                          size="small"
+                          value={selectedComboIdx}
+                          onChange={(e) => {
+                            const idx = e.target.value as number;
+                            setSelectedComboIdx(idx);
+                            const combo = knownCombos[idx] ?? [];
+                            applyCommanderPair(combo[0] ?? '', combo[1] ?? '');
+                          }}
+                          displayEmpty
+                          sx={{
+                            color: selectedComboIdx === -1 ? '#666' : '#ccc',
+                            '& .MuiOutlinedInput-notchedOutline': { borderColor: '#444' },
+                            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: `${accent}88` },
+                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: accent },
+                            '& .MuiSvgIcon-root': { color: '#555' },
+                          }}
+                          MenuProps={{ sx: { '& .MuiPaper-root': { bgcolor: '#222', color: '#eee' } } }}
+                        >
+                          <MenuItem value={-1} sx={{ color: '#666', fontSize: '0.85rem' }}>
+                            Select commander
+                          </MenuItem>
+                          {knownCombos.map((combo, i) => (
+                            <MenuItem key={i} value={i} sx={{ fontSize: '0.85rem' }}>
+                              {combo.join(' / ')}
+                            </MenuItem>
+                          ))}
+                        </Select>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                           <Button
                             size="small"
+                            variant="outlined"
                             onClick={() => {
-                              setShowManualCommanderInputs(false);
+                              setSelectedComboIdx(-1);
+                              setShowManualCommanderInputs(true);
+                              applyCommanderPair('', '');
                             }}
-                            sx={{ textTransform: 'none', color: '#999' }}
-                          >
-                            Cancel
-                          </Button>
-                        </Box>
-                      )}
-                      <Autocomplete
-                        freeSolo
-                        options={commanders}
-                        inputValue={player.commander}
-                        getOptionLabel={opt => (typeof opt === 'string' ? opt : opt.name)}
-                        filterOptions={(options, state) => {
-                          const input = state.inputValue.toLowerCase().trim();
-                          if (!input) return [];
-                          const matches: CommanderEntry[] = [];
-                          for (const option of options) {
-                            if (option.name.toLowerCase().includes(input)) {
-                              matches.push(option);
-                              if (matches.length >= 8) break;
-                            }
-                          }
-                          return matches;
-                        }}
-                        onInputChange={(_, value) => {
-                          setSelectedComboIdx(-1);
-                          applyCommanderPair(value, player.partnerCommander);
-                        }}
-                        onChange={(_, value) => {
-                          if (typeof value === 'string') applyCommanderPair(value, player.partnerCommander);
-                          else if (value) applyCommanderPair(value.name, player.partnerCommander);
-                        }}
-                        slotProps={{
-                          paper: { sx: { bgcolor: '#222', color: '#eee' } },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            size="small"
-                            placeholder="Commander…"
-                            inputProps={{ ...params.inputProps, style: { color: '#eee' } }}
-                            sx={{
-                              '& .MuiOutlinedInput-root': {
-                                '& fieldset': { borderColor: '#444' },
-                                '&:hover fieldset': { borderColor: `${accent}88` },
-                                '&.Mui-focused fieldset': { borderColor: accent },
-                              },
-                              '& .MuiAutocomplete-endAdornment svg': { color: '#555' },
-                            }}
-                          />
-                        )}
-                      />
-                      <Autocomplete
-                        freeSolo
-                        options={commanders}
-                        inputValue={player.partnerCommander}
-                        getOptionLabel={opt => (typeof opt === 'string' ? opt : opt.name)}
-                        filterOptions={(options, state) => {
-                          const input = state.inputValue.toLowerCase().trim();
-                          if (!input) return [];
-                          const matches: CommanderEntry[] = [];
-                          for (const option of options) {
-                            if (option.name.toLowerCase().includes(input)) {
-                              matches.push(option);
-                              if (matches.length >= 8) break;
-                            }
-                          }
-                          return matches;
-                        }}
-                        onInputChange={(_, value) => {
-                          setSelectedComboIdx(-1);
-                          applyCommanderPair(player.commander, value);
-                        }}
-                        onChange={(_, value) => {
-                          if (typeof value === 'string') applyCommanderPair(player.commander, value);
-                          else if (value) applyCommanderPair(player.commander, value.name);
-                        }}
-                        slotProps={{
-                          paper: { sx: { bgcolor: '#222', color: '#eee' } },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            size="small"
-                            placeholder="Partner commander (optional)…"
-                            inputProps={{ ...params.inputProps, style: { color: '#eee' } }}
-                            sx={{
-                              '& .MuiOutlinedInput-root': {
-                                '& fieldset': { borderColor: '#444' },
-                                '&:hover fieldset': { borderColor: `${accent}88` },
-                                '&.Mui-focused fieldset': { borderColor: accent },
-                              },
-                              '& .MuiAutocomplete-endAdornment svg': { color: '#555' },
-                            }}
-                          />
-                        )}
-                      />
-                      {knownPlayer && (
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-                          <Button
-                            size="small"
-                            variant="contained"
-                            onClick={saveCurrentCombo}
-                            disabled={!player.commander.trim()}
                             sx={{ textTransform: 'none' }}
                           >
-                            Save commander
+                            Add new commander
                           </Button>
                         </Box>
-                      )}
-                    </>
-                  )}
-                </Box>
-              )}
+                      </>
+                    )}
+
+                    {(knownCombos.length === 0 || showManualCommanderInputs) && (
+                      <>
+                        {knownCombos.length > 0 && (
+                          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <Button
+                              size="small"
+                              onClick={() => {
+                                setShowManualCommanderInputs(false);
+                              }}
+                              sx={{ textTransform: 'none', color: '#999' }}
+                            >
+                              Cancel
+                            </Button>
+                          </Box>
+                        )}
+                        <Autocomplete
+                          freeSolo
+                          options={commanders}
+                          inputValue={player.commander}
+                          getOptionLabel={opt => (typeof opt === 'string' ? opt : opt.name)}
+                          filterOptions={(options, state) => {
+                            const input = state.inputValue.toLowerCase().trim();
+                            if (!input) return [];
+                            const matches: CommanderEntry[] = [];
+                            for (const option of options) {
+                              if (option.name.toLowerCase().includes(input)) {
+                                matches.push(option);
+                                if (matches.length >= 8) break;
+                              }
+                            }
+                            return matches;
+                          }}
+                          onInputChange={(_, value) => {
+                            setSelectedComboIdx(-1);
+                            applyCommanderPair(value, player.partnerCommander);
+                          }}
+                          onChange={(_, value) => {
+                            if (typeof value === 'string') applyCommanderPair(value, player.partnerCommander);
+                            else if (value) applyCommanderPair(value.name, player.partnerCommander);
+                          }}
+                          slotProps={{
+                            paper: { sx: { bgcolor: '#222', color: '#eee' } },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              size="small"
+                              placeholder="Commander…"
+                              inputProps={{ ...params.inputProps, style: { color: '#eee' } }}
+                              sx={{
+                                '& .MuiOutlinedInput-root': {
+                                  '& fieldset': { borderColor: '#444' },
+                                  '&:hover fieldset': { borderColor: `${accent}88` },
+                                  '&.Mui-focused fieldset': { borderColor: accent },
+                                },
+                                '& .MuiAutocomplete-endAdornment svg': { color: '#555' },
+                              }}
+                            />
+                          )}
+                        />
+                        <Autocomplete
+                          freeSolo
+                          options={commanders}
+                          inputValue={player.partnerCommander}
+                          getOptionLabel={opt => (typeof opt === 'string' ? opt : opt.name)}
+                          filterOptions={(options, state) => {
+                            const input = state.inputValue.toLowerCase().trim();
+                            if (!input) return [];
+                            const matches: CommanderEntry[] = [];
+                            for (const option of options) {
+                              if (option.name.toLowerCase().includes(input)) {
+                                matches.push(option);
+                                if (matches.length >= 8) break;
+                              }
+                            }
+                            return matches;
+                          }}
+                          onInputChange={(_, value) => {
+                            setSelectedComboIdx(-1);
+                            applyCommanderPair(player.commander, value);
+                          }}
+                          onChange={(_, value) => {
+                            if (typeof value === 'string') applyCommanderPair(player.commander, value);
+                            else if (value) applyCommanderPair(player.commander, value.name);
+                          }}
+                          slotProps={{
+                            paper: { sx: { bgcolor: '#222', color: '#eee' } },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              size="small"
+                              placeholder="Partner commander (optional)…"
+                              inputProps={{ ...params.inputProps, style: { color: '#eee' } }}
+                              sx={{
+                                '& .MuiOutlinedInput-root': {
+                                  '& fieldset': { borderColor: '#444' },
+                                  '&:hover fieldset': { borderColor: `${accent}88` },
+                                  '&.Mui-focused fieldset': { borderColor: accent },
+                                },
+                                '& .MuiAutocomplete-endAdornment svg': { color: '#555' },
+                              }}
+                            />
+                          )}
+                        />
+                        {knownPlayer && (
+                          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                            <Button
+                              size="small"
+                              variant="contained"
+                              onClick={saveCurrentCombo}
+                              disabled={!player.commander.trim()}
+                              sx={{ textTransform: 'none' }}
+                            >
+                              Save commander
+                            </Button>
+                          </Box>
+                        )}
+                      </>
+                    )}
+                  </Box>
+                )}
+              </Box>
             </Box>
-          </Box>
-        )}
+          )}
 
         </Box>
 
         <Box sx={{ px: 2, pb: 2, display: 'flex', justifyContent: 'flex-end' }}>
-        <Button onClick={onClose} sx={{ color: '#888', textTransform: 'none' }}>
-          Close
-        </Button>
+          <Button onClick={onClose} sx={{ color: '#888', textTransform: 'none' }}>
+            Close
+          </Button>
         </Box>
       </Box>
     </Backdrop>
