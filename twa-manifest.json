@@ -14,7 +14,7 @@
   "enableNotifications": true,
   "startUrl": "/mtg",
   "iconUrl": "https://flow.fail/assets/icon-512.png",
-  "maskableIconUrl": "https://flow.fail/assets/icon-512.png",
+  "maskableIconUrl": "https://flow.fail/assets/icon-512-maskable.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "/Users/fkuenzel/IdeaProjects/flow.github.io/android.keystore",
