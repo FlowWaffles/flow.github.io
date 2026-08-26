@@ -27,3 +27,4 @@ android.keystore
 # Android release artifacts
 app-release-*.apk
 *.aab
+app-release-signed.apk.idsig
