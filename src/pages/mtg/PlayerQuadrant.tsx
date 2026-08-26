@@ -199,12 +199,16 @@ export default function PlayerQuadrant({
     : player.poisonCounters >= POISON_LETHAL
       ? 'Unalived by poison'
       : lethalCmdAttacker !== undefined
-      ? [allPlayers[lethalCmdAttacker].commander, allPlayers[lethalCmdAttacker].partnerCommander].filter(Boolean).join(' // ')
-        ? `Was killed by\n${[allPlayers[lethalCmdAttacker].commander, allPlayers[lethalCmdAttacker].partnerCommander].filter(Boolean).join(' // ')}`
+        ? [allPlayers[lethalCmdAttacker].commander, allPlayers[lethalCmdAttacker].partnerCommander].filter(Boolean).join(' // ')
+          ? `Was killed by\n${[allPlayers[lethalCmdAttacker].commander, allPlayers[lethalCmdAttacker].partnerCommander].filter(Boolean).join(' // ')}`
           : `Died to commander damage\nfrom ${allPlayers[lethalCmdAttacker].name}`
         : player.life <= 0
           ? `Life total: ${player.life}`
           : 'Defeated';
+
+  const displayName = (player.name === 'Tom' && commanderDisplay === 'Kibo, Uktabi Prince')
+    ? 'Zischi'
+    : player.name;
 
   return (
     <Box ref={quadrantRef} sx={{
@@ -387,7 +391,7 @@ export default function PlayerQuadrant({
             </>
           ) : (
             <>
-              <Box component="span">{player.name}</Box>
+              <Box component="span">{displayName}</Box>
               {commanderDisplay && (
                 <Box component="span" sx={{ color: '#ddd', opacity: 0.9, textTransform: 'none', fontSize: compact ? '0.74em' : '0.82em' }}>
                   - {commanderDisplay}
