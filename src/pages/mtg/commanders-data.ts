@@ -3043,7 +3043,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Dynaheir, Invoker Adept",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c301b389-d802-4a8b-8681-9b50c8667423.jpg?1783922694"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c301b389-d802-4a8b-8681-9b50c8667423.jpg?1787770266"
   },
   {
     "name": "Ebondeath, Dracolich",
@@ -4411,7 +4411,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Gornog, the Red Reaper",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c80a88ae-f2f2-426a-88f3-76b5d598c25f.jpg?1783908855"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f8f2cde-6894-4d8d-ade1-dcc36ed51c73.jpg?1787681190"
   },
   {
     "name": "Goro-Goro and Satoru",
@@ -7543,7 +7543,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Maeve, Insidious Singer",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/2/7/2743136b-3610-4c43-8ed7-a00b1f58a874.jpg?1783920303"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5e31ce2f-378e-4c00-abf3-6b9e0db98141.jpg?1787680772"
   },
   {
     "name": "Maga, Traitor to Mortals",
@@ -8283,7 +8283,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Mr. Foxglove",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/c/b/cba58beb-9524-46d4-ac63-119f19d9d44f.jpg?1783910737"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89459624-9c34-4456-82ec-f425ce7b402a.jpg?1787677441"
   },
   {
     "name": "Mr. House, President and CEO",
@@ -9111,7 +9111,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Otharri, Suns' Glory",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/8/0/80c72839-0fa6-4b5f-83b7-6553ebf09bef.jpg?1783918163"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/8/9/89b4491d-154d-46e2-84c2-afa4596e2b13.jpg?1787700360"
   },
   {
     "name": "Othelm, Sigardian Outcast",
@@ -9399,7 +9399,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Plagon, Lord of the Beach",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/7/f/7f8a6bfe-6033-4f6b-ab45-6b553f8b51a1.jpg?1783908858"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/3/53adc081-3d4e-47b2-9863-85ac770bdbda.jpg?1787681149"
   },
   {
     "name": "Plargg and Nassari",
@@ -10007,7 +10007,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Rev, Tithe Extractor",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8bf88010-799d-4217-8e79-308bec7ad2ff.jpg?1783908857"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/3/4/34d75399-02e1-4ab8-9493-70c1d9d28b42.jpg?1787681169"
   },
   {
     "name": "Reveka, Wizard Savant",
@@ -10323,7 +10323,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Runadi, Behemoth Caller",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f4f5500f-e82c-44f3-8be8-cee4c86824b1.jpg?1783919179"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/8/d874d839-924e-4d1d-98d2-73aea61e004d.jpg?1787681081"
   },
   {
     "name": "Rune-Tail, Kitsune Ascendant // Rune-Tail's Essence",
@@ -10975,7 +10975,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Shroofus Sproutsire",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/d/2/d29839f0-afe0-4caa-9628-655738aecce4.jpg?1783908855"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9ed9f270-4da6-439e-b13a-70da6e7f424a.jpg?1787681209"
   },
   {
     "name": "Shu Yun, the Silent Tempest",
