@@ -6419,7 +6419,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Kibo, Uktabi Prince",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/8/b/8b71345a-c3e8-4b35-beb7-6347e41d7626.jpg?1783919180"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dcf7a304-4a45-42ed-9b1e-d36ae1963b66.jpg?1787833327"
   },
   {
     "name": "Kid Loki",
