@@ -13,6 +13,7 @@ import Commander from './pages/mtg/Commander.tsx';
 import { useCurrentLocation } from './utils/location.ts';
 import LinkTree from './pages/linktree/LinkTree.tsx';
 import MtgDownload from './pages/mtg-download/MtgDownload.tsx';
+import AppPrivacyPage from "./pages/life-tracker-app-privacy/PrivacyPage.tsx";
 
 function App() {
     const { pathname } = useCurrentLocation();
@@ -40,6 +41,8 @@ function App() {
                 return <Fail />;
             case '/privacy':
                 return <PrivacyPage />;
+            case '/life-tracker-app-privacy':
+                return <AppPrivacyPage />;
             case '/quote':
                 return <DisplayCustomQuotePage />;
             case '/create-quote':

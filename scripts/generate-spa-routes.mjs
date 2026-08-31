@@ -24,6 +24,7 @@ const ROUTES = [
     'mtg',
     'mtg-download',
     'privacy',
+    'life-tracker-app-privacy',
     'quote',
     'create-quote',
     'share-wwmt',
