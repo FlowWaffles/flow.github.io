@@ -1,0 +1,14 @@
+.mtg-app,
+.mtg-app * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mtg-app input,
+.mtg-app textarea,
+.mtg-app select,
+.mtg-app [contenteditable='true'],
+.mtg-app [contenteditable='plaintext-only'] {
+  -webkit-user-select: text;
+  user-select: text;
+}

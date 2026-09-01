@@ -1,6 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { keyframes } from '@emotion/react';
 import { Backdrop, Box, Button, IconButton, TextField, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import './Commander.css';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
@@ -626,7 +627,7 @@ export default function Commander() {
   }, [clearStartingPlayerAnimation, layoutConfig.activeQuadrants]);
 
   return (
-    <Box sx={{
+    <Box className="mtg-app" sx={{
       position: 'fixed', inset: 0,
       overflow: 'hidden',
     }}>

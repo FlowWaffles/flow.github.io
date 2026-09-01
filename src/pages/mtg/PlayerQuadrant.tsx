@@ -420,36 +420,58 @@ export default function PlayerQuadrant({
 
       {/* Life row */}
       <Box sx={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', alignItems: 'stretch', minHeight: 0 }}>
-        <Box sx={{ flex: 1, position: 'relative', display: 'flex' }}>
+        <Box
+          sx={{
+            flex: 1,
+            position: 'relative',
+            display: 'flex',
+            pt: player.enableLifePayedCounter ? (compact ? '28px' : '32px') : 0,
+          }}
+        >
           {player.enableLifePayedCounter && (
             <Box
               sx={{
                 position: 'absolute',
                 top: compact ? 2 : 4,
-                left: '50%',
-                transform: 'translateX(-50%)',
+                left: 0,
+                right: 0,
                 zIndex: 8,
-                display: 'inline-flex',
+                display: 'flex',
                 alignItems: 'center',
-                gap: 0.2,
                 color: '#f44336',
               }}
             >
               <HoldButton
                 onTap={() => adjustLifePayedCounter(1)}
                 onHold={() => adjustLifePayedCounter(HOLD_INCREMENT)}
-                sx={{ minWidth: 24, width: compact ? 24 : 28, height: compact ? 24 : 28, p: 0, color: 'inherit' }}
+                sx={{
+                  flex: 1,
+                  minHeight: compact ? 24 : 28,
+                  p: 0,
+                  color: 'inherit',
+                  justifyContent: 'flex-end',
+                  pr: 0.2,
+                }}
               >
                 <RemoveIcon sx={{ fontSize: compact ? '0.92rem' : '1.04rem' }} />
               </HoldButton>
-              <WaterDropIcon sx={{ fontSize: compact ? '0.98rem' : '1.14rem' }} />
-              <Typography sx={{ fontSize: compact ? '0.86rem' : '1rem', fontWeight: 700, lineHeight: 1 }}>
-                {player.lifePayed}
-              </Typography>
+              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.2, flexShrink: 0 }}>
+                <WaterDropIcon sx={{ fontSize: compact ? '0.98rem' : '1.14rem' }} />
+                <Typography sx={{ fontSize: compact ? '0.86rem' : '1rem', fontWeight: 700, lineHeight: 1 }}>
+                  {player.lifePayed}
+                </Typography>
+              </Box>
               <HoldButton
                 onTap={() => adjustLifePayedCounter(-1)}
                 onHold={() => adjustLifePayedCounter(-HOLD_INCREMENT)}
-                sx={{ minWidth: 24, width: compact ? 24 : 28, height: compact ? 24 : 28, p: 0, color: 'inherit' }}
+                sx={{
+                  flex: 1,
+                  minHeight: compact ? 24 : 28,
+                  p: 0,
+                  color: 'inherit',
+                  justifyContent: 'flex-start',
+                  pl: 0.2,
+                }}
               >
                 <AddIcon sx={{ fontSize: compact ? '0.92rem' : '1.04rem' }} />
               </HoldButton>
@@ -461,7 +483,6 @@ export default function PlayerQuadrant({
             sx={{
               flex: 1,
               color: 'rgba(255,255,255,0.7)',
-              pt: player.enableLifePayedCounter ? (compact ? 1.5 : 2) : 0,
               transition: 'background-color 0.12s',
               '&:hover': { bgcolor: 'rgba(255,255,255,0.04)' },
               '&:active': { bgcolor: 'rgba(255,255,255,0.1)' },
@@ -520,36 +541,58 @@ export default function PlayerQuadrant({
           </HoldButton>
         </Box>
 
-        <Box sx={{ flex: 1, position: 'relative', display: 'flex' }}>
+        <Box
+          sx={{
+            flex: 1,
+            position: 'relative',
+            display: 'flex',
+            pt: player.enableLifeHealedCounter ? (compact ? '28px' : '32px') : 0,
+          }}
+        >
           {player.enableLifeHealedCounter && (
             <Box
               sx={{
                 position: 'absolute',
                 top: compact ? 2 : 4,
-                left: '50%',
-                transform: 'translateX(-50%)',
+                left: 0,
+                right: 0,
                 zIndex: 8,
-                display: 'inline-flex',
+                display: 'flex',
                 alignItems: 'center',
-                gap: 0.2,
                 color: '#d4af37',
               }}
             >
               <HoldButton
                 onTap={() => adjustLifeHealedCounter(-1)}
                 onHold={() => adjustLifeHealedCounter(-HOLD_INCREMENT)}
-                sx={{ minWidth: 24, width: compact ? 24 : 28, height: compact ? 24 : 28, p: 0, color: 'inherit' }}
+                sx={{
+                  flex: 1,
+                  minHeight: compact ? 24 : 28,
+                  p: 0,
+                  color: 'inherit',
+                  justifyContent: 'flex-end',
+                  pr: 0.2,
+                }}
               >
                 <RemoveIcon sx={{ fontSize: compact ? '0.92rem' : '1.04rem' }} />
               </HoldButton>
-              <HealingIcon sx={{ fontSize: compact ? '0.98rem' : '1.14rem' }} />
-              <Typography sx={{ fontSize: compact ? '0.86rem' : '1rem', fontWeight: 700, lineHeight: 1 }}>
-                {player.lifeHealed}
-              </Typography>
+              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.2, flexShrink: 0 }}>
+                <HealingIcon sx={{ fontSize: compact ? '0.98rem' : '1.14rem' }} />
+                <Typography sx={{ fontSize: compact ? '0.86rem' : '1rem', fontWeight: 700, lineHeight: 1 }}>
+                  {player.lifeHealed}
+                </Typography>
+              </Box>
               <HoldButton
                 onTap={() => adjustLifeHealedCounter(1)}
                 onHold={() => adjustLifeHealedCounter(HOLD_INCREMENT)}
-                sx={{ minWidth: 24, width: compact ? 24 : 28, height: compact ? 24 : 28, p: 0, color: 'inherit' }}
+                sx={{
+                  flex: 1,
+                  minHeight: compact ? 24 : 28,
+                  p: 0,
+                  color: 'inherit',
+                  justifyContent: 'flex-start',
+                  pl: 0.2,
+                }}
               >
                 <AddIcon sx={{ fontSize: compact ? '0.92rem' : '1.04rem' }} />
               </HoldButton>
@@ -561,7 +604,6 @@ export default function PlayerQuadrant({
             sx={{
               flex: 1,
               color: 'rgba(255,255,255,0.7)',
-              pt: player.enableLifeHealedCounter ? (compact ? 1.5 : 2) : 0,
               transition: 'background-color 0.12s',
               '&:hover': { bgcolor: 'rgba(255,255,255,0.04)' },
               '&:active': { bgcolor: 'rgba(255,255,255,0.1)' },
