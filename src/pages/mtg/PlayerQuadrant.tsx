@@ -103,7 +103,7 @@ interface PlayerQuadrantProps {
   onOpenSettings: () => void;
   onOpenStatus: () => void;
   lifeHistory: LifeHistoryEntry[];
-  onLifeHistoryCommit: (delta: number) => void;
+  onLifeHistoryCommit: (entry: Omit<LifeHistoryEntry, 'id' | 'timestamp'>) => void;
   onRevertHistory: () => void;
   sx?: object;
 }
@@ -118,7 +118,7 @@ export default function PlayerQuadrant({
   const [historyOpen, setHistoryOpen] = useState(false);
   const [lifeDelta, setLifeDelta] = useState(0);
   const deltaTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendingDeltaRef = useRef(0);
+  const pendingHistoryRef = useRef<Omit<LifeHistoryEntry, 'id' | 'timestamp'> | null>(null);
   const lastTapRef = useRef<number>(0);
   const onLifeHistoryCommitRef = useRef(onLifeHistoryCommit);
   onLifeHistoryCommitRef.current = onLifeHistoryCommit;
@@ -140,30 +140,67 @@ export default function PlayerQuadrant({
     }
   };
 
-  const handleLifeChange = (delta: number) => {
-    onLifeChange(delta);
-    pendingDeltaRef.current += delta;
-    setLifeDelta(pendingDeltaRef.current);
+  const commitPendingLifeHistory = () => {
+    if (deltaTimerRef.current) {
+      clearTimeout(deltaTimerRef.current);
+      deltaTimerRef.current = null;
+    }
+    const pending = pendingHistoryRef.current;
+    if (!pending || pending.delta === 0) {
+      pendingHistoryRef.current = null;
+      setLifeDelta(0);
+      return;
+    }
+    onLifeHistoryCommitRef.current(pending);
+    pendingHistoryRef.current = null;
+    setLifeDelta(0);
+  };
+
+  const scheduleLifeHistoryCommit = () => {
     if (deltaTimerRef.current) clearTimeout(deltaTimerRef.current);
     deltaTimerRef.current = setTimeout(() => {
-      onLifeHistoryCommitRef.current(pendingDeltaRef.current);
-      pendingDeltaRef.current = 0;
-      setLifeDelta(0);
+      commitPendingLifeHistory();
     }, 1500);
+  };
+
+  const handleLifeAdjustment = (
+    delta: number,
+    source: LifeHistoryEntry['source'],
+    update?: Partial<Player>,
+  ) => {
+    onLifeChange(delta);
+    if (update) onPlayerUpdate(update);
+
+    const pending = pendingHistoryRef.current;
+    if (pending && pending.source !== source) {
+      commitPendingLifeHistory();
+    }
+
+    const nextPending = pendingHistoryRef.current;
+    if (nextPending && nextPending.source === source) {
+      nextPending.delta += delta;
+      pendingHistoryRef.current = nextPending;
+      setLifeDelta(nextPending.delta);
+    } else {
+      pendingHistoryRef.current = { delta, source };
+      setLifeDelta(delta);
+    }
+
+    scheduleLifeHistoryCommit();
   };
 
   const adjustLifePayedCounter = (delta: number) => {
     const next = Math.max(0, player.lifePayed + delta);
     const applied = next - player.lifePayed;
     if (applied === 0) return;
-    onPlayerUpdate({ lifePayed: next, life: player.life - applied });
+    handleLifeAdjustment(-applied, 'paid', { lifePayed: next });
   };
 
   const adjustLifeHealedCounter = (delta: number) => {
     const next = Math.max(0, player.lifeHealed + delta);
     const applied = next - player.lifeHealed;
     if (applied === 0) return;
-    onPlayerUpdate({ lifeHealed: next, life: player.life + applied });
+    handleLifeAdjustment(applied, 'gain', { lifeHealed: next });
   };
 
   const accent = player.accentColor;
@@ -203,6 +240,10 @@ export default function PlayerQuadrant({
     document.addEventListener('pointerdown', handlePointerDown);
     return () => document.removeEventListener('pointerdown', handlePointerDown);
   }, [historyOpen]);
+
+  useEffect(() => () => {
+    if (deltaTimerRef.current) clearTimeout(deltaTimerRef.current);
+  }, []);
 
   const commanderDisplay = [player.commander, player.partnerCommander].filter(Boolean).join(' // ');
   const hasPrimaryArt = Boolean(player.commanderArtUrl);
@@ -478,8 +519,8 @@ export default function PlayerQuadrant({
             </Box>
           )}
           <HoldButton
-            onTap={() => handleLifeChange(-1)}
-            onHold={() => handleLifeChange(-HOLD_INCREMENT)}
+            onTap={() => handleLifeAdjustment(-1, 'manual')}
+            onHold={() => handleLifeAdjustment(-HOLD_INCREMENT, 'manual')}
             sx={{
               flex: 1,
               color: 'rgba(255,255,255,0.7)',
@@ -518,7 +559,10 @@ export default function PlayerQuadrant({
           )}
           <HoldButton
             onTap={handleLifeTap}
-            onHold={() => setHistoryOpen(true)}
+            onHold={() => {
+              commitPendingLifeHistory();
+              setHistoryOpen(true);
+            }}
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <Typography
@@ -599,8 +643,8 @@ export default function PlayerQuadrant({
             </Box>
           )}
           <HoldButton
-            onTap={() => handleLifeChange(1)}
-            onHold={() => handleLifeChange(HOLD_INCREMENT)}
+            onTap={() => handleLifeAdjustment(1, 'manual')}
+            onHold={() => handleLifeAdjustment(HOLD_INCREMENT, 'manual')}
             sx={{
               flex: 1,
               color: 'rgba(255,255,255,0.7)',

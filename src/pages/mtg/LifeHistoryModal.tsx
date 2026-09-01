@@ -12,6 +12,20 @@ function formatTimeAgo(timestamp: number, now: number): string {
   return `${Math.floor(minutes / 60)}h ago`;
 }
 
+function describeLifeChange(entry: LifeHistoryEntry): string {
+  const amount = Math.abs(entry.delta);
+  if (entry.source === 'paid') {
+    return entry.delta < 0 ? `Paid ${amount} life` : `Regained ${amount} life`;
+  }
+  if (entry.source === 'gain') {
+    return entry.delta > 0 ? `Gained ${amount} life` : `Lost ${amount} life`;
+  }
+  if (entry.source === 'commander') {
+    return entry.delta > 0 ? `Gained ${amount} life` : `Lost ${amount} life`;
+  }
+  return entry.delta > 0 ? `Gained ${amount} life` : `Lost ${amount} life`;
+}
+
 interface LifeHistoryModalProps {
   open: boolean;
   history: LifeHistoryEntry[];
@@ -100,6 +114,9 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <Typography sx={{ fontSize: '0.7rem', color: '#d2d9e8', fontStyle: 'italic' }}>
                 {formatTimeAgo(entry.timestamp, openTime)}
+              </Typography>
+              <Typography sx={{ fontSize: '0.72rem', color: '#d2d9e8', mt: 0.15 }}>
+                {describeLifeChange(entry)}
               </Typography>
               {entry.source === 'commander' && (
                 <Typography sx={{

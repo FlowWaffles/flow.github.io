@@ -369,7 +369,11 @@ export default function Commander() {
     setPlayers(prev => prev.map((p, i) => {
       if (i !== pid) return p;
       let next = { ...p, life: p.life - latest.delta };
-      if (
+      if (latest.source === 'paid') {
+        next = { ...next, lifePayed: Math.max(0, next.lifePayed + latest.delta) };
+      } else if (latest.source === 'gain') {
+        next = { ...next, lifeHealed: Math.max(0, next.lifeHealed - latest.delta) };
+      } else if (
         latest.source === 'commander' &&
         latest.cmdDmgAttacker !== undefined &&
         latest.cmdDmgFrom !== undefined
@@ -669,7 +673,7 @@ export default function Commander() {
             onOpenSettings={() => setSettingsPid(pid)}
             onOpenStatus={() => setStatusPid(pid)}
             lifeHistory={lifeHistory[pid]}
-            onLifeHistoryCommit={delta => pushLifeHistory(pid, { delta, source: 'manual' })}
+            onLifeHistoryCommit={entry => pushLifeHistory(pid, entry)}
             onRevertHistory={() => revertLatestHistory(pid)}
             compact={compactLayout}
             startingPlayerHighlightPhase={startingPlayerHighlightPid === pid ? startingPlayerHighlightPhase : null}

@@ -168,7 +168,7 @@ export default function PlayerStatusModal({
               }
               label={
                 <Typography sx={{ fontSize: '0.8rem', color: player.enableLifePayedCounter ? '#f44336' : '#888', userSelect: 'none' }}>
-                  Enable life payed counter
+                  Enable life paid counter
                 </Typography>
               }
               sx={{ ml: 0, gap: 0.5 }}
@@ -186,7 +186,7 @@ export default function PlayerStatusModal({
               }
               label={
                 <Typography sx={{ fontSize: '0.8rem', color: player.enableLifeHealedCounter ? '#d4af37' : '#888', userSelect: 'none' }}>
-                  Enable life healed counter
+                  Enable life gain counter
                 </Typography>
               }
               sx={{ ml: 0, gap: 0.5 }}

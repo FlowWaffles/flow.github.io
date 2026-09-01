@@ -67,7 +67,7 @@ export interface LifeHistoryEntry {
   id: string;
   timestamp: number;
   delta: number; // life change (positive = gain, negative = loss)
-  source: 'manual' | 'commander';
+  source: 'manual' | 'commander' | 'paid' | 'gain';
   attackerPid?: number;
   attackerName?: string;
   attackerCommander?: string; // commander display name or empty
