@@ -45,6 +45,10 @@ export interface Player {
   isDead: boolean;
   isAliveOverride: boolean;
   isMonarch: boolean;
+  enableLifePayedCounter: boolean;
+  lifePayed: number;
+  enableLifeHealedCounter: boolean;
+  lifeHealed: number;
   commander: string;
   commanderArtUrl: string;
   partnerCommander: string;
@@ -143,6 +147,10 @@ export const mkPlayers = (): Player[] =>
     isDead: false,
     isAliveOverride: false,
     isMonarch: false,
+    enableLifePayedCounter: false,
+    lifePayed: 0,
+    enableLifeHealedCounter: false,
+    lifeHealed: 0,
     commander: '',
     commanderArtUrl: '',
     partnerCommander: '',

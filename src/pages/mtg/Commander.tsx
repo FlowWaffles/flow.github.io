@@ -139,6 +139,22 @@ function readStoredPlayers(): Player[] {
         isAliveOverride:
           typeof player.isAliveOverride === 'boolean' ? player.isAliveOverride : fallback.isAliveOverride,
         isMonarch: typeof player.isMonarch === 'boolean' ? player.isMonarch : fallback.isMonarch,
+        enableLifePayedCounter:
+          typeof player.enableLifePayedCounter === 'boolean'
+            ? player.enableLifePayedCounter
+            : fallback.enableLifePayedCounter,
+        lifePayed:
+          typeof player.lifePayed === 'number' && Number.isFinite(player.lifePayed)
+            ? Math.max(0, player.lifePayed)
+            : fallback.lifePayed,
+        enableLifeHealedCounter:
+          typeof player.enableLifeHealedCounter === 'boolean'
+            ? player.enableLifeHealedCounter
+            : fallback.enableLifeHealedCounter,
+        lifeHealed:
+          typeof player.lifeHealed === 'number' && Number.isFinite(player.lifeHealed)
+            ? Math.max(0, player.lifeHealed)
+            : fallback.lifeHealed,
         commander: typeof player.commander === 'string' ? player.commander : fallback.commander,
         commanderArtUrl:
           typeof player.commanderArtUrl === 'string' ? player.commanderArtUrl : fallback.commanderArtUrl,

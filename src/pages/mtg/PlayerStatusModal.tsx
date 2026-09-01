@@ -4,6 +4,8 @@ import { mdiCrown } from '@mdi/js';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SkullIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import HealingIcon from '@mui/icons-material/Healing';
 import HoldButton from './HoldButton';
 import type { Player } from './types';
 import { POISON_LETHAL, HOLD_INCREMENT, isEffectivelyDead } from './types';
@@ -149,6 +151,42 @@ export default function PlayerStatusModal({
               label={
                 <Typography sx={{ fontSize: '0.8rem', color: player.isMonarch ? accent : '#888', userSelect: 'none' }}>
                   Monarch
+                </Typography>
+              }
+              sx={{ ml: 0, gap: 0.5 }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={player.enableLifePayedCounter}
+                  onChange={e => onUpdate({ enableLifePayedCounter: e.target.checked })}
+                  size="small"
+                  icon={<WaterDropIcon sx={{ fontSize: '0.95rem', color: '#555' }} />}
+                  checkedIcon={<WaterDropIcon sx={{ fontSize: '0.95rem', color: '#f44336' }} />}
+                  sx={{ p: 0.5 }}
+                />
+              }
+              label={
+                <Typography sx={{ fontSize: '0.8rem', color: player.enableLifePayedCounter ? '#f44336' : '#888', userSelect: 'none' }}>
+                  Enable life payed counter
+                </Typography>
+              }
+              sx={{ ml: 0, gap: 0.5 }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={player.enableLifeHealedCounter}
+                  onChange={e => onUpdate({ enableLifeHealedCounter: e.target.checked })}
+                  size="small"
+                  icon={<HealingIcon sx={{ fontSize: '0.95rem', color: '#555' }} />}
+                  checkedIcon={<HealingIcon sx={{ fontSize: '0.95rem', color: '#d4af37' }} />}
+                  sx={{ p: 0.5 }}
+                />
+              }
+              label={
+                <Typography sx={{ fontSize: '0.8rem', color: player.enableLifeHealedCounter ? '#d4af37' : '#888', userSelect: 'none' }}>
+                  Enable life healed counter
                 </Typography>
               }
               sx={{ ml: 0, gap: 0.5 }}
