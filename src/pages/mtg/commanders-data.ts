@@ -7135,11 +7135,11 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Liliana the Faultless",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70d8c400-87dc-4f15-808f-e54a95d779fc.jpg?1784370991"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/0/70d8c400-87dc-4f15-808f-e54a95d779fc.jpg?1788329194"
   },
   {
     "name": "Liliana the Repentant",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1eb25a6c-d6b4-465d-990e-f1ab86b26b69.jpg?1784325058"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1eb25a6c-d6b4-465d-990e-f1ab86b26b69.jpg?1788329273"
   },
   {
     "name": "Liliana, Heretical Healer // Liliana, Defiant Necromancer",
@@ -12995,7 +12995,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Tinybones, Pocket Nuisance",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f47ddf7-35b6-4205-8045-f057914c5f64.jpg?1784325073"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/f/2f47ddf7-35b6-4205-8045-f057914c5f64.jpg?1788329294"
   },
   {
     "name": "Tinybones, the Pickpocket",
@@ -13015,7 +13015,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Titanbones, Towering Heart",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/edea6f70-a5a7-475d-b7f2-97933d0f32cf.jpg?1784371016"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/d/edea6f70-a5a7-475d-b7f2-97933d0f32cf.jpg?1788329375"
   },
   {
     "name": "Titania, Nature's Force",
