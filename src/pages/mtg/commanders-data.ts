@@ -290,6 +290,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68011f60-6202-48f4-8255-fb94764e2951.jpg?1783928202"
   },
   {
+    "name": "Aerid Konstrari",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/1/f17d2792-b075-4c47-ad38-e7a7eaee5f8c.jpg?1788878199"
+  },
+  {
     "name": "Aerith Gainsborough",
     "artCrop": "https://cards.scryfall.io/art_crop/front/e/8/e86328b6-ded2-41df-8b6e-4a770e7b171e.jpg?1783906655"
   },
@@ -2706,6 +2710,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/a/c/ac40ca08-50e6-46e6-9d50-c4e84325620d.jpg?1783923350"
   },
   {
+    "name": "Denzilore Fatehold",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/8/986f9e98-9d8d-428b-9187-860745cf3269.jpg?1788878215"
+  },
+  {
     "name": "Depala, Pilot Exemplar",
     "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/592f3a92-787e-4180-9d0b-06c973ce8975.jpg?1783937169"
   },
@@ -4098,6 +4106,14 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9ec900f-1e31-4440-a75a-20b256734d5b.jpg?1783916955"
   },
   {
+    "name": "Ghalta the Immovable",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a9f3aa55-908f-42db-8135-4201433df850.jpg?1788878267"
+  },
+  {
+    "name": "Ghalta the Unstoppable",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/d/1d535b5f-c916-4f16-89a7-9477578826d2.jpg?1788878290"
+  },
+  {
     "name": "Ghalta, Primal Hunger",
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/a/6a9c39e4-a8cf-42dd-8d0e-45634b335546.jpg?1783909058"
   },
@@ -5330,6 +5346,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/c/1/c190eceb-f6d8-408f-bbc4-df0fefb778ad.jpg?1783915696"
   },
   {
+    "name": "Ingris Stingerquill",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/4/6471b135-33a8-4005-9a07-ebb74e0bf145.jpg?1788878212"
+  },
+  {
     "name": "Ink-Eyes, Servant of Oni",
     "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/55ed38fc-dc1f-4a03-8869-147f7eb8646b.jpg?1783936836"
   },
@@ -5810,6 +5830,14 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/776f490a-2f75-4c18-8164-56bd65bb09c6.jpg?1783906028"
   },
   {
+    "name": "Jiang Yanggu, Alone",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/8/e8c1ce21-b77d-40bf-9ed1-478604e71f5f.jpg?1788878286"
+  },
+  {
+    "name": "Jiang Yanggu, Never Alone",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/5/f5a0bb3e-8119-4739-8684-e61d1d607dcb.jpg?1788878298"
+  },
+  {
     "name": "Jill, Shiva's Dominant // Shiva, Warden of Ice",
     "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1f163763-4802-4a96-a5bc-f3c381db7b5c.jpg?1783906640"
   },
@@ -6164,6 +6192,14 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Karlov of the Ghost Council",
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f7c41011-a9eb-451c-a76d-67d2dcf47c52.jpg?1783913286"
+  },
+  {
+    "name": "Karn, Argent Defender",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1ebbbddb-2dc3-4194-b72b-13bcebe2ab89.jpg?1788878301"
+  },
+  {
+    "name": "Karn, Gilded Guardian",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3abcae65-5b21-4c98-adad-34b8bc76ea3a.jpg?1788878297"
   },
   {
     "name": "Karn, Legacy Reforged",
@@ -6840,6 +6876,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Kwende, Pride of Femeref",
     "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b4d3b6a8-3e4a-4e2b-900a-9a21fa0ced4c.jpg?1783935041"
+  },
+  {
+    "name": "Kwia Vigorbloom",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/d/2d6ff182-a853-4898-895b-072c89324ca7.jpg?1788878236"
   },
   {
     "name": "Kydele, Chosen of Kruphix",
@@ -13404,6 +13444,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Ulasht, the Hate Seed",
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/002fe870-eae5-42cc-a44c-32906f60719e.jpg?1783921798"
+  },
+  {
+    "name": "Uldaros Theorix",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/a/7/a7ad622a-42ff-48fa-ae95-12e0a5bd9387.jpg?1788878220"
   },
   {
     "name": "Ulder Ravengard, Marshal",
