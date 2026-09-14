@@ -3946,6 +3946,14 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/7/0744f08e-a588-4efe-ad56-5e9ed91dda40.jpg?1783931521"
   },
   {
+    "name": "Gallia, the Merrymaker",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789275444"
+  },
+  {
+    "name": "Gallia, Tragic Host",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/498fa810-8522-4020-b773-52ad404c9f65.jpg?1789275452"
+  },
+  {
     "name": "Gallowbraid",
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8df86192-6374-42ac-94bc-95e2e8284bd6.jpg?1783946734"
   },
