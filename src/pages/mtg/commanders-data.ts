@@ -3947,11 +3947,11 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Gallia, the Merrymaker",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789275444"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716"
   },
   {
     "name": "Gallia, Tragic Host",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/498fa810-8522-4020-b773-52ad404c9f65.jpg?1789275452"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/4/9/498fa810-8522-4020-b773-52ad404c9f65.jpg?1789385697"
   },
   {
     "name": "Gallowbraid",
@@ -4852,6 +4852,14 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Hansk, Slayer Zealot",
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f6ea7c19-71ec-44ff-affc-fc76fe3146a7.jpg?1783915138"
+  },
+  {
+    "name": "Hapatra, the Desert Fang",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/f/cf7c1534-af41-4991-b3c3-f0a34ae330b5.jpg?1789385991"
+  },
+  {
+    "name": "Hapatra, the Desert Frost",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/85faaa9d-4656-4365-871d-7cba53ed0996.jpg?1789387113"
   },
   {
     "name": "Hapatra, Vizier of Poisons",
@@ -7595,7 +7603,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Mabel, Bitter Recluse",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2a412b0-2ae4-4552-bc5e-70654b6b9b4e.jpg?1789128065"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2a412b0-2ae4-4552-bc5e-70654b6b9b4e.jpg?1789385677"
   },
   {
     "name": "Mabel, Heir to Cragflame",
@@ -7603,7 +7611,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Mabel, Valley Hero",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47abea4b-9848-48aa-bc1b-f04f4799e920.jpg?1789108059"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47abea4b-9848-48aa-bc1b-f04f4799e920.jpg?1789385857"
   },
   {
     "name": "MacCready, Lamplight Mayor",
@@ -9454,6 +9462,14 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/a/0ae89461-4bce-4b49-b875-03afc2469fe7.jpg?1783916510"
   },
   {
+    "name": "Pia, Aether Ascetic",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff0bc30f-9d20-458e-808f-bdc2825905a5.jpg?1789387120"
+  },
+  {
+    "name": "Pia, Determined Rebuilder",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/d/dd3faaf4-45ca-4714-8dbe-37102ec131cf.jpg?1789385851"
+  },
+  {
     "name": "Pianna, Nomad Captain",
     "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90ebb129-aa8d-4107-8e74-0b04525d76e0.jpg?1783915714"
   },
@@ -10455,7 +10471,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Ruric Thar, Magecrusher",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/eed83302-dc2c-45f4-a4bd-af9da51edef5.jpg?1789090438"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/eed83302-dc2c-45f4-a4bd-af9da51edef5.jpg?1789358701"
   },
   {
     "name": "Ruric Thar, the Unbowed",
