@@ -6750,6 +6750,14 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/2/82291f66-f4f0-4542-992e-8342e90033da.jpg?1783923988"
   },
   {
+    "name": "Koth of the Homestead",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/920703fd-2a2f-454b-8829-af8f2afda4f4.jpg?1789470874"
+  },
+  {
+    "name": "Koth, the Geomancer",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/4/54f64e95-5a97-4d7c-9939-7f33a3165562.jpg?1789470892"
+  },
+  {
     "name": "Kothophed, Soul Hoarder",
     "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a1070dd6-944f-44a0-8834-02eae93dabaa.jpg?1783921429"
   },
@@ -11190,10 +11198,6 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f7a6f6d-dfe3-40d3-90dc-58baa8924baf.jpg?1783908074"
   },
   {
-    "name": "Sigrid, God-Favored",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/aeec3c1e-e612-4700-888e-300912932552.jpg?1783928275"
-  },
-  {
     "name": "Sigurd, Jarl of Ravensthorpe",
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/5/25ceade9-f12a-4724-b198-312fb4b1210b.jpg?1783910967"
   },
@@ -12288,6 +12292,14 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Tevesh Szat, Doom of Fools",
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/f/8f244716-78ab-46f5-b6e9-fc1e6db28052.jpg?1783928825"
+  },
+  {
+    "name": "Teyo, Diamondblade Mage",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/100c3b67-0c92-4224-b5ed-67789c612df7.jpg?1789470892"
+  },
+  {
+    "name": "Teyo, Lightshield Expert",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5f7521d7-9f1f-4f03-b2ea-dd2a1b1e4e5b.jpg?1789471515"
   },
   {
     "name": "Teysa Karlov",
@@ -14550,8 +14562,16 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/47af956c-e2ba-47c5-bc5d-ec0ab345ce57.jpg?1783935553"
   },
   {
+    "name": "Yoshimaru, Beloved Companion",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/3/8/384f3b7d-8d7f-41bf-bebd-64e8babe7fca.jpg?1789470881"
+  },
+  {
     "name": "Yoshimaru, Ever Faithful",
     "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aa409269-3698-42a2-8c51-75557b27a6f6.jpg?1783923987"
+  },
+  {
+    "name": "Yoshimaru, Scrappy Stray",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/8/b8dfd087-2434-42c6-ac4c-1decbcdde2db.jpg?1789470909"
   },
   {
     "name": "Yuan Shao, the Indecisive",
