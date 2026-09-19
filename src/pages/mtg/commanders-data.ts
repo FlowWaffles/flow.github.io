@@ -3339,7 +3339,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Emrakul, the Exigent Doom",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3ff8dd3-88a8-49dc-a59b-e2748680623c.jpg?1789060137"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/ee609b68-5c9c-43e0-aff4-eb1bbc8b2911.jpg?1789060230"
   },
   {
     "name": "Emrakul, the Promised End",
@@ -10683,7 +10683,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Samut, Hazoret's Champion",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/ba920f23-f05c-410e-8516-c93abedf1d4d.jpg?1789642978"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/ba920f23-f05c-410e-8516-c93abedf1d4d.jpg?1789729662"
   },
   {
     "name": "Samut, the Driving Force",
@@ -10691,7 +10691,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Samut, Tyrant of Naktamun",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d7d8fa7-ce69-4a8c-9af0-55571393a244.jpg?1789642980"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d7d8fa7-ce69-4a8c-9af0-55571393a244.jpg?1789729644"
   },
   {
     "name": "Samut, Vizier of Naktamun",
@@ -13384,6 +13384,14 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Tomik, Distinguished Advokist",
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/e/0eea32dc-dbac-47a9-97b2-311413f1de9d.jpg?1783913341"
+  },
+  {
+    "name": "Tomik, Izzet Sparkmage",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c5afd5f-6f37-4c3e-83f0-68fdcea98810.jpg?1789729773"
+  },
+  {
+    "name": "Tomik, Orzhov Lawmage",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/c/7ca95235-6e54-4ff8-bc2e-6a3d483ff007.jpg?1789729766"
   },
   {
     "name": "Tomik, Wielder of Law",
