@@ -1,13 +1,12 @@
 [
   {
-    "relation": [
-      "delegate_permission/common.handle_all_urls"
-    ],
+    "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
       "package_name": "flow.fail.mtg.twa",
       "sha256_cert_fingerprints": [
-        "42:15:D5:3F:CA:91:36:02:EB:45:60:1D:D1:8D:6C:EC:A7:F0:03:53:A4:F7:C9:74:FE:3D:54:EC:E1:6F:C3:3E"
+        "42:15:D5:3F:CA:91:36:02:EB:45:60:1D:D1:8D:6C:EC:A7:F0:03:53:A4:F7:C9:74:FE:3D:54:EC:E1:6F:C3:3E",
+        "E4:6E:69:86:53:35:71:57:46:97:A9:16:3A:2E:CC:48:21:3E:10:64:DB:44:1B:CF:A3:D7:94:7D:88:7C:CB:4D"
       ]
     }
   }
