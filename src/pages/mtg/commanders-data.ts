@@ -13507,7 +13507,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Traxos, Scourge of Kroog",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/8566e91a-5f2c-4854-aeb3-68b3c4344582.jpg?1783921392"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/8566e91a-5f2c-4854-aeb3-68b3c4344582.jpg?1789988678"
   },
   {
     "name": "Trazyn the Infinite",
