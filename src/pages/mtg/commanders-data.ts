@@ -8067,7 +8067,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Minsc & Boo, Timeless Heroes",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/928036c9-11b8-493e-b9f2-8fbd3487cd19.jpg?1783922688"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/928036c9-11b8-493e-b9f2-8fbd3487cd19.jpg?1790212691"
   },
   {
     "name": "Minsc, Beloved Ranger",
@@ -13879,7 +13879,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Venser, Fervent Forger",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0de6353b-5c19-40f7-951a-2b600db21846.jpg?1789644277"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/0/d/0de6353b-5c19-40f7-951a-2b600db21846.jpg?1790242646"
   },
   {
     "name": "Venser, Shaper Savant",
