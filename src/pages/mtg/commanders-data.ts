@@ -3219,7 +3219,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Emrakul, the Exigent Doom",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/e/e/ee609b68-5c9c-43e0-aff4-eb1bbc8b2911.jpg?1790137401"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3ff8dd3-88a8-49dc-a59b-e2748680623c.jpg?1789060137"
   },
   {
     "name": "Emrakul, the Promised End",
@@ -4143,7 +4143,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Ginger, Queen of Sweets",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f4ff6bf9-89a9-4c2a-84a2-d4ceb7168adf.jpg?1789644416"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/4/f4ff6bf9-89a9-4c2a-84a2-d4ceb7168adf.jpg?1790343341"
   },
   {
     "name": "Giott, King of the Dwarves",
@@ -6831,7 +6831,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Kurbis, Harvest Celebrant",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5ea94e69-36f0-47a6-b7f7-1379625a6955.jpg?1783925374"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/e/5ea94e69-36f0-47a6-b7f7-1379625a6955.jpg?1790319392"
   },
   {
     "name": "Kurkesh, Onakke Ancient",
