@@ -3343,7 +3343,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Eshki, Temur's Roar",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff9aa863-8773-452d-946c-ae334c632e11.jpg?1783907192"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff9aa863-8773-452d-946c-ae334c632e11.jpg?1790528795"
   },
   {
     "name": "Esika, God of the Tree // The Prismatic Bridge",
