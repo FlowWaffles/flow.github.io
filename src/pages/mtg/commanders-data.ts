@@ -13447,7 +13447,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Truss, Chief Engineer",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/73b6f092-08b9-4c67-836a-28006ea3b2df.jpg?1783920535"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/3/73b6f092-08b9-4c67-836a-28006ea3b2df.jpg?1790614109"
   },
   {
     "name": "Trynn, Champion of Freedom",
