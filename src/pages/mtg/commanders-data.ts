@@ -1139,7 +1139,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Baeloth Barrityl, Entertainer",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec983aac-9eda-4086-ad7e-34da9b2987cc.jpg?1783922513"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec983aac-9eda-4086-ad7e-34da9b2987cc.jpg?1790748156"
   },
   {
     "name": "Baird, Argivian Recruiter",
@@ -14043,7 +14043,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Vogar, Necropolis Tyrant",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/4/2/42679318-e5c4-4aa4-8097-97552defc8bf.jpg?1783920304"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/f/6f8fca40-1f5c-4f93-8c02-b697fa592c11.jpg?1790772288"
   },
   {
     "name": "Vohar, Vodalian Desecrator",
