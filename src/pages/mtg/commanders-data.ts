@@ -3219,7 +3219,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Emrakul, the Exigent Doom",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3ff8dd3-88a8-49dc-a59b-e2748680623c.jpg?1789060137"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3ff8dd3-88a8-49dc-a59b-e2748680623c.jpg?1790829846"
   },
   {
     "name": "Emrakul, the Promised End",
