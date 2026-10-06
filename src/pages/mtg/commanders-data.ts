@@ -1951,7 +1951,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Captain America, Team Leader",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff25a4f5-c1de-464b-8153-7678bca847a8.jpg?1789532484"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/f/ff25a4f5-c1de-464b-8153-7678bca847a8.jpg?1791202003"
   },
   {
     "name": "Captain America, Unbowed",
@@ -2715,7 +2715,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Doctor Doom, King of Latveria",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9997d93-4c6f-49dd-8ff0-76901fe78859.jpg?1789532701"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9997d93-4c6f-49dd-8ff0-76901fe78859.jpg?1791202012"
   },
   {
     "name": "Doctor Doom, Unrivaled",
@@ -3847,7 +3847,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Gallia, the Merrymaker",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1789385716"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275"
   },
   {
     "name": "Gallia, Tragic Host",
@@ -5343,7 +5343,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Invisible Woman",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d239a23-9575-4202-804a-cab7c08a546d.jpg?1789532579"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/8/d/8d239a23-9575-4202-804a-cab7c08a546d.jpg?1791201997"
   },
   {
     "name": "Invisible Woman, Sue Storm",
@@ -11979,7 +11979,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "T'Challa, the Black Panther",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d72c4452-b4f2-45a8-9127-42368a23ac6a.jpg?1789532400"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d72c4452-b4f2-45a8-9127-42368a23ac6a.jpg?1791202017"
   },
   {
     "name": "T'Pol, Vulcan Representative",
