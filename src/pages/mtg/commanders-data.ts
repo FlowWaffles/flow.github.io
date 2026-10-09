@@ -5659,7 +5659,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Jaws, Relentless Predator",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c6d16a9e-98c0-46e0-987c-f0de0915a204.jpg?1785419997"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c6d16a9e-98c0-46e0-987c-f0de0915a204.jpg?1791470750"
   },
   {
     "name": "Jaxis, the Troublemaker",
