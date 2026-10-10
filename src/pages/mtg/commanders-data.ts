@@ -2715,7 +2715,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Doctor Doom, King of Latveria",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/b/9/b9997d93-4c6f-49dd-8ff0-76901fe78859.jpg?1791202012"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/1/91a7f124-79af-45c2-a43d-7004bbda3045.jpg?1791579831"
   },
   {
     "name": "Doctor Doom, Unrivaled",
@@ -3906,6 +3906,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b422ce26-06fb-4748-9c01-32c4be914a77.jpg?1783916219"
   },
   {
+    "name": "Gargantos, the Endbringer",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60b48730-3590-4c8c-b0e8-6007bb36d6b6.jpg?1791578335"
+  },
+  {
     "name": "Gargos, Vicious Watcher",
     "artCrop": "https://cards.scryfall.io/art_crop/front/4/e/4e446e90-6e31-43ed-bcb1-a01422b503c0.jpg?1783932967"
   },
@@ -4908,6 +4912,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Heiko Yamazaki, the General",
     "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9ea5e61c-d903-410b-9acf-96a917ce05cc.jpg?1783923865"
+  },
+  {
+    "name": "Hela, Mistress of Darkness // Dark Tutor",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/7750d4bb-0463-43fd-bdf3-a14271cace20.jpg?1791578367"
   },
   {
     "name": "Helga, Skittish Seer",
@@ -7608,6 +7616,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Mageta the Lion",
     "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/5861dffc-5afa-44a3-a3fa-9fd440093377.jpg?1783945797"
+  },
+  {
+    "name": "Magik, Illyana Rasputin // Darkchild, Demon Uncaged",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/0/60e252e3-88ea-49f2-a14f-ae9d0712bafe.jpg?1791578412"
   },
   {
     "name": "Magnus the Red",
