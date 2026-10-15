@@ -299,7 +299,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Albiorix, Goose Tyrant // Wild Goose Chase",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/ae3257ec-d5f3-4cfb-8446-cbeb236ee10e.jpg?1783911506"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/a/e/ae3257ec-d5f3-4cfb-8446-cbeb236ee10e.jpg?1791950367"
   },
   {
     "name": "Alela, Artful Provocateur",
@@ -4615,7 +4615,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Gutmorn, Pactbound Servant",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/0083a99d-92a1-4a31-b4d4-0dbb06057b48.jpg?1783924546"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/0083a99d-92a1-4a31-b4d4-0dbb06057b48.jpg?1791951819"
   },
   {
     "name": "Gwafa Hazid, Profiteer",
@@ -14107,7 +14107,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Vona de Iedo, the Antifex",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/853e5a1e-91eb-486b-8121-b5bc78d3e827.jpg?1783911503"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/853e5a1e-91eb-486b-8121-b5bc78d3e827.jpg?1791952394"
   },
   {
     "name": "Vona, Butcher of Magan",
