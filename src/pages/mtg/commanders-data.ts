@@ -1410,6 +1410,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e5bb585d-2b49-44a0-93d0-98dc8e0727c2.jpg?1783914618"
   },
   {
+    "name": "Beta Ray Bill",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/23a18d46-82d9-42b6-a057-6c1c7d2641a3.jpg?1792156132"
+  },
+  {
     "name": "Betor, Ancestor's Voice",
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/e/2e261489-8dde-4594-8868-69f432f03d03.jpg?1783907191"
   },
@@ -2736,6 +2740,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Doctor Spectrum",
     "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7e91d0b2-b67b-473e-b028-0bcf2ca55971.jpg?1783903088"
+  },
+  {
+    "name": "Doctor Strange, Master of Magic",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dce65d5f-6fd4-469f-97fd-636be341d793.jpg?1792154594"
   },
   {
     "name": "Doctor Strange, Surgeon",
@@ -6296,14 +6304,6 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Kaza, Roil Chaser",
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/080585c6-d946-4435-954a-0ada936dc3f1.jpg?1783911897"
-  },
-  {
-    "name": "Kazarov, Sengir Pureblood",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/2/a/2aff7077-496b-46ca-b9d7-a8c1772f9a91.jpg?1783935006"
-  },
-  {
-    "name": "Kazuul, Tyrant of the Cliffs",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/721df547-d777-4247-b130-a4e247445b04.jpg?1783912996"
   },
   {
     "name": "Kediss, Emberclaw Familiar",
