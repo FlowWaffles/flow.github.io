@@ -6306,6 +6306,14 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/8/080585c6-d946-4435-954a-0ada936dc3f1.jpg?1783911897"
   },
   {
+    "name": "Kazarov, Sengir Pureblood",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/a/2aff7077-496b-46ca-b9d7-a8c1772f9a91.jpg?1783935006"
+  },
+  {
+    "name": "Kazuul, Tyrant of the Cliffs",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/2/721df547-d777-4247-b130-a4e247445b04.jpg?1783912996"
+  },
+  {
     "name": "Kediss, Emberclaw Familiar",
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/6/f606ebf1-483d-4331-b16a-9fb6f591a39f.jpg?1783928811"
   },
