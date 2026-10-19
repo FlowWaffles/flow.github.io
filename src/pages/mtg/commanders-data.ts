@@ -1411,7 +1411,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Beta Ray Bill",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/23a18d46-82d9-42b6-a057-6c1c7d2641a3.jpg?1792156132"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/23a18d46-82d9-42b6-a057-6c1c7d2641a3.jpg?1792306764"
   },
   {
     "name": "Betor, Ancestor's Voice",
@@ -12535,7 +12535,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "The Fantastic Four",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d78cb67a-ed8a-4e76-8506-04c274318b56.jpg?1783903031"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/7/d78cb67a-ed8a-4e76-8506-04c274318b56.jpg?1792282544"
   },
   {
     "name": "The Fantasticar",
