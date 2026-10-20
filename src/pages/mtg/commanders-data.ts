@@ -12971,7 +12971,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "The Wandering Minstrel",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/77bc419d-ff69-4e7c-afe6-faca383a5ed7.jpg?1783906560"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/7/77bc419d-ff69-4e7c-afe6-faca383a5ed7.jpg?1792421941"
   },
   {
     "name": "The Wandering Rescuer",
