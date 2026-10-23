@@ -2638,10 +2638,6 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/1/8/186e15a7-d97e-40df-adaa-96d9bd64f3ca.jpg?1783903791"
   },
   {
-    "name": "Deep Space 9",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/76b039c5-e0a1-410a-954b-52f304e31f7f.jpg?1792508419"
-  },
-  {
     "name": "Delina, Wild Mage",
     "artCrop": "https://cards.scryfall.io/art_crop/front/e/8/e87459aa-af8f-4bd2-a310-151353083a2e.jpg?1783926480"
   },
@@ -2900,6 +2896,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Dr. Madison Li",
     "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/95af426d-a8af-4314-9ad0-ac61935e8e8e.jpg?1783912422"
+  },
+  {
+    "name": "Dr. McCoy, Surly Surgeon",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b300d814-cf74-44ba-b253-ec179ec54a20.jpg?1792668584"
   },
   {
     "name": "Drafna, Founder of Lat-Nam",
@@ -3176,6 +3176,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Eligeth, Crossroads Augur",
     "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a0adf34-1a2b-497b-aaab-4b2b998ed8b3.jpg?1783928863"
+  },
+  {
+    "name": "Elim Garak, Simple Tailor",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/1/113bd51a-dfbb-4106-adf3-e567057fcd06.jpg?1792668600"
   },
   {
     "name": "Ellie and Alan, Paleontologists",
@@ -4076,6 +4080,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Genku, Future Shaper",
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0cbcc962-65c4-496d-8034-75c8d204dba3.jpg?1783911250"
+  },
+  {
+    "name": "Georgiou, Terran Emperor",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/3/53401f53-aebe-4538-82be-9d6916c01c76.jpg?1792668844"
   },
   {
     "name": "Geralf, the Fleshwright",
@@ -8186,6 +8194,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9f8b4d9b-208a-4673-a617-5e3edd069c33.jpg?1783905331"
   },
   {
+    "name": "Miles O'Brien, Transporter Ops",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e4f041b3-e785-45ba-9a7e-33878614d3b0.jpg?1792637029"
+  },
+  {
     "name": "Millicent, Restless Revenant",
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b86b538-0766-440d-a2cd-f5d5bfcfb010.jpg?1783925010"
   },
@@ -9792,6 +9804,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Purraj of Urborg",
     "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/4704bf02-c6be-4983-9bc7-a1d464d21b31.jpg?1783947089"
+  },
+  {
+    "name": "Q, Stacking the Deck",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dcbe34db-0065-4960-92b8-3ea1d336e803.jpg?1792508237"
   },
   {
     "name": "Qala, Ajani's Pridemate",
@@ -11855,7 +11871,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Starship Enterprise",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66fa6995-4857-466d-8068-508f2904805b.jpg?1792551031"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66fa6995-4857-466d-8068-508f2904805b.jpg?1792645550"
   },
   {
     "name": "Stature, Size Shifter",
@@ -13844,6 +13860,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Umori, the Collector",
     "artCrop": "https://cards.scryfall.io/art_crop/front/7/5/75ac31e0-ac70-4ee6-b2b1-cc445ffa1da9.jpg?1783931008"
+  },
+  {
+    "name": "Una Chin-Riley, Number One",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/5/5585c90d-3fe7-41f4-9728-36b9410ecc53.jpg?1792668590"
   },
   {
     "name": "Uncle Iroh",
