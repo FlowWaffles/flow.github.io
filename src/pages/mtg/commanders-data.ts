@@ -11998,6 +11998,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2bc79ed6-057b-439f-b2cd-58d5bcd8b551.jpg?1783912395"
   },
   {
+    "name": "Subcommander T'Pol",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d90016d-c2cb-457b-9d97-c3b9411c46e3.jpg?1792808727"
+  },
+  {
     "name": "Subira, Tulzidi Caravanner",
     "artCrop": "https://cards.scryfall.io/art_crop/front/d/a/da62b97e-e4cd-462d-9ab9-2230ca360c32.jpg?1783915640"
   },
