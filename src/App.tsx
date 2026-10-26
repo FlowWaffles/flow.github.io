@@ -14,6 +14,7 @@ import { useCurrentLocation } from './utils/location.ts';
 import LinkTree from './pages/linktree/LinkTree.tsx';
 import MtgDownload from './pages/mtg-download/MtgDownload.tsx';
 import AppPrivacyPage from "./pages/life-tracker-app-privacy/PrivacyPage.tsx";
+import MtgTester from './pages/mtg-tester/MtgTester.tsx';
 
 function App() {
     const { pathname } = useCurrentLocation();
@@ -56,6 +57,9 @@ function App() {
             case '/linktree':
             case '/links':
                 return <LinkTree />;
+            case '/mtg-tester':
+            case '/become-tester':
+                return <MtgTester />;
             default:
                 return <NotFound />;
         }

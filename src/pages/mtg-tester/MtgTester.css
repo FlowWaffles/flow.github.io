@@ -1,0 +1,61 @@
+.mtg-tester-page {
+    align-items: start;
+    overflow-y: auto;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.mtg-tester-page::-webkit-scrollbar {
+    display: none;
+}
+
+.mtg-tester-page .linktree-title {
+    font-size: clamp(1.6rem, 7vw, 2.6rem);
+}
+
+.mtg-tester-description {
+    margin: 0 0 0.5rem;
+    font-family: 'Orbitron-Regular', monospace;
+    line-height: 1.35;
+    font-size: 0.92rem;
+}
+
+.mtg-tester-preview {
+    width: 100%;
+    height: auto;
+    max-height: min(52dvh, 560px);
+    margin: 0 0 0.5rem;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.mtg-tester-step {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    text-align: left;
+}
+
+.mtg-tester-label {
+    margin: 0;
+    font-family: 'Orbitron-Regular', monospace;
+    font-size: 0.95rem;
+}
+
+.mtg-tester-url {
+    display: block;
+    width: 100%;
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    font-family: 'Orbitron-Regular', monospace;
+    font-size: 0.82rem;
+    line-height: 1.3;
+}
