@@ -3366,6 +3366,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de17d520-cb32-4fb1-830b-8494ea118e9b.jpg?1783916020"
   },
   {
+    "name": "Erica Ortegas, Plucky Pilot",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/3/6/3667eb41-598e-4543-97ed-6da961f8b567.jpg?1792892279"
+  },
+  {
     "name": "Eriette of the Charmed Apple",
     "artCrop": "https://cards.scryfall.io/art_crop/front/b/a/baf256c5-1b4c-4fbe-94e4-1538d2577f8f.jpg?1783903753"
   },
@@ -4092,6 +4096,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Genku, Future Shaper",
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/c/0cbcc962-65c4-496d-8034-75c8d204dba3.jpg?1783911250"
+  },
+  {
+    "name": "Geordi La Forge, Innovator",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/4/b45ddbca-b89d-4552-b870-839aa281e113.jpg?1792940969"
   },
   {
     "name": "Georgiou, Terran Emperor",
@@ -5700,6 +5708,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Jadzi, Steward of Fate // Oracle's Gift",
     "artCrop": "https://cards.scryfall.io/art_crop/front/a/9/a95b6baf-01e6-49c3-9a26-394b127d53c3.jpg?1783903689"
+  },
+  {
+    "name": "Jadzia Dax, Living Legacy",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/d/bd342f8b-9072-487d-8a33-b1bb149f1502.jpg?1792891903"
   },
   {
     "name": "Jaheira, Friend of the Forest",
@@ -7636,6 +7648,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Lutri, the Spellchaser",
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/b/fb1189c9-7842-466e-8238-1e02677d8494.jpg?1783931010"
+  },
+  {
+    "name": "Lwaxana Troi, Charming Guest",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19bf2f2f-4be2-4958-bfab-eb46c9ca1995.jpg?1792892849"
   },
   {
     "name": "Lydia Frye",
