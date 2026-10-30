@@ -414,6 +414,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/9/a/9acf80a5-f2ca-45b4-aca8-fbc690e35401.jpg?1783913735"
   },
   {
+    "name": "Amanda Grayson, Logic's Link",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/a/0/a07593d8-957d-4a85-9672-f3fabf576fd5.jpg?1793281218"
+  },
+  {
     "name": "Amarant Coral",
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/0/00ef8f06-dfcc-4ffa-a054-b0c81b39dcc0.jpg?1783904652"
   },
@@ -2019,7 +2023,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Captain Kirk, Boldly Going",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b5d9bd2-cc78-4c30-b6ee-65b76c60a588.jpg?1783902729"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b5d9bd2-cc78-4c30-b6ee-65b76c60a588.jpg?1793281029"
   },
   {
     "name": "Captain Lannery Storm",
@@ -2202,12 +2206,20 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fecbf0a3-ebe1-43b6-a720-462ba19002eb.jpg?1783931028"
   },
   {
+    "name": "Chief Kyle, Transporter Tech",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7a310a62-836b-4ed9-99b1-a09c9079ab43.jpg?1793281245"
+  },
+  {
     "name": "Chief Magistrate of Mercadia",
     "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1aa3f1d6-92e5-4da2-a0e3-2c4df5619e1d.jpg?1792741607"
   },
   {
     "name": "Chief Miles O'Brien",
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/8/f8d20229-bae2-4130-8a93-302d2ad5eef0.jpg?1793111714"
+  },
+  {
+    "name": "Chief Montgomery Scott",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e26096a-88a1-4086-9fa7-7be932b2885c.jpg?1793281250"
   },
   {
     "name": "Chief of the Wilds",
@@ -2495,7 +2507,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Culber and Stamets, Star-Crossed",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/962752f7-5c94-41e4-ab7d-3e8741c7a502.jpg?1793187120"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/6/962752f7-5c94-41e4-ab7d-3e8741c7a502.jpg?1793290364"
   },
   {
     "name": "Cult of Skaro",
@@ -3860,6 +3872,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Flatman",
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/b/0b3e0339-f54b-41a9-ac80-8d58a61ef5b9.jpg?1783903039"
+  },
+  {
+    "name": "Fleet Captain Christopher Pike",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/9/5991e424-e91f-4b6d-b6bb-17dbc1cec67e.jpg?1793281193"
   },
   {
     "name": "Flitwing, Lyev Detective",
@@ -5874,6 +5890,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/5/05c31120-7d4a-42d9-adad-53970fdf566e.jpg?1792741662"
   },
   {
+    "name": "Janice Rand, Essential Aide",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/2/92925156-ffd3-4f8a-8592-ccbd935ab894.jpg?1793281231"
+  },
+  {
     "name": "Jarad, Golgari Lich Lord",
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/6870b355-e53d-4fa2-887b-0f0445bcd9c5.jpg?1783907026"
   },
@@ -7466,8 +7486,16 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c6d5da51-6c74-4dd5-a532-cf4c2a7b601c.jpg?1792508182"
   },
   {
+    "name": "Lieutenant Hikaru Sulu",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/c/5c404561-b2e4-4f27-b1a9-486c05ed5870.jpg?1793282341"
+  },
+  {
     "name": "Lieutenant Kirtar",
     "artCrop": "https://cards.scryfall.io/art_crop/front/4/7/475ba0c3-237e-4349-85e9-c31b016f609b.jpg?1783918515"
+  },
+  {
+    "name": "Lieutenant Nyota Uhura",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/4/f/4f932b20-3f3e-4f59-ab82-46733e3f54b9.jpg?1793281206"
   },
   {
     "name": "Light-Paws, Emperor's Voice",
@@ -7750,6 +7778,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/e/fe604232-19da-4331-a6f2-ddb004f1dd90.jpg?1783922690"
   },
   {
+    "name": "Lt. Arex, Ever-Adapting",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/6/16787d1c-3a1c-4c72-a986-9cea0371fd75.jpg?1793281261"
+  },
+  {
     "name": "Lt. Cmdr. Geordi La Forge",
     "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3a558d82-7efd-49b3-9f7b-ace639b44a35.jpg?1792508185"
   },
@@ -7876,6 +7908,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "M'Baku, Jabari Chieftain",
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/e/2e330643-5714-4724-a65c-0873ce9cc5a6.jpg?1783903278"
+  },
+  {
+    "name": "M'Ress, Crew Coordinator",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/8/7/870e5f5c-502e-42d8-92cb-827ea09a83f4.jpg?1793281169"
   },
   {
     "name": "Ma Chao, Western Warrior",
@@ -8240,6 +8276,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Mazzy, Truesword Paladin",
     "artCrop": "https://cards.scryfall.io/art_crop/front/4/d/4d79c221-e07a-41e1-b92f-dc057802449c.jpg?1783922689"
+  },
+  {
+    "name": "McCoy, Not a Bricklayer",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b19d93bc-dfa9-466c-9ebb-44e28ac3d8ff.jpg?1793281264"
   },
   {
     "name": "Me, the Immortal",
@@ -9706,6 +9746,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d6787c4-170a-45b6-8792-af3ea32ef538.jpg?1783944182"
   },
   {
+    "name": "Pavel Chekov, First Posting",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/4/0/4015cb79-b698-4f3b-85b7-083cc4ab1e3c.jpg?1793281273"
+  },
+  {
     "name": "Pavel Maliki",
     "artCrop": "https://cards.scryfall.io/art_crop/front/c/6/c6627e4c-dc84-4ea0-8f69-dea92f55c943.jpg?1783942199"
   },
@@ -10710,6 +10754,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/4/84e87400-cc3f-4476-b177-2c36a65f277b.jpg?1783921462"
   },
   {
+    "name": "Rok-Tahk, Budding Scientist",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/787bd19b-586e-4451-850b-60e0857bada0.jpg?1793273846"
+  },
+  {
     "name": "Rom and Leeta, Unlikely Pair",
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2bba1d93-0904-464b-9797-a0f0f4b05df8.jpg?1793156069"
   },
@@ -10886,6 +10934,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68d57ab8-fbe0-4f01-b7f7-2a5cccd2d13a.jpg?1783922416"
   },
   {
+    "name": "S.S. Botany Bay",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/7/67ab2c2a-0bc7-4672-bf50-53c96e126859.jpg?1793282641"
+  },
+  {
     "name": "Saavik, Stoic Student",
     "artCrop": "https://cards.scryfall.io/art_crop/front/3/7/3783c530-a2da-4dc1-811a-0a9a412c8e78.jpg?1785981363"
   },
@@ -10974,6 +11026,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/b/3/b33354a5-d99a-46dd-8715-34dbc5f0ec3b.jpg?1783914623"
   },
   {
+    "name": "Sam Kirk, Xenoanthropologist",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/2/b2ffe160-1860-41ba-86a5-487211889804.jpg?1793281216"
+  },
+  {
     "name": "Sam, Loyal Attendant",
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/687a2b76-3f05-4732-bd9b-513d06d16300.jpg?1783916039"
   },
@@ -11047,7 +11103,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Sarek, Federation Ambassador",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/94ad9063-9663-49d8-b7ba-05be865bd20a.jpg?1793190915"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/4/94ad9063-9663-49d8-b7ba-05be865bd20a.jpg?1793273885"
   },
   {
     "name": "Sarevok the Usurper",
@@ -11570,6 +11626,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/5/65005522-555e-4479-939c-be16e0262f6f.jpg?1783902952"
   },
   {
+    "name": "Shuttlecraft Galileo",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/a/4/a4242f45-75c1-4b23-9174-bd0fe70fa039.jpg?1793281180"
+  },
+  {
     "name": "Siani, Eye of the Storm",
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/8/8812e448-241e-4640-9cb6-0cdbe1ad2fcc.jpg?1783928853"
   },
@@ -11896,6 +11956,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Solphim, Mayhem Dominus",
     "artCrop": "https://cards.scryfall.io/art_crop/front/c/3/c3a0c7f3-7fb9-43de-a9af-96532c31e5ed.jpg?1783918023"
+  },
+  {
+    "name": "Songbird, Sonic Screamer",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b327925-8a50-4fd7-9010-673f9a3e97ce.jpg?1783903025"
   },
   {
     "name": "Sonic the Hedgehog",
@@ -12468,6 +12532,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "T'Pol, Vulcan Representative",
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/686a0be0-9374-4454-8bc6-a1bcec95df40.jpg?1785981082"
+  },
+  {
+    "name": "T'Pring, Never Parted",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c80275f8-eac0-4541-a62c-1bd77f3591dd.jpg?1793281275"
   },
   {
     "name": "Taborax, Hope's Demise",
@@ -13076,6 +13144,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "The Great Goblin",
     "artCrop": "https://cards.scryfall.io/art_crop/front/7/8/78d8f53e-537d-4eaa-99e3-cac57fa53d22.jpg?1784798171"
+  },
+  {
+    "name": "The Guardian of Forever",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b682a918-4f3a-41ce-90d9-f7acca9acfde.jpg?1793281284"
   },
   {
     "name": "The Haunt of Hightower",
@@ -13994,6 +14066,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/5/a/5ab10b32-00b6-40b7-ad5e-ff2fd35951ef.jpg?1783942195"
   },
   {
+    "name": "Tuktuk the Explorer",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b17f5403-7692-41ca-a3c9-b81c31bddc00.jpg?1783930156"
+  },
+  {
     "name": "Tura Kennerüd, Skyknight",
     "artCrop": "https://cards.scryfall.io/art_crop/front/c/8/c839d302-bf85-4a30-a49a-dbbd48695b5c.jpg?1783921274"
   },
@@ -14054,6 +14130,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35e11911-799c-4d82-9109-3ca27964bef0.jpg?1783902894"
   },
   {
+    "name": "U.S.S. Defiant, Mirror Migrant",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/c/6c347d57-4a92-42eb-b703-d4bec298e94b.jpg?1793281306"
+  },
+  {
     "name": "U.S.S. Defiant, Tough Little Ship",
     "artCrop": "https://cards.scryfall.io/art_crop/front/e/9/e92acccf-d5a6-4559-8acd-d24492b0649e.jpg?1793111816"
   },
@@ -14082,6 +14162,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/d/e/de62b452-3780-4eeb-8163-f44176495615.jpg?1793100663"
   },
   {
+    "name": "U.S.S. Farragut, Bold Explorer",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/f/bfbef056-cf8b-46f8-892e-30742fd78707.jpg?1793281307"
+  },
+  {
     "name": "U.S.S. Prometheus, Prototype",
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/9/69ed6b4e-f4de-4c68-9db9-9692dc247897.jpg?1793111827"
   },
@@ -14092,6 +14176,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "U.S.S. Stargazer, Here and There",
     "artCrop": "https://cards.scryfall.io/art_crop/front/b/6/b63286ae-127b-4eb0-870f-f105decf575a.jpg?1793111838"
+  },
+  {
+    "name": "U.S.S. Voyager, Lone Wanderer",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/a/a/aaf8a0b2-c6cb-41cb-913d-7ae1d75e555d.jpg?1793274284"
   },
   {
     "name": "Uchbenbak, the Great Mistake",
@@ -14776,6 +14864,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Wernog, Rider's Chaplain",
     "artCrop": "https://cards.scryfall.io/art_crop/front/3/9/39491011-bdf6-4e61-8534-fe26c1571f8f.jpg?1783923608"
+  },
+  {
+    "name": "Wesley Crusher, Starfleet Cadet",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/5/956eeb71-fd5f-4a26-aff6-77127c0ad4e7.jpg?1793274247"
   },
   {
     "name": "Whiplash, Vengeful Engineer",
