@@ -4818,6 +4818,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/0/6/06fa6050-0f9d-46a2-9635-8d05899dbc49.jpg?1792507961"
   },
   {
+    "name": "Gul Dukat, Colonial Prefect",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/a/7adc6373-1196-448f-8aee-cee7a890c724.jpg?1793359426"
+  },
+  {
     "name": "Guru Pathik",
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/2/224a2241-0dce-4008-8d9c-86db40ec5f8b.jpg?1783904925"
   },
@@ -5947,7 +5951,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Jean-Luc Picard, Luminary",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/901eaed9-dbea-4a31-87b0-e17e9bcabfed.jpg?1792507924"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/3/136b07f3-b902-41af-8732-92c6448b6ef9.jpg?1792551639"
   },
   {
     "name": "Jean-Luc, Mon Capitaine",
@@ -7707,7 +7711,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Loran of the Third Path",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/a/3/a39a24a4-cc0a-412e-8b1c-97ceff7539e7.jpg?1793187751"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/5/e58c2b2c-4206-4e9c-97c4-4b58baa554de.jpg?1793111849"
   },
   {
     "name": "Loran, Disciple of History",
@@ -8451,7 +8455,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Miles O'Brien, Transporter Ops",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e4f041b3-e785-45ba-9a7e-33878614d3b0.jpg?1792637029"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/4/e4f041b3-e785-45ba-9a7e-33878614d3b0.jpg?1793361164"
   },
   {
     "name": "Millicent, Restless Revenant",
@@ -9004,6 +9008,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Nebuchadnezzar",
     "artCrop": "https://cards.scryfall.io/art_crop/front/1/e/1e50afb3-cf9f-4ce3-91ff-84f99860c181.jpg?1783942199"
+  },
+  {
+    "name": "Neelix, Moral Support",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/0/9/09c0daa9-9eca-4817-a427-868d1efcfa20.jpg?1793359554"
   },
   {
     "name": "Neera, Wild Mage",
@@ -14128,6 +14136,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "U.S.Agent, John Walker",
     "artCrop": "https://cards.scryfall.io/art_crop/front/3/5/35e11911-799c-4d82-9109-3ca27964bef0.jpg?1783902894"
+  },
+  {
+    "name": "U.S.S. Cerritos, Following Up",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/76bf7521-5024-4fdc-9ea1-5e10f2647efb.jpg?1793361418"
   },
   {
     "name": "U.S.S. Defiant, Mirror Migrant",
