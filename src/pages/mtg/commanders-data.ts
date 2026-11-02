@@ -1991,7 +1991,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Captain Benjamin Sisko",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/51338fb2-13a3-41b8-981f-05fa35e87e2e.jpg?1792508139"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/1/51338fb2-13a3-41b8-981f-05fa35e87e2e.jpg?1793538714"
   },
   {
     "name": "Captain Eberhart",
@@ -6063,7 +6063,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Jett Reno, Problem Solver",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6dc34d44-397a-4dda-a8e3-0c2ff7da110f.jpg?1793013033"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6dc34d44-397a-4dda-a8e3-0c2ff7da110f.jpg?1793511776"
   },
   {
     "name": "Jhoira of the Ghitu",
@@ -11383,7 +11383,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Seven of Nine",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/6204cfdb-6fb4-4030-96b6-9306c8266bcf.jpg?1784036800"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/2/6204cfdb-6fb4-4030-96b6-9306c8266bcf.jpg?1793538768"
   },
   {
     "name": "Seven of Nine, Tertiary Adjunct",
@@ -12983,7 +12983,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "The Caretaker",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec6a1967-78fc-4ef4-9816-6d9a9dde61fb.jpg?1793013505"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec6a1967-78fc-4ef4-9816-6d9a9dde61fb.jpg?1793538731"
   },
   {
     "name": "The Celestial Toymaker",
