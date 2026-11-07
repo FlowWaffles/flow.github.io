@@ -3579,7 +3579,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Euru, Acorn Scrounger",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dc63c971-458a-4be9-aaa0-18df47547d59.jpg?1792715990"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dc63c971-458a-4be9-aaa0-18df47547d59.jpg?1793992713"
   },
   {
     "name": "Eutropia the Twice-Favored",
