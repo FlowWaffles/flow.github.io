@@ -278,6 +278,45 @@ export default function Commander() {
     };
   }, []);
 
+useEffect(() => {
+  if (!('wakeLock' in navigator)) return;
+
+  let sentinel: WakeLockSentinel | null = null;
+  let cancelled = false;
+
+  const acquire = async () => {
+    if (cancelled || document.visibilityState !== 'visible') return;
+    if (sentinel && !sentinel.released) return;
+    try {
+      sentinel = await navigator.wakeLock.request('screen');
+      if (cancelled) {
+        void sentinel.release();
+        sentinel = null;
+      }
+    } catch (error) {
+      // Can fail on battery saver or before a user gesture (iOS)
+      console.warn('Wake lock request failed.', error);
+    }
+  };
+
+  const onVisibilityChange = () => {
+    if (document.visibilityState === 'visible') void acquire();
+  };
+
+  void acquire();
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  // Fallback: retry on first touch in case the browser wanted a user gesture
+  document.addEventListener('pointerdown', acquire);
+
+  return () => {
+    cancelled = true;
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    document.removeEventListener('pointerdown', acquire);
+    void sentinel?.release();
+  };
+}, []);
+
+
   const clearFullscreenMenuTimer = () => {
     if (fullscreenMenuTimerRef.current === null) return;
     window.clearTimeout(fullscreenMenuTimerRef.current);
