@@ -1147,7 +1147,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "B'Elanna Torres, Scrapper",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc2287da-495a-4b48-9e4f-43792d3bccbb.jpg?1793111764"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc2287da-495a-4b48-9e4f-43792d3bccbb.jpg?1794242772"
   },
   {
     "name": "Baba Lysaga, Night Witch",
@@ -15423,7 +15423,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Zefram Cochrane, Warp Pioneer",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/43ce2e91-9dce-4e86-a4b8-8d21e4e368ea.jpg?1793013553"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/4/3/43ce2e91-9dce-4e86-a4b8-8d21e4e368ea.jpg?1794222434"
   },
   {
     "name": "Zegana, Utopian Speaker",
