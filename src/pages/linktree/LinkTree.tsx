@@ -29,6 +29,14 @@ const LinkTree = () => {
                     </a>
                     <a
                         className="linktree-link"
+                        href="/mtg-tester"
+                        aria-label="How to become an MTG LifeTracker tester"
+                    >
+                        <Icon path={mdiUnicornVariant} size={1} color="#fff" className="linktree-icon"/>
+                        <span>MTG LifeTracker: Become a Tester</span>
+                    </a>
+                    <a
+                        className="linktree-link"
                         href="https://moxfield.com/users/flow666"
                         target="_blank"
                         rel="noreferrer"
