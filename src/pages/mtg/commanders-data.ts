@@ -2007,7 +2007,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Captain Janeway, Endgame",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1fc05320-c8f8-4acd-8bac-86c4156352d2.jpg?1793111765"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/f/1fc05320-c8f8-4acd-8bac-86c4156352d2.jpg?1794300064"
   },
   {
     "name": "Captain Jean-Luc Picard",
@@ -2023,7 +2023,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Captain Kirk, Boldly Going",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b5d9bd2-cc78-4c30-b6ee-65b76c60a588.jpg?1793281029"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/b/6b5d9bd2-cc78-4c30-b6ee-65b76c60a588.jpg?1794300042"
   },
   {
     "name": "Captain Lannery Storm",
@@ -2427,7 +2427,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Commander William Riker",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b78058a-8434-4b0a-9c69-56c9bcdda65a.jpg?1793111778"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/b/2b78058a-8434-4b0a-9c69-56c9bcdda65a.jpg?1794300011"
   },
   {
     "name": "Commissar Severina Raine",
@@ -2663,7 +2663,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Data, Exploring Humanity",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c769fc2-b234-4bb2-aac0-1373e6ad07d3.jpg?1793111717"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/c/2c769fc2-b234-4bb2-aac0-1373e6ad07d3.jpg?1794299915"
   },
   {
     "name": "Data, New Life",
@@ -4735,7 +4735,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Grilka, Widowed Warrior",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63d3add3-be3f-4ced-85c5-a7d4891b11f5.jpg?1793197377"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63d3add3-be3f-4ced-85c5-a7d4891b11f5.jpg?1794299987"
   },
   {
     "name": "Grim Reaper, Lethal Legionnaire",
@@ -6979,7 +6979,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Kor, Cause of Vengeance",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e4364a4-6dac-4eea-be75-9f8ce1b3e334.jpg?1793197412"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/e/9e4364a4-6dac-4eea-be75-9f8ce1b3e334.jpg?1794300053"
   },
   {
     "name": "Korlash, Heir to Blackblade",
@@ -7647,7 +7647,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Locutus of Borg",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1b2e5971-d31c-4f6d-9bee-4b13a402e798.jpg?1792507972"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/b/1b2e5971-d31c-4f6d-9bee-4b13a402e798.jpg?1794300032"
   },
   {
     "name": "Locutus, the One Who Speaks",
@@ -8283,7 +8283,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "McCoy, Not a Bricklayer",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b19d93bc-dfa9-466c-9ebb-44e28ac3d8ff.jpg?1793281264"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/b/1/b19d93bc-dfa9-466c-9ebb-44e28ac3d8ff.jpg?1794300023"
   },
   {
     "name": "Me, the Immortal",
@@ -12219,7 +12219,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Starship Enterprise",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66fa6995-4857-466d-8068-508f2904805b.jpg?1792645550"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/6/66fa6995-4857-466d-8068-508f2904805b.jpg?1794300078"
   },
   {
     "name": "Stature, Size Shifter",
