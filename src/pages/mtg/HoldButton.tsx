@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { Box } from '@mui/material';
-import { HOLD_DELAY_MS, HOLD_TICK_MS } from './types';
+import { HOLD_DELAY_MS } from './types';
 
 interface HoldButtonProps {
   onTap: () => void;
@@ -10,9 +10,9 @@ interface HoldButtonProps {
 }
 
 export default function HoldButton({ onTap, onHold, children, sx }: HoldButtonProps) {
-  const tapRef = useRef(true);
+  const tapRef = useRef(false);
+  const pointerRef = useRef<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const onTapRef = useRef(onTap);
   const onHoldRef = useRef(onHold);
   onTapRef.current = onTap;
@@ -20,24 +20,36 @@ export default function HoldButton({ onTap, onHold, children, sx }: HoldButtonPr
 
   const clear = useCallback(() => {
     if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
-    if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
   }, []);
 
   useEffect(() => clear, [clear]);
 
   const down = (e: React.PointerEvent) => {
+    if (e.button !== 0 || pointerRef.current !== null) return;
     e.preventDefault();
+    pointerRef.current = e.pointerId;
     tapRef.current = true;
     timerRef.current = setTimeout(() => {
+      timerRef.current = null;
       tapRef.current = false;
-      intervalRef.current = setInterval(() => onHoldRef.current(), HOLD_TICK_MS);
+      onHoldRef.current();
     }, HOLD_DELAY_MS);
   };
 
-  const up = () => {
+  const up = (e: React.PointerEvent) => {
+    if (pointerRef.current !== e.pointerId) return;
+    pointerRef.current = null;
     const wasTap = tapRef.current;
+    tapRef.current = false;
     clear();
     if (wasTap) onTapRef.current();
+  };
+
+  const cancel = (e: React.PointerEvent) => {
+    if (pointerRef.current !== e.pointerId) return;
+    pointerRef.current = null;
+    tapRef.current = false;
+    clear();
   };
 
   return (
@@ -50,8 +62,8 @@ export default function HoldButton({ onTap, onHold, children, sx }: HoldButtonPr
       }}
       onPointerDown={down}
       onPointerUp={up}
-      onPointerLeave={clear}
-      onPointerCancel={clear}
+      onPointerLeave={cancel}
+      onPointerCancel={cancel}
       onContextMenu={(e) => e.preventDefault()}
     >
       {children}

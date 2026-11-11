@@ -18,6 +18,13 @@ type QuickSetupEntry = {
 
 type StartingLife = 20 | 40;
 
+type VisibleViewport = {
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+};
+
 interface QuickSetupDialogProps {
   open: boolean;
   players: Player[];
@@ -569,11 +576,50 @@ export default function QuickSetupDialog({
   const [startingLife, setStartingLife] = useState<StartingLife>(40);
   const [currentStep, setCurrentStep] = useState(0);
   const [view, setView] = useState<'setup' | 'manage'>('setup');
+  const [visibleViewport, setVisibleViewport] = useState<VisibleViewport | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollFocusedInputIntoView = useCallback(() => {
+    const activeElement = document.activeElement;
+    if (
+      (activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement)
+      && modalRef.current?.contains(activeElement)
+    ) {
+      activeElement.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+  }, []);
 
   const setTyping = useCallback((typing: boolean) => {
     onTypingChange?.(typing);
   }, [onTypingChange]);
+
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!open || !viewport) return;
+
+    const updateViewport = () => {
+      setVisibleViewport({
+        width: viewport.width,
+        height: viewport.height,
+        left: viewport.offsetLeft,
+        top: viewport.offsetTop,
+      });
+    };
+
+    updateViewport();
+    viewport.addEventListener('resize', updateViewport);
+    viewport.addEventListener('scroll', updateViewport);
+    return () => {
+      viewport.removeEventListener('resize', updateViewport);
+      viewport.removeEventListener('scroll', updateViewport);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const frame = window.requestAnimationFrame(scrollFocusedInputIntoView);
+    return () => window.cancelAnimationFrame(frame);
+  }, [open, visibleViewport, landscapeMobileLayout, scrollFocusedInputIntoView]);
 
   useEffect(() => {
     if (!open) { setTyping(false); return; }
@@ -623,12 +669,29 @@ export default function QuickSetupDialog({
     <Backdrop
       open={open}
       onClick={onClose}
-      sx={{ position: 'fixed', inset: 0, zIndex: 230, backdropFilter: 'blur(4px)', bgcolor: 'rgba(0,0,0,0.7)' }}
+      sx={{
+        position: 'fixed',
+        inset: 0,
+        ...(visibleViewport && {
+          top: visibleViewport.top,
+          left: visibleViewport.left,
+          right: 'auto',
+          bottom: 'auto',
+          width: visibleViewport.width,
+          height: visibleViewport.height,
+        }),
+        zIndex: 230,
+        backdropFilter: 'blur(4px)',
+        bgcolor: 'rgba(0,0,0,0.7)',
+      }}
     >
       <Box
         ref={modalRef}
         onClick={e => e.stopPropagation()}
-        onFocusCapture={() => setTyping(true)}
+        onFocusCapture={() => {
+          setTyping(true);
+          window.requestAnimationFrame(scrollFocusedInputIntoView);
+        }}
         onBlurCapture={() => {
           window.setTimeout(() => {
             if (!modalRef.current?.contains(document.activeElement)) setTyping(false);
@@ -640,18 +703,25 @@ export default function QuickSetupDialog({
           border: '1px solid #333',
           borderRadius: 2,
           boxShadow: '0 0 32px rgba(0,0,0,0.35)',
-          width: landscapeMobileLayout ? 'min(92dvh, 460px)' : 'min(92vw, 460px)',
-          maxWidth: landscapeMobileLayout ? 'calc(100dvh - 24px)' : 'calc(100% - 24px)',
-          maxHeight: landscapeMobileLayout ? 'calc(100dvw - 24px)' : 'calc(100dvh - 24px)',
+          width: visibleViewport
+            ? Math.min((landscapeMobileLayout ? visibleViewport.height : visibleViewport.width) * 0.92, 460)
+            : landscapeMobileLayout ? 'min(92dvh, 460px)' : 'min(92vw, 460px)',
+          maxWidth: visibleViewport
+            ? Math.max((landscapeMobileLayout ? visibleViewport.height : visibleViewport.width) - 24, 0)
+            : landscapeMobileLayout ? 'calc(100dvh - 24px)' : 'calc(100% - 24px)',
+          maxHeight: visibleViewport
+            ? Math.max((landscapeMobileLayout ? visibleViewport.width : visibleViewport.height) - 24, 0)
+            : landscapeMobileLayout ? 'calc(100dvw - 24px)' : 'calc(100dvh - 24px)',
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
+          overflowX: 'hidden',
+          overflowY: 'auto',
           transform: landscapeMobileLayout ? 'rotate(90deg)' : 'none',
           transformOrigin: 'center',
         }}
       >
         {/* Header */}
-        <Box sx={{ px: 3, pt: 2.25, pb: 1.5 }}>
+        <Box sx={{ px: 3, pt: 2.25, pb: 1.5, flexShrink: 0 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <Box>
               <Typography sx={{
@@ -715,7 +785,11 @@ export default function QuickSetupDialog({
         </Box>
 
         {/* Content */}
-        <Box sx={{ px: 3, pb: 2, overflowY: 'auto', flex: 1 }}>
+        <Box sx={{
+          px: 3,
+          pb: 2,
+          flex: '0 0 auto',
+        }}>
           {view === 'setup' ? (
             <PlayerSetupStep
               key={currentPlayerIdx}
@@ -740,7 +814,7 @@ export default function QuickSetupDialog({
         </Box>
 
         {/* Footer */}
-        <Box sx={{ px: 3, pb: 2.25, borderTop: '1px solid #282828' }}>
+        <Box sx={{ px: 3, pb: 2.25, borderTop: '1px solid #282828', flexShrink: 0 }}>
           {view === 'setup' ? (
             <>
               <Box

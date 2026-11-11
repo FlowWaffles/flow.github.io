@@ -1,4 +1,5 @@
-import { Box, Typography, Backdrop } from '@mui/material';
+import { Box, Typography, Backdrop, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import DamageEditor from './DamageEditor';
 import type { ModalState, Player } from './types';
 import { CMD_LETHAL } from './types';
@@ -58,15 +59,31 @@ export default function CommanderDamageModal({
                 : `${attacker.partnerCommander || 'Commander 2'} lethal`
               : 'Lethal commander damage';
 
-            return anyLethal ? (
-              <Typography variant="h6" sx={{ textAlign: 'center', mb: 0.5, fontWeight: 700, color: '#f44336',
-                transition: 'color 0.3s', fontSize: hasPartner ? '0.95rem' : undefined }}>
-                {lethalLabel}
-              </Typography>
-            ) : (
-              <Typography variant="h6" sx={{ textAlign: 'center', mb: 0.5, fontWeight: 700, color: '#ddd' }}>
-                Commander Damage
-              </Typography>
+            return (
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                <Box sx={{ width: 36, height: 36, flexShrink: 0 }} />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    flex: 1,
+                    textAlign: 'center',
+                    fontWeight: 700,
+                    color: anyLethal ? '#f44336' : '#ddd',
+                    transition: 'color 0.3s',
+                    fontSize: anyLethal && hasPartner ? '0.95rem' : undefined,
+                  }}
+                >
+                  {anyLethal ? lethalLabel : 'Commander Damage'}
+                </Typography>
+                <IconButton
+                  onClick={onClose}
+                  aria-label="Close commander damage"
+                  size="small"
+                  sx={{ width: 36, height: 36, flexShrink: 0, color: '#c1c8d6' }}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </Box>
             );
           })()}
           <Typography sx={{ textAlign: 'center', mb: 2, fontSize: '0.82rem', color: '#b0b7c6' }}>

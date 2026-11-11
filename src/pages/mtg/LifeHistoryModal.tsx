@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Box, Typography, Button, IconButton } from '@mui/material';
+import { useState, useEffect, useRef } from 'react';
+import { Backdrop, Box, Typography, Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import type { LifeHistoryEntry } from './types';
 
@@ -30,12 +30,21 @@ interface LifeHistoryModalProps {
   open: boolean;
   history: LifeHistoryEntry[];
   accent: string;
+  modalRotation: number;
   onClose: () => void;
   onRevert: () => void;
 }
 
-export default function LifeHistoryModal({ open, history, accent, onClose, onRevert }: LifeHistoryModalProps) {
+export default function LifeHistoryModal({ open, history, accent, modalRotation, onClose, onRevert }: LifeHistoryModalProps) {
   const [openTime, setOpenTime] = useState(Date.now());
+  const dragRef = useRef<{
+    pointerId: number;
+    x: number;
+    y: number;
+    scrollTop: number;
+    inverseTransform: DOMMatrix;
+    moved: boolean;
+  } | null>(null);
 
   useEffect(() => {
     if (open) setOpenTime(Date.now());
@@ -44,9 +53,10 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
   if (!open) return null;
 
   return (
-    <Box
+    <Backdrop
+      open={open}
       sx={{
-        position: 'absolute', inset: 0, zIndex: 80,
+        position: 'absolute', inset: 0, zIndex: 230,
         bgcolor: 'rgba(0,0,0,0.88)',
         backdropFilter: 'blur(6px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -60,33 +70,95 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
           bgcolor: '#0f1318',
           border: `1px solid ${accent}44`,
           borderRadius: 2,
-          p: 2,
-          width: 'min(90%, 300px)',
-          maxHeight: '76%',
-          overflowY: 'auto',
+          p: 3,
+          width: 'min(92%, 600px)',
+          height: 'min(88%, 600px)',
+          maxHeight: 'calc(100% - 32px)',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          transform: `rotate(${modalRotation}deg)`,
+          transformOrigin: 'center',
           cursor: 'default',
           boxShadow: `0 0 28px ${accent}28`,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexShrink: 0 }}>
           <Typography sx={{
-            fontWeight: 700, color: '#777',
+            fontWeight: 700, color: '#c1c8d6',
             fontFamily: "'Orbitron-Regular', monospace",
-            fontSize: '0.55rem', letterSpacing: '0.06em', textTransform: 'uppercase',
+            fontSize: '1.1rem', letterSpacing: '0.06em', textTransform: 'uppercase',
           }}>
             Life History
           </Typography>
           <IconButton
-            size="small"
             onClick={onClose}
-            sx={{ color: '#555', p: 0.25, '&:hover': { color: '#999' } }}
+            aria-label="Close life history"
+            sx={{ color: '#c1c8d6', minWidth: 48, minHeight: 48, '&:hover': { color: '#fff' } }}
           >
-            <CloseIcon sx={{ fontSize: '0.9rem' }} />
+            <CloseIcon sx={{ fontSize: '1.75rem' }} />
           </IconButton>
         </Box>
 
+        <Box
+          onPointerDown={event => {
+            if (event.pointerType === 'touch' || event.button !== 0) return;
+            if ((event.target as Element).closest('button')) return;
+            const element = event.currentTarget;
+            if (element.scrollHeight <= element.clientHeight) return;
+            let transform = new DOMMatrix();
+            for (let node: HTMLElement | null = element; node; node = node.parentElement) {
+              const value = getComputedStyle(node).transform;
+              if (value !== 'none') transform = new DOMMatrix(value).multiply(transform);
+            }
+            dragRef.current = {
+              pointerId: event.pointerId,
+              x: event.clientX,
+              y: event.clientY,
+              scrollTop: element.scrollTop,
+              inverseTransform: transform.inverse(),
+              moved: false,
+            };
+            element.setPointerCapture(event.pointerId);
+          }}
+          onPointerMove={event => {
+            const drag = dragRef.current;
+            if (!drag || drag.pointerId !== event.pointerId) return;
+            // Convert the screen-space drag into the rotated list's local scroll axis.
+            const delta = new DOMPoint(event.clientX - drag.x, event.clientY - drag.y, 0, 0)
+              .matrixTransform(drag.inverseTransform);
+            if (Math.abs(delta.y) > 4) drag.moved = true;
+            if (drag.moved) event.currentTarget.scrollTop = drag.scrollTop - delta.y;
+          }}
+          onPointerUp={event => {
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+              event.currentTarget.releasePointerCapture(event.pointerId);
+            }
+          }}
+          onLostPointerCapture={() => { dragRef.current = null; }}
+          sx={{
+          flex: 1,
+          minHeight: 0,
+          overflowY: 'auto',
+          pr: 1.5,
+          scrollbarGutter: 'stable',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#667085 transparent',
+          '&::-webkit-scrollbar': { width: 6 },
+          '&::-webkit-scrollbar-track': { background: 'transparent' },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#667085',
+            borderRadius: 999,
+          },
+          overscrollBehavior: 'contain',
+          touchAction: 'auto',
+          cursor: 'grab',
+          '&:active': { cursor: 'grabbing' },
+          WebkitOverflowScrolling: 'touch',
+        }}>
         {history.length === 0 && (
-          <Typography sx={{ textAlign: 'center', color: '#555', fontSize: '0.8rem', py: 2 }}>
+          <Typography sx={{ textAlign: 'center', color: '#c1c8d6', fontSize: '1.2rem', py: 2 }}>
             No changes yet
           </Typography>
         )}
@@ -94,15 +166,16 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
         {history.map((entry, i) => (
           <Box key={entry.id} sx={{
             display: 'flex', alignItems: 'center',
-            py: 0.75, px: 0.5,
+            py: 1.5, px: 0.5,
             borderBottom: i < history.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
-            gap: 1,
+            gap: 2,
           }}>
             <Typography sx={{
               fontWeight: 700,
-              fontSize: '1rem',
+              fontSize: '2rem',
               color: entry.delta > 0 ? '#4caf50' : '#f44336',
-              minWidth: '4ch',
+              minWidth: '3ch',
+              flexShrink: 0,
               textShadow: entry.delta > 0
                 ? '0 0 8px rgba(76,175,80,0.5)'
                 : '0 0 8px rgba(244,67,54,0.5)',
@@ -112,18 +185,18 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
 
             {/* Meta */}
             <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography sx={{ fontSize: '0.7rem', color: '#d2d9e8', fontStyle: 'italic' }}>
+              <Typography sx={{ fontSize: '1.1rem', color: '#d2d9e8', fontStyle: 'italic' }}>
                 {formatTimeAgo(entry.timestamp, openTime)}
               </Typography>
-              <Typography sx={{ fontSize: '0.72rem', color: '#d2d9e8', mt: 0.15 }}>
+              <Typography sx={{ fontSize: '1.25rem', color: '#eef2f8', mt: 0.25 }}>
                 {describeLifeChange(entry)}
               </Typography>
               {entry.source === 'commander' && (
                 <Typography sx={{
-                  fontSize: '0.66rem',
+                  fontSize: '1.1rem',
                   color: entry.attackerAccent ?? '#d2d9e8',
                   mt: 0.1,
-                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  overflowWrap: 'anywhere',
                 }}>
                   Commander dmg by {entry.attackerCommander || entry.attackerName}
                 </Typography>
@@ -132,13 +205,12 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
 
             {i === 0 && (
               <Button
-                size="small"
                 onClick={onRevert}
                 sx={{
-                  fontSize: '0.62rem', color: '#888', textTransform: 'none',
-                  border: '1px solid #2a2a2a', borderRadius: 999,
-                  px: 0.9, py: 0.2, minWidth: 'auto', flexShrink: 0,
-                  '&:hover': { bgcolor: 'rgba(255,255,255,0.07)', borderColor: '#444', color: '#bbb' },
+                  fontSize: '1.1rem', color: '#e0e6f0', textTransform: 'none',
+                  border: '1px solid #667085', borderRadius: 999,
+                  px: 2, py: 1, minWidth: 88, minHeight: 48, flexShrink: 0,
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.07)', borderColor: '#999', color: '#fff' },
                 }}
               >
                 Revert
@@ -146,7 +218,8 @@ export default function LifeHistoryModal({ open, history, accent, onClose, onRev
             )}
           </Box>
         ))}
+        </Box>
       </Box>
-    </Box>
+    </Backdrop>
   );
 }

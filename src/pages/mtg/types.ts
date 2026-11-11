@@ -1,6 +1,5 @@
 export const INITIAL_LIFE = 40;
 export const HOLD_DELAY_MS = 500;
-export const HOLD_TICK_MS = 120;
 export const HOLD_INCREMENT = 10;
 export const CMD_LETHAL = 21;
 export const POISON_LETHAL = 10;

@@ -18,6 +18,7 @@ import PlayerQuadrant from './PlayerQuadrant';
 import CommanderDamageModal from './CommanderDamageModal';
 import PlayerSettingsModal from './PlayerSettingsModal';
 import PlayerStatusModal from './PlayerStatusModal';
+import LifeHistoryModal from './LifeHistoryModal';
 import ResetDialog from './ResetDialog';
 import QuickSetupDialog from './QuickSetupDialog';
 import DiceMenuButton from './DiceMenuButton';
@@ -185,6 +186,7 @@ export default function Commander() {
   const [modal, setModal] = useState<ModalState | null>(null);
   const [settingsPid, setSettingsPid] = useState<number | null>(null);
   const [statusPid, setStatusPid] = useState<number | null>(null);
+  const [historyPid, setHistoryPid] = useState<number | null>(null);
   const [commanders] = useState<CommanderEntry[]>(commandersData);
   const commandersLoading = false;
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
@@ -711,9 +713,8 @@ useEffect(() => {
             onDamageClick={attacker => openModal(pid, attacker)}
             onOpenSettings={() => setSettingsPid(pid)}
             onOpenStatus={() => setStatusPid(pid)}
-            lifeHistory={lifeHistory[pid]}
+            onOpenHistory={() => setHistoryPid(pid)}
             onLifeHistoryCommit={entry => pushLifeHistory(pid, entry)}
-            onRevertHistory={() => revertLatestHistory(pid)}
             compact={compactLayout}
             startingPlayerHighlightPhase={startingPlayerHighlightPid === pid ? startingPlayerHighlightPhase : null}
             sx={{
@@ -985,6 +986,17 @@ useEffect(() => {
             </Box>
           </Box>
         </Backdrop>
+
+        {historyPid !== null && (
+          <LifeHistoryModal
+            open
+            history={lifeHistory[historyPid]}
+            accent={players[historyPid].accentColor}
+            modalRotation={layoutConfig.activeQuadrants.find(q => q.pid === historyPid)?.rotation ?? 0}
+            onClose={() => setHistoryPid(null)}
+            onRevert={() => { revertLatestHistory(historyPid); setHistoryPid(null); }}
+          />
+        )}
 
         {statusPid !== null && (
           <PlayerStatusModal

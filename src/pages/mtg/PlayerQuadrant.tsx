@@ -63,7 +63,6 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import HealingIcon from '@mui/icons-material/Healing';
 import HoldButton from './HoldButton';
 import CommanderDamageGrid from './CommanderDamageGrid';
-import LifeHistoryModal from './LifeHistoryModal';
 import type { Player, LifeHistoryEntry } from './types';
 import {
   CMD_LETHAL, HOLD_INCREMENT, POISON_LETHAL,
@@ -102,9 +101,8 @@ interface PlayerQuadrantProps {
   onDamageClick: (attacker: number) => void;
   onOpenSettings: () => void;
   onOpenStatus: () => void;
-  lifeHistory: LifeHistoryEntry[];
+  onOpenHistory: () => void;
   onLifeHistoryCommit: (entry: Omit<LifeHistoryEntry, 'id' | 'timestamp'>) => void;
-  onRevertHistory: () => void;
   sx?: object;
 }
 
@@ -113,9 +111,8 @@ export default function PlayerQuadrant({
   showCenterMenu = true,
   startingPlayerHighlightPhase = null,
   onLifeChange, onOpenLifeSetModal, onPlayerUpdate, onDamageClick, onOpenSettings, onOpenStatus,
-  lifeHistory, onLifeHistoryCommit, onRevertHistory, sx,
+  onOpenHistory, onLifeHistoryCommit, sx,
 }: PlayerQuadrantProps) {
-  const [historyOpen, setHistoryOpen] = useState(false);
   const [lifeDelta, setLifeDelta] = useState(0);
   const deltaTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingHistoryRef = useRef<Omit<LifeHistoryEntry, 'id' | 'timestamp'> | null>(null);
@@ -219,27 +216,18 @@ export default function PlayerQuadrant({
       ? '#ff9800'
       : player.life <= yellowLifeThreshold
         ? '#ffeb3b'
-        : '#fff';
+        : player.life > 40
+          ? '#4caf50'
+          : '#fff';
   const lifeTextShadow = player.life <= 5
     ? '0 0 20px rgba(244,67,54,0.5)'
     : player.life <= 10
       ? '0 0 20px rgba(255,152,0,0.4)'
       : player.life <= yellowLifeThreshold
         ? '0 0 20px rgba(255,235,59,0.35)'
-        : undefined;
-
-  const quadrantRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!historyOpen) return;
-    const handlePointerDown = (e: PointerEvent) => {
-      if (quadrantRef.current && !quadrantRef.current.contains(e.target as Node)) {
-        setHistoryOpen(false);
-      }
-    };
-    document.addEventListener('pointerdown', handlePointerDown);
-    return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [historyOpen]);
+        : player.life > 40
+          ? '0 0 20px rgba(76,175,80,0.4)'
+          : undefined;
 
   useEffect(() => () => {
     if (deltaTimerRef.current) clearTimeout(deltaTimerRef.current);
@@ -249,7 +237,9 @@ export default function PlayerQuadrant({
   const hasPrimaryArt = Boolean(player.commanderArtUrl);
   const hasPartnerArt = Boolean(player.partnerCommanderArtUrl);
 
-  const lethalCmdAttacker = opponents.find(o => player.cmdDmg[o][0] >= CMD_LETHAL || player.cmdDmg[o][1] >= CMD_LETHAL);
+  const lethalCmdAttacker = [pid, ...opponents].find(
+    attacker => player.cmdDmg[attacker][0] >= CMD_LETHAL || player.cmdDmg[attacker][1] >= CMD_LETHAL,
+  );
 
   const deathCause = player.isDead
     ? 'KO\'d'
@@ -268,7 +258,7 @@ export default function PlayerQuadrant({
     : player.name;
 
   return (
-    <Box ref={quadrantRef} sx={{
+    <Box sx={{
       display: 'flex', flexDirection: 'column',
       bgcolor: bg,
       backgroundImage: `
@@ -543,7 +533,7 @@ export default function PlayerQuadrant({
               position: 'absolute',
               top: compact ? 2 : 4,
               left: 'calc(100% + 4px)',
-              fontSize: compact ? '0.7rem' : '0.85rem',
+              fontSize: compact ? '1.2rem' : '1.5rem',
               fontWeight: 700,
               color: lifeDelta > 0 ? '#4caf50' : '#f44336',
               lineHeight: 1,
@@ -561,7 +551,7 @@ export default function PlayerQuadrant({
             onTap={handleLifeTap}
             onHold={() => {
               commitPendingLifeHistory();
-              setHistoryOpen(true);
+              onOpenHistory();
             }}
             sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
@@ -668,18 +658,9 @@ export default function PlayerQuadrant({
           physicalLayout={physicalLayout}
           compact={compact}
           onDamageClick={onDamageClick}
-          onSelfClick={onOpenSettings}
+          onSelfClick={() => onDamageClick(pid)}
         />
       </Box>
-
-      {/* Life history modal */}
-      <LifeHistoryModal
-        open={historyOpen}
-        history={lifeHistory}
-        accent={accent}
-        onClose={() => setHistoryOpen(false)}
-        onRevert={() => { onRevertHistory(); setHistoryOpen(false); }}
-      />
 
       {/* Dead overlay */}
       {dead && (
