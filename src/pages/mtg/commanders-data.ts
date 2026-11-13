@@ -7299,7 +7299,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Lae'zel, Vlaakith's Champion",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a93f587-ab72-42da-88c4-31af1c9cdf1b.jpg?1783922810"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1a93f587-ab72-42da-88c4-31af1c9cdf1b.jpg?1794473330"
   },
   {
     "name": "Laelia, the Blade Reforged",
