@@ -10498,6 +10498,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/e/2/e25468e2-17c6-47b2-8eb6-fcb8ae6f4c17.jpg?1783902924"
   },
   {
+    "name": "Red XIII, Proud Warrior",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/0/10407b26-be28-4628-9567-746681e5c834.jpg?1783906343"
+  },
+  {
     "name": "Redshift, Rocketeer Chief",
     "artCrop": "https://cards.scryfall.io/art_crop/front/5/f/5fba3820-32ba-47e9-9fa8-f985ff471b3f.jpg?1783907854"
   },
@@ -11024,6 +11028,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Salacinder and Soot, Rascals",
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/4/240374d3-6a10-487d-8e2f-3fa79c262895.jpg?1783904252"
+  },
+  {
+    "name": "Salinae, the Ocean Mother",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1ae63298-f198-4304-acca-d867835130d4.jpg?1794579717"
   },
   {
     "name": "Sally Pride, Lioness Leader",
@@ -14692,6 +14700,18 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Vision, Synthezoid Avenger",
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/7/f7007b77-84ec-4391-b279-8c188dd569d0.jpg?1783903252"
+  },
+  {
+    "name": "Vislor Turlough",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f25ec946-036b-480a-bab6-c4102e5c31db.jpg?1783914658"
+  },
+  {
+    "name": "Vito, Fanatic of Aclazotz",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/4/c4fd9047-df91-4d82-be00-c623acae0f01.jpg?1783913729"
+  },
+  {
+    "name": "Vito, Thorn of the Dusk Rose",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/d/5deb74ff-15df-4894-b074-9a98731bd2c0.jpg?1783908850"
   },
   {
     "name": "Viv Vision, Teen Synthezoid",
