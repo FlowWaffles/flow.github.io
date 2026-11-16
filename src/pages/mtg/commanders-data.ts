@@ -6,6 +6,14 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/8/68832214-2943-4253-8884-ffa490e84087.jpg?1783920545"
   },
   {
+    "name": "\"The Ignoble Serpent\"",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a1510c0a-30d8-48b3-857f-6214f5e0efaf.jpg?1794794065"
+  },
+  {
+    "name": "\"Zekes, Acid Rock Fan\"",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7edeeae9-26d8-4e9f-8647-93a8f8cfd265.jpg?1794794494"
+  },
+  {
     "name": "Aang and Katara",
     "artCrop": "https://cards.scryfall.io/art_crop/front/f/3/f333ea01-124f-4125-87ab-609be40e774c.jpg?1783904838"
   },
@@ -1159,7 +1167,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Baeloth Barrityl, Entertainer",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec983aac-9eda-4086-ad7e-34da9b2987cc.jpg?1790748156"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/e/c/ec983aac-9eda-4086-ad7e-34da9b2987cc.jpg?1794790985"
   },
   {
     "name": "Baird, Argivian Recruiter",
@@ -13996,10 +14004,6 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Traxos, Scourge of Kroog",
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/8566e91a-5f2c-4854-aeb3-68b3c4344582.jpg?1789988678"
-  },
-  {
-    "name": "Trazyn the Infinite",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1ae95cfb-1c3e-43cc-acfa-68f25b0f6e52.jpg?1783920903"
   },
   {
     "name": "Treebeard, Gracious Host",
