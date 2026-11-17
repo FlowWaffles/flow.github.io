@@ -7,11 +7,11 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "\"The Ignoble Serpent\"",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a1510c0a-30d8-48b3-857f-6214f5e0efaf.jpg?1794794065"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/a/1/a1510c0a-30d8-48b3-857f-6214f5e0efaf.jpg?1794862604"
   },
   {
     "name": "\"Zekes, Acid Rock Fan\"",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7edeeae9-26d8-4e9f-8647-93a8f8cfd265.jpg?1794794494"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/7/e/7edeeae9-26d8-4e9f-8647-93a8f8cfd265.jpg?1794862623"
   },
   {
     "name": "Aang and Katara",
@@ -1439,7 +1439,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Beta Ray Bill",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/23a18d46-82d9-42b6-a057-6c1c7d2641a3.jpg?1792306764"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/2/3/23a18d46-82d9-42b6-a057-6c1c7d2641a3.jpg?1794875984"
   },
   {
     "name": "Betor, Ancestor's Voice",
@@ -2887,7 +2887,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Doctor Strange, Master of Magic",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dce65d5f-6fd4-469f-97fd-636be341d793.jpg?1792154594"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/d/c/dce65d5f-6fd4-469f-97fd-636be341d793.jpg?1794875957"
   },
   {
     "name": "Doctor Strange, Surgeon",
@@ -4055,7 +4055,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Gallia, the Merrymaker",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1791192275"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/f/2/f27d50f0-d76e-4ce1-a8d9-d997af6a5b41.jpg?1794826624"
   },
   {
     "name": "Gallia, Tragic Host",
@@ -14004,6 +14004,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Traxos, Scourge of Kroog",
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/5/8566e91a-5f2c-4854-aeb3-68b3c4344582.jpg?1789988678"
+  },
+  {
+    "name": "Trazyn the Infinite",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/1/a/1ae95cfb-1c3e-43cc-acfa-68f25b0f6e52.jpg?1783920903"
   },
   {
     "name": "Treebeard, Gracious Host",
