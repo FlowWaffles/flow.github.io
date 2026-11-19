@@ -1262,6 +1262,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/e/a/eaf2251a-ffaf-4055-9474-7e3d08d89609.jpg?1783902947"
   },
   {
+    "name": "Baron Vladimir Harkonnen",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/0/90923093-b29e-44d6-8e86-7e7c12dd3c92.jpg?1795004073"
+  },
+  {
     "name": "Baron Von Count",
     "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19d31d5c-6d4d-4bd8-b69c-b44c5b7f089f.jpg?1783935400"
   },
@@ -2192,6 +2196,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Chandra, Fire of Kaladesh // Chandra, Roaring Flame",
     "artCrop": "https://cards.scryfall.io/art_crop/front/b/0/b0d6caf0-4fa8-4ec5-b7f4-1307474d1b13.jpg?1783938336"
+  },
+  {
+    "name": "Chani, Blade of Sietch Tabr",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/e/6eb17c62-1ba0-4d5f-8947-ff04e09f0b84.jpg?1795004004"
   },
   {
     "name": "Charix, the Raging Isle",
@@ -8630,6 +8638,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/521911e5-9ce5-4d55-bfc4-fbfeba4047fe.jpg?1783909637"
   },
   {
+    "name": "Mohiam, Imperial Truthsayer",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/8/589100fa-b201-417f-ade3-5ad531b2d1c5.jpg?1795020843"
+  },
+  {
     "name": "Moira and Teshar",
     "artCrop": "https://cards.scryfall.io/art_crop/front/1/9/19d0acaa-bfbf-4155-a9b0-5b39c3c87361.jpg?1783917293"
   },
@@ -8796,6 +8808,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Mu Yanling, Wind Rider",
     "artCrop": "https://cards.scryfall.io/art_crop/front/7/6/76423446-d62f-4cc5-a23a-3175be88bd73.jpg?1783907905"
+  },
+  {
+    "name": "Muad'Dib, Prophet Foretold",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/3/2/3259dcf4-ed05-4d7e-93ed-d9b17f8e2a8a.jpg?1795003725"
   },
   {
     "name": "Muddle, the Ever-Changing",
@@ -9686,6 +9702,10 @@ const commandersData: CommanderEntry[] = [
     "artCrop": "https://cards.scryfall.io/art_crop/front/3/a/3aae2ff2-5bd3-4f8f-9726-c81035c16137.jpg?1783908850"
   },
   {
+    "name": "Padishah Emperor Shaddam IV",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/5/2/5254fa46-3984-43ac-902b-e0771b3c6e36.jpg?1795004118"
+  },
+  {
     "name": "Page, Loose Leaf",
     "artCrop": "https://cards.scryfall.io/art_crop/front/8/c/8c6fecfd-8241-4cf0-b1eb-19472b99e0ed.jpg?1783903623"
   },
@@ -9764,6 +9784,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Patron of the Orochi",
     "artCrop": "https://cards.scryfall.io/art_crop/front/6/d/6d6787c4-170a-45b6-8792-af3ea32ef538.jpg?1783944182"
+  },
+  {
+    "name": "Paul Atreides, Ducal Heir",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30473f74-454b-4622-9c38-f71dea3b7139.jpg?1795004442"
   },
   {
     "name": "Pavel Chekov, First Posting",
@@ -10000,6 +10024,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Prince Imrahil the Fair",
     "artCrop": "https://cards.scryfall.io/art_crop/front/7/d/7d486def-7c3f-41e9-bb28-4582450a7b9e.jpg?1783916250"
+  },
+  {
+    "name": "Princess Irulan Corrino",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/6/3/63d31118-94db-43c0-822e-ec7f84de2cea.jpg?1795003746"
   },
   {
     "name": "Princess Lucrezia",
@@ -10580,6 +10608,10 @@ const commandersData: CommanderEntry[] = [
   {
     "name": "Reveka, Wizard Savant",
     "artCrop": "https://cards.scryfall.io/art_crop/front/2/7/27c32cc5-b4da-4345-9118-1fe46a5049cb.jpg?1783942234"
+  },
+  {
+    "name": "Reverend Mother Jessica",
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/d/9dd5c140-dbde-4d2a-b957-e832f759f073.jpg?1795004445"
   },
   {
     "name": "Rex, Cyber-Hound",
