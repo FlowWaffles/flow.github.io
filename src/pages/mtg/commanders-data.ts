@@ -4847,7 +4847,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Gustha Ebbasdotter",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9ff02aab-9532-445e-915c-3ccf71147c76.jpg?1792739790"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/9/f/9ff02aab-9532-445e-915c-3ccf71147c76.jpg?1795142345"
   },
   {
     "name": "Gut, Fanatical Priestess",
@@ -9787,7 +9787,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "Paul Atreides, Ducal Heir",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30473f74-454b-4622-9c38-f71dea3b7139.jpg?1795004442"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/3/0/30473f74-454b-4622-9c38-f71dea3b7139.jpg?1795129194"
   },
   {
     "name": "Pavel Chekov, First Posting",
