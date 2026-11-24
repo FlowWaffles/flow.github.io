@@ -1155,7 +1155,7 @@ const commandersData: CommanderEntry[] = [
   },
   {
     "name": "B'Elanna Torres, Scrapper",
-    "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc2287da-495a-4b48-9e4f-43792d3bccbb.jpg?1794242772"
+    "artCrop": "https://cards.scryfall.io/art_crop/front/c/c/cc2287da-495a-4b48-9e4f-43792d3bccbb.jpg?1795410864"
   },
   {
     "name": "Baba Lysaga, Night Witch",
